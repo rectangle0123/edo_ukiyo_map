@@ -20,6 +20,7 @@ version: 1.0.0+1
 
 environment:
   sdk: '>=3.4.3 <4.0.0'
+  flutter: ">=3.0.0"
 
 # Dependencies specify other packages that your package needs in order to work.
 # To automatically upgrade your package dependencies to the latest versions
@@ -42,6 +43,9 @@ dependencies:
   # データベース
   drift: ^2.19.1
   drift_flutter: ^0.1.0
+  # プロバイダ
+  flutter_riverpod: ^3.0.0-dev.3
+  riverpod_annotation: ^3.0.0-dev.3
   # その他
   path: ^1.9.0
   path_provider: ^2.1.3
@@ -52,6 +56,11 @@ dev_dependencies:
 
   # データベース
   drift_dev: ^2.19.0
+  # プロバイダ
+  custom_lint:
+  riverpod_generator: ^3.0.0-dev.11
+  riverpod_lint: ^3.0.0-dev.4
+  # その他
   build_runner: ^2.4.11
 
   # The "flutter_lints" package below contains a set of recommended lints to

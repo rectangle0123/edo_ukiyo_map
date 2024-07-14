@@ -116,13 +116,13 @@ class Database extends _$Database {
   /// 絵師を取得する
   Future<Painter> getPainter(int id) => (select(painters)..where((e) => e.id.equals(id))).getSingle();
 
-  /// 全ての絵師を取得する
+  /// すべての絵師を取得する
   Future<List<Painter>> getAllPainters() => select(painters).get();
 
   /// 作品を取得する
   Future<Work> getWork(int id) => (select(works)..where((e) => e.id.equals(id))).getSingle();
 
-  /// 全ての作品を取得する
+  /// すべての作品を取得する
   Future<List<Work>> getAllWorks() => select(works).get();
 
   /// 作品IDから絵師を取得する
