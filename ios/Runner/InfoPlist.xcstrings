@@ -29,6 +29,23 @@
           }
         }
       }
+    },
+    "NSLocationWhenInUseUsageDescription" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Required for pointing your location on the map."
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "needs_review",
+            "value" : "現在位置を表示するために使用します。"
+          }
+        }
+      }
     }
   },
   "version" : "1.0"

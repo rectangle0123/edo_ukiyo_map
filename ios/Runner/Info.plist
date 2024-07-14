@@ -47,5 +47,7 @@
 	</array>
 	<key>DartDefines</key>
 	<string>$(DART_DEFINES)</string>
+	<key>NSLocationWhenInUseUsageDescription</key>
+	<string>Required for pointing your location on the map.</string>
 </dict>
 </plist>
