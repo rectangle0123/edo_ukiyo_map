@@ -1,5 +1,6 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
+import 'package:package_info_plus/package_info_plus.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 import 'package:edo_ukiyo_map/providers/notifiers.dart';
@@ -63,3 +64,10 @@ Future<List<Work>> worksByPainter(WorksByPainterRef ref, Painter painter) async 
 Future<List<Work>> allWorks(AllWorksRef ref) async {
   return Database.instance.getAllWorks();
 }
+
+/// パッケージ情報を取得する
+@riverpod
+Future<PackageInfo> packageInfo(PackageInfoRef ref) async {
+  return await PackageInfo.fromPlatform();
+}
+

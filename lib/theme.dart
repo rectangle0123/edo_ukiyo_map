@@ -7,6 +7,7 @@ class AppTheme {
     // 基本
     brightness: Brightness.light,
     colorScheme: ColorScheme.fromSeed(seedColor: Colors.blue, brightness: Brightness.light),
+    cupertinoOverrideTheme: CupertinoAppTheme.lightTheme,
     scaffoldBackgroundColor: CupertinoColors.systemGrey6,
     // テキスト
     fontFamily: 'Noto Serif Japanese',
@@ -14,8 +15,6 @@ class AppTheme {
     cardTheme: const CardTheme(color: Colors.white),
     // ダイアログ
     dialogBackgroundColor: Colors.white,
-    // Cupertino
-    cupertinoOverrideTheme: CupertinoAppTheme.lightTheme,
   );
 }
 
