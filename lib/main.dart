@@ -6,6 +6,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:edo_ukiyo_map/pages/home.dart';
 import 'package:edo_ukiyo_map/pages/splash.dart';
 import 'package:edo_ukiyo_map/storage/database.dart';
+import 'package:edo_ukiyo_map/theme.dart';
 
 void main() {
   WidgetsFlutterBinding.ensureInitialized();
@@ -48,6 +49,8 @@ class AppState extends ConsumerState<App> with WidgetsBindingObserver {
       // 多言語化
       localizationsDelegates: AppLocalizations.localizationsDelegates,
       supportedLocales: AppLocalizations.supportedLocales,
+      // テーマ
+      theme: AppTheme.lightTheme,
       // ホーム画面
       home: FutureBuilder(
         future: initialize(),
