@@ -47,10 +47,17 @@ android {
         applicationId = "com.gmail.rectangle0123.edo_ukiyo_map"
         // You can update the following values to match your application needs.
         // For more information, see: https://docs.flutter.dev/deployment/android#reviewing-the-gradle-build-configuration.
-        minSdk = flutter.minSdkVersion
+
+        // Googleマップ
+        // minSdk = flutter.minSdkVersion
+        minSdkVersion flutter.minSdkVersion
+
         targetSdk = flutter.targetSdkVersion
         versionCode = flutterVersionCode.toInteger()
         versionName = flutterVersionName
+
+        // マニフェストのプレイスホルダーにdartDefinesの値を追加する
+        manifestPlaceholders['googleMapsApiKey'] = dartDefines.googleMapsApiKey
     }
 
     buildTypes {

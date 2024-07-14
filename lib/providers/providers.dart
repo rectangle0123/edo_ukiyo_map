@@ -1,10 +1,16 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 import 'package:edo_ukiyo_map/providers/notifiers.dart';
 import 'package:edo_ukiyo_map/storage/database.dart';
 
 part 'providers.g.dart';
+
+/// Googleマップコントローラーの状態通知を取得する
+final mapControllerNotifierProvider = StateNotifierProvider<MapControllerNotifier, GoogleMapController?>(
+      (ref) => MapControllerNotifier(),
+);
 
 /// 選択されている作品の状態通知を取得する
 final selectedWorkNotifierProvider = StateNotifierProvider<SelectedWorkNotifier, Work?>(

@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import 'package:edo_ukiyo_map/providers/providers.dart';
+import 'package:edo_ukiyo_map/widgets/map.dart';
 
 class HomePage extends ConsumerWidget {
   const HomePage({super.key});
@@ -12,7 +13,7 @@ class HomePage extends ConsumerWidget {
     return Scaffold(
       body: Center(
         child: selected != null
-          ? Text(selected.nameJa)
+          ? const AppMap()
           : Container()
       ),
     );

@@ -1,6 +1,18 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:google_maps_flutter/google_maps_flutter.dart';
 
 import 'package:edo_ukiyo_map/storage/database.dart';
+import 'package:edo_ukiyo_map/utils/constants.dart';
+
+/// Googleマップコントローラーの状態通知
+class MapControllerNotifier extends StateNotifier<GoogleMapController?> {
+  MapControllerNotifier() : super(null);
+
+  /// 状態更新
+  void updateState(GoogleMapController controller) {
+    state = controller;
+  }
+}
 
 /// 選択されている作品の状態通知
 class SelectedWorkNotifier extends StateNotifier<Work?> {
@@ -10,7 +22,7 @@ class SelectedWorkNotifier extends StateNotifier<Work?> {
 
   // 初期化
   Future<void> _initialize() async {
-    final work = await Database.instance.getWork(1);
+    final work = await Database.instance.getWork(defaultWorkId);
     state = work;
   }
 
