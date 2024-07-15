@@ -1,20 +1,49 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
+/// 藍色
+const indigoSwatch = MaterialColor(
+  0xff165e83,
+  {
+    50: Color(0xffe5e9ef),
+    100: Color(0xffbec9d7),
+    200: Color(0xff93a5bc),
+    300: Color(0xff6880a1),
+    400: Color(0xff47658c),
+    500: Color(0xff274a78),
+    600: Color(0xff234370),
+    700: Color(0xff1d3a65),
+    800: Color(0xff17325b),
+    900: Color(0xff0e2248),
+  },
+);
+
+/// 生成り色
+const unbleachedColor = Color(0xfffbfaf5);
+/// 乳白色
+const milkyWhiteColor = Color(0xfff3f3f3);
+/// 胡粉色
+const gofunColor = Color(0xfffffffc);
+
 /// Materialテーマ
 class AppTheme {
   static final ThemeData lightTheme = ThemeData(
     // 基本
     brightness: Brightness.light,
-    colorScheme: ColorScheme.fromSeed(seedColor: Colors.blue, brightness: Brightness.light),
-    cupertinoOverrideTheme: CupertinoAppTheme.lightTheme,
-    scaffoldBackgroundColor: CupertinoColors.systemGrey6,
-    // テキスト
     fontFamily: 'Noto Serif Japanese',
-    // カード
-    cardTheme: const CardTheme(color: Colors.white),
-    // ダイアログ
-    dialogBackgroundColor: Colors.white,
+    cupertinoOverrideTheme: CupertinoAppTheme.lightTheme,
+    colorScheme: ColorScheme.fromSwatch(
+      primarySwatch: indigoSwatch,
+      backgroundColor: milkyWhiteColor,
+    ),
+    // メニュー
+    drawerTheme: const DrawerThemeData(
+      backgroundColor: milkyWhiteColor,
+    ),
+    // カードの色
+    cardColor: gofunColor,
+    // ダイアログの色
+    dialogBackgroundColor: gofunColor,
   );
 }
 
@@ -23,8 +52,8 @@ class CupertinoAppTheme {
   static const CupertinoThemeData lightTheme = CupertinoThemeData(
     // 基本
     brightness: Brightness.light,
-    primaryColor: Colors.blue,
-    scaffoldBackgroundColor: CupertinoColors.systemGrey6,
+    primaryColor: indigoSwatch,
+    barBackgroundColor: unbleachedColor,
     // テキスト
     textTheme: CupertinoTextThemeData(
       // 通常のテキスト

@@ -1,8 +1,11 @@
-import 'package:edo_ukiyo_map/providers/providers.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+
+import 'package:edo_ukiyo_map/pages/debug.dart';
+import 'package:edo_ukiyo_map/providers/providers.dart';
 
 /// メニュー
 class Menu extends StatelessWidget {
@@ -22,6 +25,7 @@ class Menu extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 CupertinoListSection(
+                  backgroundColor: Theme.of(context).drawerTheme.backgroundColor!,
                   children: [
                     _MenuItem(
                       title: AppLocalizations.of(context)!.page_home,
@@ -29,6 +33,19 @@ class Menu extends StatelessWidget {
                     ),
                   ],
                 ),
+                // デバッグページ
+                if (!kReleaseMode)
+                  CupertinoListSection(
+                    backgroundColor: Theme.of(context).drawerTheme.backgroundColor!,
+                    children: [
+                      _MenuItem(
+                        title: 'デバッグ',
+                        onTap: () => Navigator.of(context).push(
+                          MaterialPageRoute(builder: (context) => const DebugPage()),
+                        ),
+                      ),
+                    ],
+                  ),
                 const Spacer(),
                 _Version(),
               ],
