@@ -45,65 +45,69 @@ class Database extends _$Database {
     final paintersData = await CsvUtils.read('painters.csv');
     final worksData = await CsvUtils.read('works.csv');
     final worksPaintersData = await CsvUtils.read('works-painters.csv');
-    // マスタデータクリア
-    await batch((batch) async {
-      batch.deleteAll(worksPainters);
-      batch.deleteAll(works);
-      batch.deleteAll(painters);
-      batch.deleteAll(serieses);
-      batch.deleteAll(sources);
-    });
-    // マスタデータ投入
-    await batch((batch) async {
-      batch.insertAll(sources, sourcesData.map((data) => SourcesCompanion(
-        id: Value(int.parse(data[0])),
-        nameJa: Value(data[1]),
-        nameEn: Value(data[2]),
-        licenseJa: Value(data[3]),
-        licenseEn: Value(data[4]),
-      )).toList());
-    });
-    await batch((batch) async {
-      batch.insertAll(serieses, seriesData.map((data) => SeriesesCompanion(
-        id: Value(int.parse(data[0])),
-        nameJa: Value(data[1]),
-        nameEn: Value(data[2]),
-      )).toList());
-    });
-    await batch((batch) async {
-      batch.insertAll(painters, paintersData.map((data) => PaintersCompanion(
-        id: Value(int.parse(data[0])),
-        nameJa: Value(data[1]),
-        nameEn: Value(data[2]),
-        aliasJa: Value(data[3]),
-        aliasEn: Value(data[4]),
-        bornIn: Value(data[5].isEmpty ? null : int.parse(data[5])),
-        diedIn: Value(data[6].isEmpty ? null : int.parse(data[6])),
-        descriptionJa: Value(data[7]),
-        descriptionEn: Value(data[8]),
-        source: Value(data[9].isEmpty ? null : int.parse(data[9])),
-      )).toList());
-    });
-    await batch((batch) async {
-      batch.insertAll(works, worksData.map((data) => WorksCompanion(
-        id: Value(int.parse(data[0])),
-        series: Value(data[1].isEmpty ? null : int.parse(data[1])),
-        nameJa: Value(data[2]),
-        nameEn: Value(data[3]),
-        season: Value(data[4].isEmpty ? null : int.parse(data[4])),
-        publishedIn: Value(data[5].isEmpty ? null : int.parse(data[5])),
-        latitude: Value(double.parse(data[6])),
-        longitude: Value(double.parse(data[7])),
-        direction: Value(data[8].isEmpty ? null : double.parse(data[8])),
-        descriptionJa: Value(data[9]),
-        descriptionEn: Value(data[10]),
-      )).toList());
-    });
-    await batch((batch) async {
-    batch.insertAll(worksPainters, worksPaintersData.map((data) => WorksPaintersCompanion(
-        workId: Value(int.parse(data[0])),
-        painterId: Value(int.parse(data[1])),
-      )).toList());
+
+    // トランザクション処理
+    await transaction(() async {
+      // マスタデータクリア
+      await batch((batch) async {
+        batch.deleteAll(worksPainters);
+        batch.deleteAll(works);
+        batch.deleteAll(painters);
+        batch.deleteAll(serieses);
+        batch.deleteAll(sources);
+      });
+      // マスタデータ投入
+      await batch((batch) async {
+        batch.insertAll(sources, sourcesData.map((data) => SourcesCompanion(
+          id: Value(int.parse(data[0])),
+          nameJa: Value(data[1]),
+          nameEn: Value(data[2]),
+          licenseJa: Value(data[3]),
+          licenseEn: Value(data[4]),
+        )).toList());
+      });
+      await batch((batch) async {
+        batch.insertAll(serieses, seriesData.map((data) => SeriesesCompanion(
+          id: Value(int.parse(data[0])),
+          nameJa: Value(data[1]),
+          nameEn: Value(data[2]),
+        )).toList());
+      });
+      await batch((batch) async {
+        batch.insertAll(painters, paintersData.map((data) => PaintersCompanion(
+          id: Value(int.parse(data[0])),
+          nameJa: Value(data[1]),
+          nameEn: Value(data[2]),
+          aliasJa: Value(data[3]),
+          aliasEn: Value(data[4]),
+          bornIn: Value(data[5].isEmpty ? null : int.parse(data[5])),
+          diedIn: Value(data[6].isEmpty ? null : int.parse(data[6])),
+          descriptionJa: Value(data[7]),
+          descriptionEn: Value(data[8]),
+          source: Value(data[9].isEmpty ? null : int.parse(data[9])),
+        )).toList());
+      });
+      await batch((batch) async {
+        batch.insertAll(works, worksData.map((data) =>  WorksCompanion(
+          id: Value(int.parse(data[0])),
+          series: Value(data[1].isEmpty ? null : int.parse(data[1])),
+          nameJa: Value(data[2]),
+          nameEn: Value(data[3]),
+          season: Value(data[4].isEmpty ? null : int.parse(data[4])),
+          publishedIn: Value(data[5].isEmpty ? null : int.parse(data[5])),
+          latitude: Value(double.parse(data[6])),
+          longitude: Value(double.parse(data[7])),
+          direction: Value(data[8].isEmpty ? null : double.parse(data[8])),
+          descriptionJa: Value(data[9]),
+          descriptionEn: Value(data[10]),
+        )).toList());
+      });
+      await batch((batch) async {
+        batch.insertAll(worksPainters, worksPaintersData.map((data) => WorksPaintersCompanion(
+          workId: Value(int.parse(data[0])),
+          painterId: Value(int.parse(data[1])),
+        )).toList());
+      });
     });
   }
 
