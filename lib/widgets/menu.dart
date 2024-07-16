@@ -5,6 +5,7 @@ import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import 'package:edo_ukiyo_map/pages/debug.dart';
+import 'package:edo_ukiyo_map/pages/packages.dart';
 import 'package:edo_ukiyo_map/providers/providers.dart';
 
 /// メニュー
@@ -33,13 +34,24 @@ class Menu extends StatelessWidget {
                     ),
                   ],
                 ),
+                CupertinoListSection(
+                  backgroundColor: Theme.of(context).drawerTheme.backgroundColor!,
+                  children: [
+                    _MenuItem(
+                      title: AppLocalizations.of(context)!.page_licenses,
+                      onTap: () => Navigator.of(context).push(
+                        MaterialPageRoute(builder: (context) => const PackagesPage()),
+                      ),
+                    ),
+                  ],
+                ),
                 // デバッグページ
                 if (!kReleaseMode)
                   CupertinoListSection(
                     backgroundColor: Theme.of(context).drawerTheme.backgroundColor!,
                     children: [
                       _MenuItem(
-                        title: 'デバッグ',
+                        title: AppLocalizations.of(context)!.page_debug,
                         onTap: () => Navigator.of(context).push(
                           MaterialPageRoute(builder: (context) => const DebugPage()),
                         ),

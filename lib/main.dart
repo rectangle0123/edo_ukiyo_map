@@ -22,10 +22,11 @@ class App extends ConsumerStatefulWidget {
 }
 
 class AppState extends ConsumerState<App> with WidgetsBindingObserver {
+
   @override
   void initState() {
-    super.initState();
     WidgetsBinding.instance.addObserver(this);
+    super.initState();
   }
 
   @override
