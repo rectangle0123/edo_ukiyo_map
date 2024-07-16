@@ -1,3 +1,4 @@
+import 'package:carousel_slider/carousel_controller.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:package_info_plus/package_info_plus.dart';
@@ -12,6 +13,12 @@ part 'providers.g.dart';
 final mapControllerNotifierProvider = StateNotifierProvider<MapControllerNotifier, GoogleMapController?>(
       (ref) => MapControllerNotifier(),
 );
+
+/// カルーセルコントローラー
+@riverpod
+CarouselController carouselController(CarouselControllerRef ref) {
+  return CarouselController();
+}
 
 /// 選択されている作品の状態通知を取得する
 final selectedWorkNotifierProvider = StateNotifierProvider<SelectedWorkNotifier, Work?>(

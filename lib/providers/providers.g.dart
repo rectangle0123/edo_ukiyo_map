@@ -6,6 +6,25 @@ part of 'providers.dart';
 // RiverpodGenerator
 // **************************************************************************
 
+String _$carouselControllerHash() =>
+    r'ebded5237381d1b7308643a510aa654a96cb55c6';
+
+/// カルーセルコントローラー
+///
+/// Copied from [carouselController].
+@ProviderFor(carouselController)
+final carouselControllerProvider =
+    AutoDisposeProvider<CarouselController>.internal(
+  carouselController,
+  name: r'carouselControllerProvider',
+  debugGetCreateSourceHash: const bool.fromEnvironment('dart.vm.product')
+      ? null
+      : _$carouselControllerHash,
+  dependencies: null,
+  allTransitiveDependencies: null,
+);
+
+typedef CarouselControllerRef = AutoDisposeProviderRef<CarouselController>;
 String _$sourceByIdHash() => r'b4920c09ca79d0cda5f4e76e1885a89d7a21e713';
 
 /// Copied from Dart SDK

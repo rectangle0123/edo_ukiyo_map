@@ -52,6 +52,8 @@ dependencies:
   geolocator: ^12.0.0
   # パッケージ情報
   package_info_plus: ^8.0.0
+  # カルーセル
+  carousel_slider: ^4.2.1
   # その他
   path: ^1.9.0
   path_provider: ^2.1.3
