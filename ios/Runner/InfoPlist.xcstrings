@@ -2,6 +2,7 @@
   "sourceLanguage" : "en",
   "strings" : {
     "CFBundleDisplayName" : {
+      "comment" : "Bundle display name",
       "extractionState" : "manual",
       "localizations" : {
         "en" : {
@@ -27,10 +28,17 @@
             "state" : "new",
             "value" : "edo_ukiyo_map"
           }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "edo_ukiyo_map"
+          }
         }
       }
     },
     "NSLocationWhenInUseUsageDescription" : {
+      "comment" : "Privacy - Location When In Use Usage Description",
       "extractionState" : "manual",
       "localizations" : {
         "en" : {
@@ -41,7 +49,7 @@
         },
         "ja" : {
           "stringUnit" : {
-            "state" : "needs_review",
+            "state" : "translated",
             "value" : "現在位置を表示するために使用します。"
           }
         }
