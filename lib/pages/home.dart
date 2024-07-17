@@ -1,11 +1,13 @@
+import 'package:edo_ukiyo_map/providers/providers.dart';
 import 'package:flutter/material.dart';
 
 import 'package:edo_ukiyo_map/widgets/carousel.dart';
 import 'package:edo_ukiyo_map/widgets/menu.dart';
 import 'package:edo_ukiyo_map/widgets/map.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 /// ホーム画面
-class HomePage extends StatelessWidget {
+class HomePage extends ConsumerWidget {
   /// タブの高さ
   static const tabHeight = 40.0;
   /// カルーセルの高さ
@@ -14,7 +16,7 @@ class HomePage extends StatelessWidget {
   const HomePage({super.key});
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     return Scaffold(
       drawer: const Menu(),
       body: Stack(
@@ -32,6 +34,12 @@ class HomePage extends StatelessWidget {
             ],
           ),
         ],
+      ),
+      floatingActionButton: FloatingActionButton(
+        onPressed: () {
+          ref.read(selectedSeriesIdNotifierProvider.notifier).updateState(2);
+        },
+        child: Icon(Icons.add),
       ),
     );
   }
