@@ -803,6 +803,41 @@ class _WorksBySeriesProviderElement
   Series get series => (origin as WorksBySeriesProvider).series;
 }
 
+String _$selectedWorkHash() => r'aa4bd7e02ac5bca686c17171df941e609917be65';
+
+/// 選択されている作品IDから作品を取得する
+///
+/// Copied from [selectedWork].
+@ProviderFor(selectedWork)
+final selectedWorkProvider = AutoDisposeFutureProvider<Work>.internal(
+  selectedWork,
+  name: r'selectedWorkProvider',
+  debugGetCreateSourceHash:
+      const bool.fromEnvironment('dart.vm.product') ? null : _$selectedWorkHash,
+  dependencies: null,
+  allTransitiveDependencies: null,
+);
+
+typedef SelectedWorkRef = AutoDisposeFutureProviderRef<Work>;
+String _$worksBySelectedSeriesIdHash() =>
+    r'90d050d28e6fc2beec56c202c1a884cd1d49a2bf';
+
+/// 選択されているシリーズIDから作品を取得する
+///
+/// Copied from [worksBySelectedSeriesId].
+@ProviderFor(worksBySelectedSeriesId)
+final worksBySelectedSeriesIdProvider =
+    AutoDisposeFutureProvider<List<Work>>.internal(
+  worksBySelectedSeriesId,
+  name: r'worksBySelectedSeriesIdProvider',
+  debugGetCreateSourceHash: const bool.fromEnvironment('dart.vm.product')
+      ? null
+      : _$worksBySelectedSeriesIdHash,
+  dependencies: null,
+  allTransitiveDependencies: null,
+);
+
+typedef WorksBySelectedSeriesIdRef = AutoDisposeFutureProviderRef<List<Work>>;
 String _$paintersByWorkHash() => r'432c4c7e433e6e9f4b3d2d7d9d0f91c69b8f20cb';
 
 /// 作品から絵師を取得する

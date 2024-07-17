@@ -14,14 +14,14 @@ final mapControllerNotifierProvider = StateNotifierProvider<MapControllerNotifie
       (ref) => MapControllerNotifier(),
 );
 
-/// 選択されているシリーズの状態通知を取得する
-final selectedSeriesNotifierProvider = StateNotifierProvider<SelectedStateNotifier, Series?>(
-      (ref) => SelectedStateNotifier(),
+/// 選択されているシリーズIDの状態通知を取得する
+final selectedSeriesIdNotifierProvider = StateNotifierProvider<SelectedStateIdNotifier, int>(
+      (ref) => SelectedStateIdNotifier(),
 );
 
-/// 選択されている作品の状態通知を取得する
-final selectedWorkNotifierProvider = StateNotifierProvider<SelectedWorkNotifier, Work?>(
-      (ref) => SelectedWorkNotifier(),
+/// 選択されている作品IDの状態通知を取得する
+final selectedWorkIdNotifierProvider = StateNotifierProvider<SelectedWorkIdNotifier, int>(
+      (ref) => SelectedWorkIdNotifier(),
 );
 
 /// お気に入りの状態通知を取得する
@@ -69,6 +69,20 @@ Future<List<Painter>> allPainters(AllPaintersRef ref) async {
 @riverpod
 Future<List<Work>> worksBySeries(WorksBySeriesRef ref, Series series) async {
   return Database.instance.getWorksBySeriesId(series.id);
+}
+
+/// 選択されている作品IDから作品を取得する
+@riverpod
+Future<Work> selectedWork(SelectedWorkRef ref) async {
+  final selectedWorkId = ref.watch(selectedWorkIdNotifierProvider);
+  return Database.instance.getWork(selectedWorkId);
+}
+
+/// 選択されているシリーズIDから作品を取得する
+@riverpod
+Future<List<Work>> worksBySelectedSeriesId(WorksBySelectedSeriesIdRef ref) async {
+  final selectedSeriesId = ref.watch(selectedSeriesIdNotifierProvider);
+  return Database.instance.getWorksBySeriesId(selectedSeriesId);
 }
 
 /// 作品から絵師を取得する

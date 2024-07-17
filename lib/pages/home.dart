@@ -33,6 +33,7 @@ class HomePage extends StatelessWidget {
     );
   }
 }
+
 // ヘッダー
 class _Header extends StatelessWidget {
   /// パディング
