@@ -23,7 +23,7 @@ class CarouselPanelState extends ConsumerState<CarouselPanel> {
   @override
   Widget build(BuildContext context) {
     final controller = ref.watch(carouselControllerProvider);
-    final works = ref.watch(worksBySelectedSeriesIdProvider);
+    final works = ref.watch(currentAllWorksProvider);
     return LayoutBuilder(
       builder: (context, constraints) {
         return switch (works) {
@@ -52,7 +52,7 @@ class CarouselPanelState extends ConsumerState<CarouselPanel> {
   // アイテム変更イベント
   void onItemChanged(int index, CarouselPageChangedReason reason) async {
     ref.read(selectedWorkIndexNotifierProvider.notifier).updateState(++index);
-    final work = await ref.watch(worksBySelectedSeriesIdAndWorkIndexProvider.future);
+    final work = await ref.watch(currentSingleWorkProvider.future);
     ref.watch(mapControllerNotifierProvider)?.animateCamera(
       CameraUpdate.newLatLng(LatLng(work.latitude, work.longitude)),
     );

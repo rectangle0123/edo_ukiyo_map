@@ -25,8 +25,7 @@ final carouselControllerProvider =
 );
 
 typedef CarouselControllerRef = AutoDisposeProviderRef<CarouselController>;
-String _$worksBySelectedSeriesIdHash() =>
-    r'ec845a4fb71fb6bc4d12e7c4a3231e1d3e729991';
+String _$currentAllWorksHash() => r'c0a8c52d620cafcd7da218e0444c9b4d4199ba3c';
 
 /// 出典を取得する
 /// シリーズを取得する
@@ -34,42 +33,58 @@ String _$worksBySelectedSeriesIdHash() =>
 /// 絵師を取得する
 /// すべての絵師を取得する
 /// シリーズから作品を取得する
-/// 選択されているシリーズIDから作品を取得する
+/// 選択されているシリーズに含まれるすべての作品を取得する
 ///
-/// Copied from [worksBySelectedSeriesId].
-@ProviderFor(worksBySelectedSeriesId)
-final worksBySelectedSeriesIdProvider =
-    AutoDisposeFutureProvider<List<Work>>.internal(
-  worksBySelectedSeriesId,
-  name: r'worksBySelectedSeriesIdProvider',
+/// Copied from [currentAllWorks].
+@ProviderFor(currentAllWorks)
+final currentAllWorksProvider = AutoDisposeFutureProvider<List<Work>>.internal(
+  currentAllWorks,
+  name: r'currentAllWorksProvider',
   debugGetCreateSourceHash: const bool.fromEnvironment('dart.vm.product')
       ? null
-      : _$worksBySelectedSeriesIdHash,
+      : _$currentAllWorksHash,
   dependencies: null,
   allTransitiveDependencies: null,
 );
 
-typedef WorksBySelectedSeriesIdRef = AutoDisposeFutureProviderRef<List<Work>>;
-String _$worksBySelectedSeriesIdAndWorkIndexHash() =>
-    r'9124a7a4b888fe65cf19601ad770c09804c6b240';
+typedef CurrentAllWorksRef = AutoDisposeFutureProviderRef<List<Work>>;
+String _$currentSingleWorkHash() => r'beff4e62d9d2ea25edcb1beb0dd27def045f4efa';
 
-/// 選択されているシリーズIDと作品インデックスから作品を取得する
+/// 選択されているシリーズと作品インデックスからひとつの作品を取得する
 ///
-/// Copied from [worksBySelectedSeriesIdAndWorkIndex].
-@ProviderFor(worksBySelectedSeriesIdAndWorkIndex)
-final worksBySelectedSeriesIdAndWorkIndexProvider =
-    AutoDisposeFutureProvider<Work>.internal(
-  worksBySelectedSeriesIdAndWorkIndex,
-  name: r'worksBySelectedSeriesIdAndWorkIndexProvider',
+/// Copied from [currentSingleWork].
+@ProviderFor(currentSingleWork)
+final currentSingleWorkProvider = AutoDisposeFutureProvider<Work>.internal(
+  currentSingleWork,
+  name: r'currentSingleWorkProvider',
   debugGetCreateSourceHash: const bool.fromEnvironment('dart.vm.product')
       ? null
-      : _$worksBySelectedSeriesIdAndWorkIndexHash,
+      : _$currentSingleWorkHash,
   dependencies: null,
   allTransitiveDependencies: null,
 );
 
-typedef WorksBySelectedSeriesIdAndWorkIndexRef
-    = AutoDisposeFutureProviderRef<Work>;
+typedef CurrentSingleWorkRef = AutoDisposeFutureProviderRef<Work>;
+String _$currentWorksAndWorkHash() =>
+    r'09456d574f924c6713230cec244a72c2f6cc4995';
+
+/// 選択されているシリーズに含まれるすべての作品と、選択されている作品インデックスからひとつの作品を取得する
+///
+/// Copied from [currentWorksAndWork].
+@ProviderFor(currentWorksAndWork)
+final currentWorksAndWorkProvider =
+    AutoDisposeFutureProvider<(List<Work>, Work)>.internal(
+  currentWorksAndWork,
+  name: r'currentWorksAndWorkProvider',
+  debugGetCreateSourceHash: const bool.fromEnvironment('dart.vm.product')
+      ? null
+      : _$currentWorksAndWorkHash,
+  dependencies: null,
+  allTransitiveDependencies: null,
+);
+
+typedef CurrentWorksAndWorkRef
+    = AutoDisposeFutureProviderRef<(List<Work>, Work)>;
 String _$packageInfoHash() => r'6d24887a45825322730812d638eae4192104901b';
 
 /// 作品から絵師を取得する

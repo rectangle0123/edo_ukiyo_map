@@ -3,16 +3,6 @@ import 'package:google_maps_flutter/google_maps_flutter.dart';
 
 import 'package:edo_ukiyo_map/storage/database.dart';
 
-/// Googleマップコントローラーの状態通知
-class MapControllerNotifier extends StateNotifier<GoogleMapController?> {
-  MapControllerNotifier() : super(null);
-
-  /// 状態更新
-  void updateState(GoogleMapController controller) {
-    state = controller;
-  }
-}
-
 /// 選択されているシリーズIDの状態通知
 class SelectedStateIdNotifier extends StateNotifier<int> {
   SelectedStateIdNotifier() : super(1);
@@ -57,3 +47,24 @@ class FavouritesNotifier extends StateNotifier<List<Work>> {
     state = state.where((e) => e.id != work.id).toList();
   }
 }
+
+/// Googleマップコントローラーの状態通知
+class MapControllerNotifier extends StateNotifier<GoogleMapController?> {
+  MapControllerNotifier() : super(null);
+
+  /// 状態更新
+  void updateState(GoogleMapController controller) {
+    state = controller;
+  }
+}
+
+/// Googleマップマーカー画像の状態通知
+class MarkerNotifier extends StateNotifier<(BitmapDescriptor, BitmapDescriptor)?> {
+  MarkerNotifier() : super(null);
+
+  /// 状態更新
+  void updateState((BitmapDescriptor, BitmapDescriptor) markers) {
+    state = markers;
+  }
+}
+

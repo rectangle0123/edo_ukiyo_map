@@ -9,11 +9,6 @@ import 'package:edo_ukiyo_map/storage/database.dart';
 
 part 'providers.g.dart';
 
-/// Googleマップコントローラーの状態通知を取得する
-final mapControllerNotifierProvider = StateNotifierProvider<MapControllerNotifier, GoogleMapController?>(
-      (ref) => MapControllerNotifier(),
-);
-
 /// 選択されているシリーズIDの状態通知を取得する
 final selectedSeriesIdNotifierProvider = StateNotifierProvider<SelectedStateIdNotifier, int>(
       (ref) => SelectedStateIdNotifier(),
@@ -27,6 +22,16 @@ final selectedWorkIndexNotifierProvider = StateNotifierProvider<SelectedWorkInde
 /// お気に入りの状態通知を取得する
 final favouritesNotifierProvider = StateNotifierProvider<FavouritesNotifier, List<Work>>(
       (ref) => FavouritesNotifier(),
+);
+
+/// Googleマップコントローラーの状態通知を取得する
+final mapControllerNotifierProvider = StateNotifierProvider<MapControllerNotifier, GoogleMapController?>(
+      (ref) => MapControllerNotifier(),
+);
+
+/// Googleマップマーカー画像の状態通知を取得する
+final markerNotifierProvider = StateNotifierProvider<MarkerNotifier, (BitmapDescriptor, BitmapDescriptor)?>(
+      (ref) => MarkerNotifier(),
 );
 
 /// カルーセルコントローラーを取得する
@@ -71,19 +76,27 @@ CarouselController carouselController(CarouselControllerRef ref) {
 //   return Database.instance.getWorksBySeriesId(series.id);
 // }
 
-/// 選択されているシリーズIDから作品を取得する
+/// 選択されているシリーズに含まれるすべての作品を取得する
 @riverpod
-Future<List<Work>> worksBySelectedSeriesId(WorksBySelectedSeriesIdRef ref) {
-  final selectedSeriesId = ref.watch(selectedSeriesIdNotifierProvider);
-  return Database.instance.getWorksBySeriesId(selectedSeriesId);
+Future<List<Work>> currentAllWorks(CurrentAllWorksRef ref) {
+  final seriesId = ref.watch(selectedSeriesIdNotifierProvider);
+  return Database.instance.getWorksBySeriesId(seriesId);
 }
 
-/// 選択されているシリーズIDと作品インデックスから作品を取得する
+/// 選択されているシリーズと作品インデックスからひとつの作品を取得する
 @riverpod
-Future<Work> worksBySelectedSeriesIdAndWorkIndex(WorksBySelectedSeriesIdAndWorkIndexRef ref) {
-  final selectedSeriesId = ref.watch(selectedSeriesIdNotifierProvider);
-  final selectedIndex = ref.watch(selectedWorkIndexNotifierProvider);
-  return Database.instance.getWorkBySeriesIdAndWorkIndex(selectedSeriesId, selectedIndex);
+Future<Work> currentSingleWork(CurrentSingleWorkRef ref) {
+  final seriesId = ref.watch(selectedSeriesIdNotifierProvider);
+  final index = ref.watch(selectedWorkIndexNotifierProvider);
+  return Database.instance.getWorkBySeriesIdAndWorkIndex(seriesId, index);
+}
+
+/// 選択されているシリーズに含まれるすべての作品と、選択されている作品インデックスからひとつの作品を取得する
+@riverpod
+Future<(List<Work>, Work)> currentWorksAndWork(CurrentWorksAndWorkRef ref) async {
+  final works = await ref.watch(currentAllWorksProvider.future);
+  final work = await ref.watch(currentSingleWorkProvider.future);
+  return (works, work);
 }
 
 /// 作品から絵師を取得する
