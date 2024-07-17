@@ -23,9 +23,9 @@ class SelectedStateIdNotifier extends StateNotifier<int> {
   }
 }
 
-/// 選択されている作品シーケンス番号の状態通知
-class SelectedWorkSeqNotifier extends StateNotifier<int> {
-  SelectedWorkSeqNotifier() : super(1);
+/// 選択されている作品インデックスの状態通知
+class SelectedWorkIndexNotifier extends StateNotifier<int> {
+  SelectedWorkIndexNotifier() : super(1);
 
   /// 状態更新
   void updateState(int id) {

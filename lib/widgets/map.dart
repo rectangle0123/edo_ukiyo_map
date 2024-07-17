@@ -16,7 +16,7 @@ class AppMap extends ConsumerStatefulWidget {
 class AppMapState extends ConsumerState<AppMap> {
   @override
   Widget build(BuildContext context) {
-    final work = ref.watch(worksBySelectedSeriesIdAndWorkSeqProvider);
+    final work = ref.watch(worksBySelectedSeriesIdAndWorkIndexProvider);
     return switch (work) {
       AsyncData(:final value) => GoogleMap(
         mapType: MapType.normal,

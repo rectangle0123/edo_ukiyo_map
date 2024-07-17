@@ -51,8 +51,8 @@ class CarouselPanelState extends ConsumerState<CarouselPanel> {
 
   // アイテム変更イベント
   void onItemChanged(int index, CarouselPageChangedReason reason) async {
-    ref.read(selectedWorkSeqNotifierProvider.notifier).updateState(index);
-    final work = await ref.watch(worksBySelectedSeriesIdAndWorkSeqProvider.future);
+    ref.read(selectedWorkIndexNotifierProvider.notifier).updateState(++index);
+    final work = await ref.watch(worksBySelectedSeriesIdAndWorkIndexProvider.future);
     ref.watch(mapControllerNotifierProvider)?.animateCamera(
       CameraUpdate.newLatLng(LatLng(work.latitude, work.longitude)),
     );

@@ -21,13 +21,10 @@ void main() async {
   // 初期化のテスト
   test('initialize database', () async {
     await database.initialize();
-    var count = await database.getAllWorks();
+    final count = await database.getWorksBySeriesId(1);
     expect(count.length, 119);
 
-    count = await database.getWorksBySeriesId(1);
-    expect(count.length, 119);
-
-    var work = await database.getWorkBySeriesIdAndSeq(1, 0);
+    final work = await database.getWorkBySeriesIdAndWorkIndex(1, 1);
     expect(work.nameJa, '日本橋雪晴');
   });
 }

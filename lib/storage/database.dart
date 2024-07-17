@@ -91,7 +91,7 @@ class Database extends _$Database {
         batch.insertAll(works, worksData.map((data) =>  WorksCompanion(
           id: Value(int.parse(data[0])),
           series: Value(data[1].isEmpty ? null : int.parse(data[1])),
-          seq: Value(int.parse(data[2])),
+          index: Value(int.parse(data[2])),
           nameJa: Value(data[3]),
           nameEn: Value(data[4]),
           season: Value(data[5].isEmpty ? null : int.parse(data[5])),
@@ -113,53 +113,53 @@ class Database extends _$Database {
   }
 
   /// 出典を取得する
-  Future<Source> getSource(int id) => (select(sources)..where((e) => e.id.equals(id))).getSingle();
+  // Future<Source> getSource(int id) => (select(sources)..where((e) => e.id.equals(id))).getSingle();
 
   /// シリーズを取得する
-  Future<Series> getSeries(int id) => (select(serieses)..where((e) => e.id.equals(id))).getSingle();
+  // Future<Series> getSeries(int id) => (select(serieses)..where((e) => e.id.equals(id))).getSingle();
 
   /// すべてのシリーズを取得する
-  Future<List<Series>> getAllSeries() => select(serieses).get();
+  // Future<List<Series>> getAllSeries() => select(serieses).get();
 
   /// 絵師を取得する
-  Future<Painter> getPainter(int id) => (select(painters)..where((e) => e.id.equals(id))).getSingle();
+  // Future<Painter> getPainter(int id) => (select(painters)..where((e) => e.id.equals(id))).getSingle();
 
   /// すべての絵師を取得する
-  Future<List<Painter>> getAllPainters() => select(painters).get();
+  // Future<List<Painter>> getAllPainters() => select(painters).get();
 
   /// 作品を取得する
-  Future<Work> getWork(int id) => (select(works)..where((e) => e.id.equals(id))).getSingle();
+  // Future<Work> getWork(int id) => (select(works)..where((e) => e.id.equals(id))).getSingle();
 
   /// すべての作品を取得する
-  Future<List<Work>> getAllWorks() => select(works).get();
+  // Future<List<Work>> getAllWorks() => select(works).get();
 
   /// シリーズIDから作品を取得する
   Future<List<Work>> getWorksBySeriesId(int seriesId) {
     return (select(works)..where((tbl) => tbl.series.equals(seriesId))).get();
   }
 
-  /// シリーズIDとシーケンス番号から作品を取得する
-  Future<Work> getWorkBySeriesIdAndSeq(int seriesId, int seq) async {
-    return await (select(works)..where((e) => e.series.equals(seriesId) & e.seq.equals(seq))).getSingle();
+  /// シリーズIDと作品インデックスから作品を取得する
+  Future<Work> getWorkBySeriesIdAndWorkIndex(int seriesId, int index) async {
+    return await (select(works)..where((e) => e.series.equals(seriesId) & e.index.equals(index))).getSingle();
   }
 
   /// 作品IDから絵師を取得する
-  Future<List<Painter>> getPaintersByWorkId(int workId) async {
-    final query = select(painters).join(
-        [innerJoin(worksPainters, worksPainters.painterId.equalsExp(painters.id))]
-    )..where(worksPainters.workId.equals(workId));
-    final result = await query.get();
-    return result.map((e) => e.readTable(painters)).toList();
-  }
+  // Future<List<Painter>> getPaintersByWorkId(int workId) async {
+  //   final query = select(painters).join(
+  //       [innerJoin(worksPainters, worksPainters.painterId.equalsExp(painters.id))]
+  //   )..where(worksPainters.workId.equals(workId));
+  //   final result = await query.get();
+  //   return result.map((e) => e.readTable(painters)).toList();
+  // }
 
   /// 絵師IDから作品を取得する
-  Future<List<Work>> getWorksByPainterId(int painterId) async {
-    final query = select(works).join(
-        [innerJoin(worksPainters, worksPainters.workId.equalsExp(works.id))]
-    )..where(worksPainters.painterId.equals(painterId));
-    final result = await query.get();
-    return result.map((e) => e.readTable(works)).toList();
-  }
+  // Future<List<Work>> getWorksByPainterId(int painterId) async {
+  //   final query = select(works).join(
+  //       [innerJoin(worksPainters, worksPainters.workId.equalsExp(works.id))]
+  //   )..where(worksPainters.painterId.equals(painterId));
+  //   final result = await query.get();
+  //   return result.map((e) => e.readTable(works)).toList();
+  // }
 
   /// お気に入りを取得する
   Future<List<Work>> getFavourites() async {
@@ -269,8 +269,8 @@ class Works extends Table {
   IntColumn get id => integer()();
   /// シリーズ
   IntColumn get series => integer().nullable().references(Serieses, #id)();
-  /// シーケンス番号
-  IntColumn get seq => integer()();
+  /// 作品インデックス
+  IntColumn get index => integer()();
   /// 名前（日本語）
   TextColumn get nameJa => text()();
   /// 名前（英語）
