@@ -4,6 +4,7 @@ import 'package:google_maps_flutter/google_maps_flutter.dart';
 
 import 'package:edo_ukiyo_map/utils/constants.dart';
 import 'package:edo_ukiyo_map/providers/providers.dart';
+import 'package:edo_ukiyo_map/storage/database.dart';
 
 /// 地図
 class AppMap extends ConsumerStatefulWidget {
@@ -18,9 +19,6 @@ class AppMapState extends ConsumerState<AppMap> {
   Widget build(BuildContext context) {
     // 選択されているシリーズに含まれるすべての作品と、選択されている作品インデックスからひとつの作品を取得する
     final works = ref.watch(currentAllWorksProvider);
-    // マーカー画像を取得する
-    final markers = ref.watch(markerNotifierProvider);
-
     return switch (works) {
       AsyncData(:final value) => GoogleMap(
         mapType: MapType.normal,
@@ -34,25 +32,35 @@ class AppMapState extends ConsumerState<AppMap> {
           tilt: defaultMapTilt,
         ),
         // マーカーの設定
-        // 画像を取得できなければデフォルトのマーカーを使用する
-        markers: value.map((e) => Marker(
-          markerId: MarkerId(e.id.toString()),
-          position: LatLng(e.latitude, e.longitude),
-          icon: markers == null
-              ? BitmapDescriptor.defaultMarker
-              : ref.watch(markerNotifierProvider)!.$1,
-          onTap: () async {
-            // カルーセルを回す
-            // カルーセルのアイテム変更イベントが発火して選択されている作品インデックスも更新される
-            ref.watch(carouselControllerProvider).jumpToPage(e.index - 1);
-          }
-        )).toSet(),
+        markers: _createMarkers(value),
         onMapCreated: (controller) {
+          // 最初のマーカーのバルーンを表示する
+          controller.showMarkerInfoWindow(const MarkerId('1'));
           // Googleマップコントローラーをプロバイダに設定する
           ref.read(mapControllerNotifierProvider.notifier).updateState(controller);
         },
       ),
       _ => Container(),
     };
+  }
+
+  // マーカーを作成する
+  Set<Marker> _createMarkers(List<Work> works) {
+    // マーカー画像を取得する
+    // 画像を取得できなければデフォルトのマーカーを使用する
+    final image = ref.watch(markerImageNotifierProvider);
+    return works.map((e) => Marker(
+      markerId: MarkerId(e.index.toString()),
+      position: LatLng(e.latitude, e.longitude),
+      icon: image ?? BitmapDescriptor.defaultMarker,
+      infoWindow: InfoWindow(
+        title: e.getName(context),
+      ),
+      onTap: () async {
+        // カルーセルを回す
+        // カルーセルのアイテム変更イベントが発火して選択されている作品インデックスも更新される
+        ref.watch(carouselControllerProvider).jumpToPage(e.index - 1);
+      },
+    )).toSet();
   }
 }

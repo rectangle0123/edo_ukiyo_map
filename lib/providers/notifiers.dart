@@ -59,12 +59,12 @@ class MapControllerNotifier extends StateNotifier<GoogleMapController?> {
 }
 
 /// Googleマップマーカー画像の状態通知
-class MarkerNotifier extends StateNotifier<(BitmapDescriptor, BitmapDescriptor)?> {
-  MarkerNotifier() : super(null);
+class MarkerImageNotifier extends StateNotifier<BitmapDescriptor?> {
+  MarkerImageNotifier() : super(null);
 
   /// 状態更新
-  void updateState((BitmapDescriptor, BitmapDescriptor) markers) {
-    state = markers;
+  void updateState(BitmapDescriptor image) {
+    state = image;
   }
 }
 

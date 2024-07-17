@@ -77,9 +77,8 @@ class AppState extends ConsumerState<App> with WidgetsBindingObserver {
     // データベース初期化
     await Database.instance.initialize();
     // Googleマップマーカー画像を生成する
-    var marker_1 = await _loadCustomMarker('assets/images/pin_blue.png');
-    var marker_2 = await _loadCustomMarker('assets/images/pin_red.png');
-    ref.watch(markerNotifierProvider.notifier).updateState((marker_1, marker_2));
+    var image = await _loadCustomMarker('assets/images/pin.png');
+    ref.watch(markerImageNotifierProvider.notifier).updateState(image);
   }
 
   // マーカー画像を生成する
