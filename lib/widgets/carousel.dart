@@ -1,23 +1,29 @@
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:google_maps_flutter/google_maps_flutter.dart';
 
 import 'package:edo_ukiyo_map/providers/providers.dart';
 import 'package:edo_ukiyo_map/storage/database.dart';
 
 /// カルーセルパネル
-class CarouselPanel extends ConsumerWidget {
+class CarouselPanel extends ConsumerStatefulWidget {
+  const CarouselPanel({super.key});
+
+  @override
+  CarouselPanelState createState() => CarouselPanelState();
+}
+
+class CarouselPanelState extends ConsumerState<CarouselPanel> {
   /// 画面に対する幅の比率
   static const viewPortFraction = 0.4;
   /// 下のパディング
   static const bottomPadding = 4.0;
 
-  const CarouselPanel({super.key});
-
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
+  Widget build(BuildContext context) {
     final controller = ref.watch(carouselControllerProvider);
-    final works = ref.watch(allWorksProvider);
+    final works = ref.watch(worksBySelectedSeriesIdProvider);
     return LayoutBuilder(
       builder: (context, constraints) {
         return switch (works) {
@@ -27,18 +33,28 @@ class CarouselPanel extends ConsumerWidget {
               height: constraints.maxHeight,
               enlargeCenterPage: true,
               enableInfiniteScroll: false,
-              viewportFraction: viewPortFraction
+              viewportFraction: viewPortFraction,
+              onPageChanged: onItemChanged,
             ),
             items: value.map((e) {
               return Container(
                 padding: const EdgeInsets.only(bottom: bottomPadding),
                 child: _CarouselItem(work: e),
               );
-            }).toList()
+            }).toList(),
           ),
           _ => SizedBox(height: constraints.maxHeight),
         };
       },
+    );
+  }
+
+  // アイテム変更イベント
+  void onItemChanged(int index, CarouselPageChangedReason reason) async {
+    ref.read(selectedWorkSeqNotifierProvider.notifier).updateState(index);
+    final work = await ref.watch(worksBySelectedSeriesIdAndWorkSeqProvider.future);
+    ref.watch(mapControllerNotifierProvider)?.animateCamera(
+      CameraUpdate.newLatLng(LatLng(work.latitude, work.longitude)),
     );
   }
 }

@@ -25,7 +25,7 @@ final carouselControllerProvider =
 );
 
 typedef CarouselControllerRef = AutoDisposeProviderRef<CarouselController>;
-String _$sourceByIdHash() => r'b4920c09ca79d0cda5f4e76e1885a89d7a21e713';
+String _$sourceByIdHash() => r'20ad6aba6f5455f84105076b60618b8b7a4456da';
 
 /// Copied from Dart SDK
 class _SystemHash {
@@ -227,7 +227,7 @@ class _SourceByIdProviderElement
   int get id => (origin as SourceByIdProvider).id;
 }
 
-String _$seriesByIdHash() => r'1e425ca1fe419d49e7c090146c157d8429e12850';
+String _$seriesByIdHash() => r'3240678cefb5696b6b94e33626466c21ae71898e';
 
 /// シリーズを取得する
 ///
@@ -408,7 +408,7 @@ class _SeriesByIdProviderElement
   int get id => (origin as SeriesByIdProvider).id;
 }
 
-String _$allSeriesHash() => r'f5f7e0a49e251ac459a6584b5e13278aa9b81f30';
+String _$allSeriesHash() => r'363feab3f07f849290f2a8dd3774dc5a4f390856';
 
 /// すべてのシリーズを取得する
 ///
@@ -424,7 +424,7 @@ final allSeriesProvider = AutoDisposeFutureProvider<List<Series>>.internal(
 );
 
 typedef AllSeriesRef = AutoDisposeFutureProviderRef<List<Series>>;
-String _$painterByIdHash() => r'd2f3d33592c11abdc14af78021a45f53b94dd53e';
+String _$painterByIdHash() => r'efe92578700b7e877cae3db35954bbace53e9263';
 
 /// 絵師を取得する
 ///
@@ -605,7 +605,7 @@ class _PainterByIdProviderElement
   int get id => (origin as PainterByIdProvider).id;
 }
 
-String _$allPaintersHash() => r'61126db0737ec80ce0338214bfcc55050971d80e';
+String _$allPaintersHash() => r'd32b73458299b9219f59fcbd6d1598182b5addb8';
 
 /// すべての絵師を取得する
 ///
@@ -621,7 +621,7 @@ final allPaintersProvider = AutoDisposeFutureProvider<List<Painter>>.internal(
 );
 
 typedef AllPaintersRef = AutoDisposeFutureProviderRef<List<Painter>>;
-String _$worksBySeriesHash() => r'd474edb3964739c37411e9a50bad92ac2eb381c1';
+String _$worksBySeriesHash() => r'50088bd1cc6a3f7ae471662d29059b5f58227353';
 
 /// シリーズから作品を取得する
 ///
@@ -803,24 +803,8 @@ class _WorksBySeriesProviderElement
   Series get series => (origin as WorksBySeriesProvider).series;
 }
 
-String _$selectedWorkHash() => r'aa4bd7e02ac5bca686c17171df941e609917be65';
-
-/// 選択されている作品IDから作品を取得する
-///
-/// Copied from [selectedWork].
-@ProviderFor(selectedWork)
-final selectedWorkProvider = AutoDisposeFutureProvider<Work>.internal(
-  selectedWork,
-  name: r'selectedWorkProvider',
-  debugGetCreateSourceHash:
-      const bool.fromEnvironment('dart.vm.product') ? null : _$selectedWorkHash,
-  dependencies: null,
-  allTransitiveDependencies: null,
-);
-
-typedef SelectedWorkRef = AutoDisposeFutureProviderRef<Work>;
 String _$worksBySelectedSeriesIdHash() =>
-    r'90d050d28e6fc2beec56c202c1a884cd1d49a2bf';
+    r'ec845a4fb71fb6bc4d12e7c4a3231e1d3e729991';
 
 /// 選択されているシリーズIDから作品を取得する
 ///
@@ -838,7 +822,27 @@ final worksBySelectedSeriesIdProvider =
 );
 
 typedef WorksBySelectedSeriesIdRef = AutoDisposeFutureProviderRef<List<Work>>;
-String _$paintersByWorkHash() => r'432c4c7e433e6e9f4b3d2d7d9d0f91c69b8f20cb';
+String _$worksBySelectedSeriesIdAndWorkSeqHash() =>
+    r'70b13e9f39072d7b7d899b42f55e652466f915ab';
+
+/// 選択されているシリーズIDと作品シーケンス番号から作品を取得する
+///
+/// Copied from [worksBySelectedSeriesIdAndWorkSeq].
+@ProviderFor(worksBySelectedSeriesIdAndWorkSeq)
+final worksBySelectedSeriesIdAndWorkSeqProvider =
+    AutoDisposeFutureProvider<Work>.internal(
+  worksBySelectedSeriesIdAndWorkSeq,
+  name: r'worksBySelectedSeriesIdAndWorkSeqProvider',
+  debugGetCreateSourceHash: const bool.fromEnvironment('dart.vm.product')
+      ? null
+      : _$worksBySelectedSeriesIdAndWorkSeqHash,
+  dependencies: null,
+  allTransitiveDependencies: null,
+);
+
+typedef WorksBySelectedSeriesIdAndWorkSeqRef
+    = AutoDisposeFutureProviderRef<Work>;
+String _$paintersByWorkHash() => r'16df42fcfc9b54e12f244cfd1205fe8dbc207ea0';
 
 /// 作品から絵師を取得する
 ///
@@ -1021,7 +1025,7 @@ class _PaintersByWorkProviderElement
   Work get work => (origin as PaintersByWorkProvider).work;
 }
 
-String _$worksByPainterHash() => r'6c9013892d82a4e825372869281074f9b011e310';
+String _$worksByPainterHash() => r'7934dde731be3ec6737d474b59e7e1b8c2d89e8e';
 
 /// 絵師から作品を取得する
 ///
@@ -1204,7 +1208,7 @@ class _WorksByPainterProviderElement
   Painter get painter => (origin as WorksByPainterProvider).painter;
 }
 
-String _$allWorksHash() => r'972f2b2888ca5d89816a8086c3c13fef17512abf';
+String _$allWorksHash() => r'074dd3f6f4902a163e3edf21ba7b8b71e34a4f50';
 
 /// 全ての作品を取得する
 ///
@@ -1220,7 +1224,7 @@ final allWorksProvider = AutoDisposeFutureProvider<List<Work>>.internal(
 );
 
 typedef AllWorksRef = AutoDisposeFutureProviderRef<List<Work>>;
-String _$packageInfoHash() => r'70b4a9f2a022e5b2378e51d1d49d1f88448f9784';
+String _$packageInfoHash() => r'6d24887a45825322730812d638eae4192104901b';
 
 /// パッケージ情報を取得する
 ///

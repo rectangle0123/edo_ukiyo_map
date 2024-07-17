@@ -91,15 +91,16 @@ class Database extends _$Database {
         batch.insertAll(works, worksData.map((data) =>  WorksCompanion(
           id: Value(int.parse(data[0])),
           series: Value(data[1].isEmpty ? null : int.parse(data[1])),
-          nameJa: Value(data[2]),
-          nameEn: Value(data[3]),
-          season: Value(data[4].isEmpty ? null : int.parse(data[4])),
-          publishedIn: Value(data[5].isEmpty ? null : int.parse(data[5])),
-          latitude: Value(double.parse(data[6])),
-          longitude: Value(double.parse(data[7])),
-          direction: Value(data[8].isEmpty ? null : double.parse(data[8])),
-          descriptionJa: Value(data[9]),
-          descriptionEn: Value(data[10]),
+          seq: Value(int.parse(data[2])),
+          nameJa: Value(data[3]),
+          nameEn: Value(data[4]),
+          season: Value(data[5].isEmpty ? null : int.parse(data[5])),
+          publishedIn: Value(data[6].isEmpty ? null : int.parse(data[6])),
+          latitude: Value(double.parse(data[7])),
+          longitude: Value(double.parse(data[8])),
+          direction: Value(data[9].isEmpty ? null : double.parse(data[9])),
+          descriptionJa: Value(data[10]),
+          descriptionEn: Value(data[11]),
         )).toList());
       });
       await batch((batch) async {
@@ -133,8 +134,13 @@ class Database extends _$Database {
   Future<List<Work>> getAllWorks() => select(works).get();
 
   /// シリーズIDから作品を取得する
-  Future<List<Work>> getWorksBySeriesId(int seriesId) async {
+  Future<List<Work>> getWorksBySeriesId(int seriesId) {
     return (select(works)..where((tbl) => tbl.series.equals(seriesId))).get();
+  }
+
+  /// シリーズIDとシーケンス番号から作品を取得する
+  Future<Work> getWorkBySeriesIdAndSeq(int seriesId, int seq) async {
+    return await (select(works)..where((e) => e.series.equals(seriesId) & e.seq.equals(seq))).getSingle();
   }
 
   /// 作品IDから絵師を取得する
@@ -263,6 +269,8 @@ class Works extends Table {
   IntColumn get id => integer()();
   /// シリーズ
   IntColumn get series => integer().nullable().references(Serieses, #id)();
+  /// シーケンス番号
+  IntColumn get seq => integer()();
   /// 名前（日本語）
   TextColumn get nameJa => text()();
   /// 名前（英語）

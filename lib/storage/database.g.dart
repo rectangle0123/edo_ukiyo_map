@@ -1094,6 +1094,11 @@ class $WorksTable extends Works with TableInfo<$WorksTable, Work> {
       requiredDuringInsert: false,
       defaultConstraints:
           GeneratedColumn.constraintIsAlways('REFERENCES serieses (id)'));
+  static const VerificationMeta _seqMeta = const VerificationMeta('seq');
+  @override
+  late final GeneratedColumn<int> seq = GeneratedColumn<int>(
+      'seq', aliasedName, false,
+      type: DriftSqlType.int, requiredDuringInsert: true);
   static const VerificationMeta _nameJaMeta = const VerificationMeta('nameJa');
   @override
   late final GeneratedColumn<String> nameJa = GeneratedColumn<String>(
@@ -1149,6 +1154,7 @@ class $WorksTable extends Works with TableInfo<$WorksTable, Work> {
   List<GeneratedColumn> get $columns => [
         id,
         series,
+        seq,
         nameJa,
         nameEn,
         season,
@@ -1177,6 +1183,12 @@ class $WorksTable extends Works with TableInfo<$WorksTable, Work> {
     if (data.containsKey('series')) {
       context.handle(_seriesMeta,
           series.isAcceptableOrUnknown(data['series']!, _seriesMeta));
+    }
+    if (data.containsKey('seq')) {
+      context.handle(
+          _seqMeta, seq.isAcceptableOrUnknown(data['seq']!, _seqMeta));
+    } else if (isInserting) {
+      context.missing(_seqMeta);
     }
     if (data.containsKey('name_ja')) {
       context.handle(_nameJaMeta,
@@ -1245,6 +1257,8 @@ class $WorksTable extends Works with TableInfo<$WorksTable, Work> {
           .read(DriftSqlType.int, data['${effectivePrefix}id'])!,
       series: attachedDatabase.typeMapping
           .read(DriftSqlType.int, data['${effectivePrefix}series']),
+      seq: attachedDatabase.typeMapping
+          .read(DriftSqlType.int, data['${effectivePrefix}seq'])!,
       nameJa: attachedDatabase.typeMapping
           .read(DriftSqlType.string, data['${effectivePrefix}name_ja'])!,
       nameEn: attachedDatabase.typeMapping
@@ -1279,6 +1293,9 @@ class Work extends DataClass implements Insertable<Work> {
   /// シリーズ
   final int? series;
 
+  /// シーケンス番号
+  final int seq;
+
   /// 名前（日本語）
   final String nameJa;
 
@@ -1308,6 +1325,7 @@ class Work extends DataClass implements Insertable<Work> {
   const Work(
       {required this.id,
       this.series,
+      required this.seq,
       required this.nameJa,
       required this.nameEn,
       this.season,
@@ -1324,6 +1342,7 @@ class Work extends DataClass implements Insertable<Work> {
     if (!nullToAbsent || series != null) {
       map['series'] = Variable<int>(series);
     }
+    map['seq'] = Variable<int>(seq);
     map['name_ja'] = Variable<String>(nameJa);
     map['name_en'] = Variable<String>(nameEn);
     if (!nullToAbsent || season != null) {
@@ -1347,6 +1366,7 @@ class Work extends DataClass implements Insertable<Work> {
       id: Value(id),
       series:
           series == null && nullToAbsent ? const Value.absent() : Value(series),
+      seq: Value(seq),
       nameJa: Value(nameJa),
       nameEn: Value(nameEn),
       season:
@@ -1370,6 +1390,7 @@ class Work extends DataClass implements Insertable<Work> {
     return Work(
       id: serializer.fromJson<int>(json['id']),
       series: serializer.fromJson<int?>(json['series']),
+      seq: serializer.fromJson<int>(json['seq']),
       nameJa: serializer.fromJson<String>(json['nameJa']),
       nameEn: serializer.fromJson<String>(json['nameEn']),
       season: serializer.fromJson<int?>(json['season']),
@@ -1387,6 +1408,7 @@ class Work extends DataClass implements Insertable<Work> {
     return <String, dynamic>{
       'id': serializer.toJson<int>(id),
       'series': serializer.toJson<int?>(series),
+      'seq': serializer.toJson<int>(seq),
       'nameJa': serializer.toJson<String>(nameJa),
       'nameEn': serializer.toJson<String>(nameEn),
       'season': serializer.toJson<int?>(season),
@@ -1402,6 +1424,7 @@ class Work extends DataClass implements Insertable<Work> {
   Work copyWith(
           {int? id,
           Value<int?> series = const Value.absent(),
+          int? seq,
           String? nameJa,
           String? nameEn,
           Value<int?> season = const Value.absent(),
@@ -1414,6 +1437,7 @@ class Work extends DataClass implements Insertable<Work> {
       Work(
         id: id ?? this.id,
         series: series.present ? series.value : this.series,
+        seq: seq ?? this.seq,
         nameJa: nameJa ?? this.nameJa,
         nameEn: nameEn ?? this.nameEn,
         season: season.present ? season.value : this.season,
@@ -1428,6 +1452,7 @@ class Work extends DataClass implements Insertable<Work> {
     return Work(
       id: data.id.present ? data.id.value : this.id,
       series: data.series.present ? data.series.value : this.series,
+      seq: data.seq.present ? data.seq.value : this.seq,
       nameJa: data.nameJa.present ? data.nameJa.value : this.nameJa,
       nameEn: data.nameEn.present ? data.nameEn.value : this.nameEn,
       season: data.season.present ? data.season.value : this.season,
@@ -1450,6 +1475,7 @@ class Work extends DataClass implements Insertable<Work> {
     return (StringBuffer('Work(')
           ..write('id: $id, ')
           ..write('series: $series, ')
+          ..write('seq: $seq, ')
           ..write('nameJa: $nameJa, ')
           ..write('nameEn: $nameEn, ')
           ..write('season: $season, ')
@@ -1467,6 +1493,7 @@ class Work extends DataClass implements Insertable<Work> {
   int get hashCode => Object.hash(
       id,
       series,
+      seq,
       nameJa,
       nameEn,
       season,
@@ -1482,6 +1509,7 @@ class Work extends DataClass implements Insertable<Work> {
       (other is Work &&
           other.id == this.id &&
           other.series == this.series &&
+          other.seq == this.seq &&
           other.nameJa == this.nameJa &&
           other.nameEn == this.nameEn &&
           other.season == this.season &&
@@ -1496,6 +1524,7 @@ class Work extends DataClass implements Insertable<Work> {
 class WorksCompanion extends UpdateCompanion<Work> {
   final Value<int> id;
   final Value<int?> series;
+  final Value<int> seq;
   final Value<String> nameJa;
   final Value<String> nameEn;
   final Value<int?> season;
@@ -1509,6 +1538,7 @@ class WorksCompanion extends UpdateCompanion<Work> {
   const WorksCompanion({
     this.id = const Value.absent(),
     this.series = const Value.absent(),
+    this.seq = const Value.absent(),
     this.nameJa = const Value.absent(),
     this.nameEn = const Value.absent(),
     this.season = const Value.absent(),
@@ -1523,6 +1553,7 @@ class WorksCompanion extends UpdateCompanion<Work> {
   WorksCompanion.insert({
     required int id,
     this.series = const Value.absent(),
+    required int seq,
     required String nameJa,
     required String nameEn,
     this.season = const Value.absent(),
@@ -1534,6 +1565,7 @@ class WorksCompanion extends UpdateCompanion<Work> {
     required String descriptionEn,
     this.rowid = const Value.absent(),
   })  : id = Value(id),
+        seq = Value(seq),
         nameJa = Value(nameJa),
         nameEn = Value(nameEn),
         latitude = Value(latitude),
@@ -1543,6 +1575,7 @@ class WorksCompanion extends UpdateCompanion<Work> {
   static Insertable<Work> custom({
     Expression<int>? id,
     Expression<int>? series,
+    Expression<int>? seq,
     Expression<String>? nameJa,
     Expression<String>? nameEn,
     Expression<int>? season,
@@ -1557,6 +1590,7 @@ class WorksCompanion extends UpdateCompanion<Work> {
     return RawValuesInsertable({
       if (id != null) 'id': id,
       if (series != null) 'series': series,
+      if (seq != null) 'seq': seq,
       if (nameJa != null) 'name_ja': nameJa,
       if (nameEn != null) 'name_en': nameEn,
       if (season != null) 'season': season,
@@ -1573,6 +1607,7 @@ class WorksCompanion extends UpdateCompanion<Work> {
   WorksCompanion copyWith(
       {Value<int>? id,
       Value<int?>? series,
+      Value<int>? seq,
       Value<String>? nameJa,
       Value<String>? nameEn,
       Value<int?>? season,
@@ -1586,6 +1621,7 @@ class WorksCompanion extends UpdateCompanion<Work> {
     return WorksCompanion(
       id: id ?? this.id,
       series: series ?? this.series,
+      seq: seq ?? this.seq,
       nameJa: nameJa ?? this.nameJa,
       nameEn: nameEn ?? this.nameEn,
       season: season ?? this.season,
@@ -1607,6 +1643,9 @@ class WorksCompanion extends UpdateCompanion<Work> {
     }
     if (series.present) {
       map['series'] = Variable<int>(series.value);
+    }
+    if (seq.present) {
+      map['seq'] = Variable<int>(seq.value);
     }
     if (nameJa.present) {
       map['name_ja'] = Variable<String>(nameJa.value);
@@ -1646,6 +1685,7 @@ class WorksCompanion extends UpdateCompanion<Work> {
     return (StringBuffer('WorksCompanion(')
           ..write('id: $id, ')
           ..write('series: $series, ')
+          ..write('seq: $seq, ')
           ..write('nameJa: $nameJa, ')
           ..write('nameEn: $nameEn, ')
           ..write('season: $season, ')
@@ -2500,6 +2540,7 @@ class $$PaintersTableOrderingComposer
 typedef $$WorksTableCreateCompanionBuilder = WorksCompanion Function({
   required int id,
   Value<int?> series,
+  required int seq,
   required String nameJa,
   required String nameEn,
   Value<int?> season,
@@ -2514,6 +2555,7 @@ typedef $$WorksTableCreateCompanionBuilder = WorksCompanion Function({
 typedef $$WorksTableUpdateCompanionBuilder = WorksCompanion Function({
   Value<int> id,
   Value<int?> series,
+  Value<int> seq,
   Value<String> nameJa,
   Value<String> nameEn,
   Value<int?> season,
@@ -2545,6 +2587,7 @@ class $$WorksTableTableManager extends RootTableManager<
           updateCompanionCallback: ({
             Value<int> id = const Value.absent(),
             Value<int?> series = const Value.absent(),
+            Value<int> seq = const Value.absent(),
             Value<String> nameJa = const Value.absent(),
             Value<String> nameEn = const Value.absent(),
             Value<int?> season = const Value.absent(),
@@ -2559,6 +2602,7 @@ class $$WorksTableTableManager extends RootTableManager<
               WorksCompanion(
             id: id,
             series: series,
+            seq: seq,
             nameJa: nameJa,
             nameEn: nameEn,
             season: season,
@@ -2573,6 +2617,7 @@ class $$WorksTableTableManager extends RootTableManager<
           createCompanionCallback: ({
             required int id,
             Value<int?> series = const Value.absent(),
+            required int seq,
             required String nameJa,
             required String nameEn,
             Value<int?> season = const Value.absent(),
@@ -2587,6 +2632,7 @@ class $$WorksTableTableManager extends RootTableManager<
               WorksCompanion.insert(
             id: id,
             series: series,
+            seq: seq,
             nameJa: nameJa,
             nameEn: nameEn,
             season: season,
@@ -2606,6 +2652,11 @@ class $$WorksTableFilterComposer
   $$WorksTableFilterComposer(super.$state);
   ColumnFilters<int> get id => $state.composableBuilder(
       column: $state.table.id,
+      builder: (column, joinBuilders) =>
+          ColumnFilters(column, joinBuilders: joinBuilders));
+
+  ColumnFilters<int> get seq => $state.composableBuilder(
+      column: $state.table.seq,
       builder: (column, joinBuilders) =>
           ColumnFilters(column, joinBuilders: joinBuilders));
 
@@ -2698,6 +2749,11 @@ class $$WorksTableOrderingComposer
   $$WorksTableOrderingComposer(super.$state);
   ColumnOrderings<int> get id => $state.composableBuilder(
       column: $state.table.id,
+      builder: (column, joinBuilders) =>
+          ColumnOrderings(column, joinBuilders: joinBuilders));
+
+  ColumnOrderings<int> get seq => $state.composableBuilder(
+      column: $state.table.seq,
       builder: (column, joinBuilders) =>
           ColumnOrderings(column, joinBuilders: joinBuilders));
 

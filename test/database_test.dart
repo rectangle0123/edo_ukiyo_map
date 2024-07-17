@@ -26,5 +26,8 @@ void main() async {
 
     count = await database.getWorksBySeriesId(1);
     expect(count.length, 119);
+
+    var work = await database.getWorkBySeriesIdAndSeq(1, 0);
+    expect(work.nameJa, '日本橋雪晴');
   });
 }

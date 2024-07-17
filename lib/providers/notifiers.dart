@@ -2,7 +2,6 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 
 import 'package:edo_ukiyo_map/storage/database.dart';
-import 'package:edo_ukiyo_map/utils/constants.dart';
 
 /// Googleマップコントローラーの状態通知
 class MapControllerNotifier extends StateNotifier<GoogleMapController?> {
@@ -16,7 +15,7 @@ class MapControllerNotifier extends StateNotifier<GoogleMapController?> {
 
 /// 選択されているシリーズIDの状態通知
 class SelectedStateIdNotifier extends StateNotifier<int> {
-  SelectedStateIdNotifier() : super(defaultSeriesId);
+  SelectedStateIdNotifier() : super(1);
 
   /// 状態更新
   void updateState(int id) {
@@ -24,9 +23,9 @@ class SelectedStateIdNotifier extends StateNotifier<int> {
   }
 }
 
-/// 選択されている作品IDの状態通知
-class SelectedWorkIdNotifier extends StateNotifier<int> {
-  SelectedWorkIdNotifier() : super(defaultWorkId);
+/// 選択されている作品シーケンス番号の状態通知
+class SelectedWorkSeqNotifier extends StateNotifier<int> {
+  SelectedWorkSeqNotifier() : super(1);
 
   /// 状態更新
   void updateState(int id) {

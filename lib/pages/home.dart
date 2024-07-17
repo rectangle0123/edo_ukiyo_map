@@ -6,8 +6,10 @@ import 'package:edo_ukiyo_map/widgets/map.dart';
 
 /// ホーム画面
 class HomePage extends StatelessWidget {
-  /// フッターの高さ
-  static const footerHeight = 240.0;
+  /// タブの高さ
+  static const tabHeight = 40.0;
+  /// カルーセルの高さ
+  static const carouselHeight = 240.0;
 
   const HomePage({super.key});
 
@@ -18,18 +20,74 @@ class HomePage extends StatelessWidget {
       body: Stack(
         children: [
           SizedBox(
-            height: MediaQuery.of(context).size.height - footerHeight,
+            height: MediaQuery.of(context).size.height - tabHeight - carouselHeight,
             child: const AppMap(),
           ),
           const Column(
             children: [
               _Header(),
               Spacer(),
-              _Footer(height: footerHeight),
+              _Tab(height: tabHeight),
+              _Carousel(height: carouselHeight),
             ],
           ),
         ],
       ),
+    );
+  }
+}
+
+// タブ
+class _Tab extends StatelessWidget {
+  /// 影のオフセット
+  static const shadowOffset = Offset(0.0, -1.0);
+  /// 影のぼかし
+  static const shadowBlur = 1.0;
+
+  /// 高さ
+  final double height;
+
+  const _Tab({required this.height});
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      height: height,
+      decoration: BoxDecoration(
+        color: Colors.white,
+        boxShadow: [
+          BoxShadow(
+            color: Colors.black.withOpacity(0.2),
+            offset: shadowOffset,
+            blurRadius: shadowBlur,
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+// カルーセル
+class _Carousel extends StatelessWidget {
+  /// パディング
+  static const padding = 16.0;
+  /// 背景色
+  static const color = Color(0xfff8fbf8);
+
+  /// 高さ
+  final double height;
+
+  const _Carousel({required this.height});
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      height: height,
+      padding: EdgeInsets.only(
+        top: padding,
+        bottom: MediaQuery.of(context).padding.bottom,
+      ),
+      child: const CarouselPanel(),
     );
   }
 }
@@ -55,45 +113,6 @@ class _Header extends StatelessWidget {
           Spacer(),
         ],
       ),
-    );
-  }
-}
-
-// フッター
-class _Footer extends StatelessWidget {
-  /// パディング
-  static const padding = 16.0;
-  /// 背景色
-  static const color = Color(0xfff8fbf8);
-  /// 影のオフセット
-  static const shadowOffset = Offset(0.0, -1.0);
-  /// 影のぼかし
-  static const shadowBlur = 1.0;
-
-  /// 高さ
-  final double height;
-
-  const _Footer({required this.height});
-
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      height: height,
-      padding: EdgeInsets.only(
-        top: padding,
-        bottom: MediaQuery.of(context).padding.bottom,
-      ),
-      decoration: BoxDecoration(
-        color: color,
-        boxShadow: [
-          BoxShadow(
-            color: Colors.black.withOpacity(0.2),
-            offset: shadowOffset,
-            blurRadius: shadowBlur,
-          ),
-        ],
-      ),
-      child: const CarouselPanel(),
     );
   }
 }
