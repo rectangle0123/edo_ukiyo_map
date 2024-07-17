@@ -408,6 +408,22 @@ class _SeriesByIdProviderElement
   int get id => (origin as SeriesByIdProvider).id;
 }
 
+String _$allSeriesHash() => r'f5f7e0a49e251ac459a6584b5e13278aa9b81f30';
+
+/// すべてのシリーズを取得する
+///
+/// Copied from [allSeries].
+@ProviderFor(allSeries)
+final allSeriesProvider = AutoDisposeFutureProvider<List<Series>>.internal(
+  allSeries,
+  name: r'allSeriesProvider',
+  debugGetCreateSourceHash:
+      const bool.fromEnvironment('dart.vm.product') ? null : _$allSeriesHash,
+  dependencies: null,
+  allTransitiveDependencies: null,
+);
+
+typedef AllSeriesRef = AutoDisposeFutureProviderRef<List<Series>>;
 String _$painterByIdHash() => r'd2f3d33592c11abdc14af78021a45f53b94dd53e';
 
 /// 絵師を取得する

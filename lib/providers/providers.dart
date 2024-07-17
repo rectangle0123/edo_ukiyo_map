@@ -42,6 +42,12 @@ Future<Series> seriesById(SeriesByIdRef ref, int id) async {
   return Database.instance.getSeries(id);
 }
 
+/// すべてのシリーズを取得する
+@riverpod
+Future<List<Series>> allSeries(AllSeriesRef ref) async {
+  return Database.instance.getAllSeries();
+}
+
 /// 絵師を取得する
 @riverpod
 Future<Painter> painterById(PainterByIdRef ref, int id) async {
