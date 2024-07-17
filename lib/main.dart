@@ -85,7 +85,7 @@ class AppState extends ConsumerState<App> with WidgetsBindingObserver {
   // マーカー画像を生成する
   Future<BitmapDescriptor> _loadCustomMarker(String path) async {
     var data = await rootBundle.load(path);
-    var codec = await instantiateImageCodec(data.buffer.asUint8List(), targetWidth: 96);
+    var codec = await instantiateImageCodec(data.buffer.asUint8List(), targetWidth: 72);
     var frameInfo = await codec.getNextFrame();
     var byteData = await frameInfo.image.toByteData(format: ImageByteFormat.png);
     return BitmapDescriptor.fromBytes(byteData!.buffer.asUint8List());

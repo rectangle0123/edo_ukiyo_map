@@ -17,11 +17,11 @@ class AppMapState extends ConsumerState<AppMap> {
   @override
   Widget build(BuildContext context) {
     // 選択されているシリーズに含まれるすべての作品と、選択されている作品インデックスからひとつの作品を取得する
-    final worksAndWork = ref.watch(currentWorksAndWorkProvider);
+    final works = ref.watch(currentAllWorksProvider);
     // マーカー画像を取得する
     final markers = ref.watch(markerNotifierProvider);
 
-    return switch (worksAndWork) {
+    return switch (works) {
       AsyncData(:final value) => GoogleMap(
         mapType: MapType.normal,
         myLocationEnabled: true,
@@ -29,25 +29,21 @@ class AppMapState extends ConsumerState<AppMap> {
         style: '[{"featureType": "poi", "stylers": [{"visibility": "off"}]}]',
         // カメラ位置の設定
         initialCameraPosition: CameraPosition(
-          target: LatLng(value.$2.latitude, value.$2.longitude),
+          target: LatLng(value[0].latitude, value[0].longitude),
           zoom: defaultMapZoom,
           tilt: defaultMapTilt,
         ),
         // マーカーの設定
         // 画像を取得できなければデフォルトのマーカーを使用する
-        markers: value.$1.map((e) => Marker(
+        markers: value.map((e) => Marker(
           markerId: MarkerId(e.id.toString()),
           position: LatLng(e.latitude, e.longitude),
-          zIndex: e.id == value.$2.id ? 1 : 0,
           icon: markers == null
               ? BitmapDescriptor.defaultMarker
-              : e.id == value.$2.id
-                ? ref.watch(markerNotifierProvider)!.$2
-                : ref.watch(markerNotifierProvider)!.$1,
+              : ref.watch(markerNotifierProvider)!.$1,
           onTap: () async {
-            // 選択されている作品インデックスを更新する
-            ref.read(selectedWorkIndexNotifierProvider.notifier).updateState(e.index);
             // カルーセルを回す
+            // カルーセルのアイテム変更イベントが発火して選択されている作品インデックスも更新される
             ref.watch(carouselControllerProvider).jumpToPage(e.index - 1);
           }
         )).toSet(),
