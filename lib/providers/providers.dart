@@ -14,11 +14,10 @@ final mapControllerNotifierProvider = StateNotifierProvider<MapControllerNotifie
       (ref) => MapControllerNotifier(),
 );
 
-/// カルーセルコントローラー
-@riverpod
-CarouselController carouselController(CarouselControllerRef ref) {
-  return CarouselController();
-}
+/// 選択されているシリーズの状態通知を取得する
+final selectedSeriesNotifierProvider = StateNotifierProvider<SelectedStateNotifier, Series?>(
+      (ref) => SelectedStateNotifier(),
+);
 
 /// 選択されている作品の状態通知を取得する
 final selectedWorkNotifierProvider = StateNotifierProvider<SelectedWorkNotifier, Work?>(
@@ -29,6 +28,12 @@ final selectedWorkNotifierProvider = StateNotifierProvider<SelectedWorkNotifier,
 final favouritesNotifierProvider = StateNotifierProvider<FavouritesNotifier, List<Work>>(
       (ref) => FavouritesNotifier(),
 );
+
+/// カルーセルコントローラーを取得する
+@riverpod
+CarouselController carouselController(CarouselControllerRef ref) {
+  return CarouselController();
+}
 
 /// 出典を取得する
 @riverpod
@@ -58,6 +63,12 @@ Future<Painter> painterById(PainterByIdRef ref, int id) async {
 @riverpod
 Future<List<Painter>> allPainters(AllPaintersRef ref) async {
   return Database.instance.getAllPainters();
+}
+
+/// シリーズから作品を取得する
+@riverpod
+Future<List<Work>> worksBySeries(WorksBySeriesRef ref, Series series) async {
+  return Database.instance.getWorksBySeriesId(series.id);
 }
 
 /// 作品から絵師を取得する

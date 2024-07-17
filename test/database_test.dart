@@ -21,7 +21,10 @@ void main() async {
   // 初期化のテスト
   test('initialize database', () async {
     await database.initialize();
-    final count = await database.getAllWorks();
+    var count = await database.getAllWorks();
+    expect(count.length, 119);
+
+    count = await database.getWorksBySeriesId(1);
     expect(count.length, 119);
   });
 }

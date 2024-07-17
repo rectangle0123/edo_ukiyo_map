@@ -1,3 +1,6 @@
+/// 選択されているシリーズの初期値
+const int defaultSeriesId = 1;
+
 /// 選択されている作品の初期値
 const int defaultWorkId = 1;
 

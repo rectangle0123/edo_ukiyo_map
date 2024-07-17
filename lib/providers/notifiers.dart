@@ -14,6 +14,24 @@ class MapControllerNotifier extends StateNotifier<GoogleMapController?> {
   }
 }
 
+/// 選択されているシリーズの状態通知
+class SelectedStateNotifier extends StateNotifier<Series?> {
+  SelectedStateNotifier() : super(null) {
+    _initialize();
+  }
+
+  // 初期化
+  Future<void> _initialize() async {
+    final series = await Database.instance.getSeries(defaultSeriesId);
+    state = series;
+  }
+
+  /// 状態更新
+  void updateState(Series series) {
+    state = series;
+  }
+}
+
 /// 選択されている作品の状態通知
 class SelectedWorkNotifier extends StateNotifier<Work?> {
   SelectedWorkNotifier() : super(null) {

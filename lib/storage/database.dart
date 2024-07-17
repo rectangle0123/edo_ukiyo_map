@@ -132,6 +132,11 @@ class Database extends _$Database {
   /// すべての作品を取得する
   Future<List<Work>> getAllWorks() => select(works).get();
 
+  /// シリーズIDから作品を取得する
+  Future<List<Work>> getWorksBySeriesId(int seriesId) async {
+    return (select(works)..where((tbl) => tbl.series.equals(seriesId))).get();
+  }
+
   /// 作品IDから絵師を取得する
   Future<List<Painter>> getPaintersByWorkId(int workId) async {
     final query = select(painters).join(
