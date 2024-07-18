@@ -29,8 +29,10 @@ class LicensesPage extends StatelessWidget {
               shrinkWrap: true,
               physics: const NeverScrollableScrollPhysics(),
               itemCount: licenses.length,
-              itemBuilder: (context, index) => Text(licenses[index],
-                  style: Theme.of(context).textTheme.bodyMedium),
+              itemBuilder: (context, index) => Text(
+                licenses[index],
+                style: Theme.of(context).textTheme.bodyMedium
+              ),
               separatorBuilder: (context, int index) => const Divider(
                 height: space,
                 color: Colors.grey,

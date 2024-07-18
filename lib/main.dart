@@ -58,7 +58,7 @@ class AppState extends ConsumerState<App> with WidgetsBindingObserver {
       theme: AppTheme.lightTheme,
       // ホーム画面
       home: FutureBuilder(
-        future: initialize(),
+        future: _initialize(),
         builder: (context, snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting) {
             return const SplashPage();
@@ -70,18 +70,18 @@ class AppState extends ConsumerState<App> with WidgetsBindingObserver {
     );
   }
 
-  /// 初期化
-  Future<void> initialize() async {
+  // 初期化
+  Future<void> _initialize() async {
     // デバイスの向きを縦に固定する
     await SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp]);
     // データベース初期化
     await Database.instance.initialize();
     // Googleマップマーカー画像を生成する
     var image = await _loadCustomMarker('assets/images/pin.png');
-    ref.watch(markerImageNotifierProvider.notifier).updateState(image);
+    ref.read(markerImageNotifierProvider.notifier).updateState(image);
   }
 
-  // マーカー画像を生成する
+  // Googleマップマーカー画像を生成する
   Future<BitmapDescriptor> _loadCustomMarker(String path) async {
     var data = await rootBundle.load(path);
     var codec = await instantiateImageCodec(data.buffer.asUint8List(), targetWidth: 72);

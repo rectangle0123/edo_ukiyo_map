@@ -6,15 +6,15 @@ import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:edo_ukiyo_map/providers/providers.dart';
 import 'package:edo_ukiyo_map/storage/database.dart';
 
-/// カルーセルパネル
-class CarouselPanel extends ConsumerStatefulWidget {
-  const CarouselPanel({super.key});
+/// 作品カルーセル
+class WorkCarousel extends ConsumerStatefulWidget {
+  const WorkCarousel({super.key});
 
   @override
-  CarouselPanelState createState() => CarouselPanelState();
+  WorkCarouselState createState() => WorkCarouselState();
 }
 
-class CarouselPanelState extends ConsumerState<CarouselPanel> {
+class WorkCarouselState extends ConsumerState<WorkCarousel> {
   /// 画面に対する幅の比率
   static const viewPortFraction = 0.4;
   /// 下のパディング
@@ -22,8 +22,11 @@ class CarouselPanelState extends ConsumerState<CarouselPanel> {
 
   @override
   Widget build(BuildContext context) {
-    final controller = ref.watch(carouselControllerProvider);
+    // 選択されているシリーズに含まれるすべての作品を取得する
     final works = ref.watch(currentAllWorksProvider);
+    // カルーセルコントローラーを取得する
+    final controller = ref.watch(carouselControllerProvider);
+
     return LayoutBuilder(
       builder: (context, constraints) {
         return switch (works) {
@@ -43,7 +46,7 @@ class CarouselPanelState extends ConsumerState<CarouselPanel> {
               );
             }).toList(),
           ),
-          _ => SizedBox(height: constraints.maxHeight),
+          _ => Container(),
         };
       },
     );
@@ -51,8 +54,11 @@ class CarouselPanelState extends ConsumerState<CarouselPanel> {
 
   // アイテム変更イベント
   void onItemChanged(int index, CarouselPageChangedReason reason) async {
+    // Googleマップのマーカーに設定したバルーンを表示する
     ref.read(mapControllerNotifierProvider)?.showMarkerInfoWindow(MarkerId('${index + 1}'));
+    // 選択されている作品IDを更新する
     ref.read(selectedWorkIndexNotifierProvider.notifier).updateState(index + 1);
+    // 選択されている作品の位置にGoogleマップのカメラを移動する
     final work = await ref.watch(currentSingleWorkProvider.future);
     ref.watch(mapControllerNotifierProvider)?.animateCamera(
       CameraUpdate.newLatLng(LatLng(work.latitude, work.longitude)),
@@ -60,14 +66,14 @@ class CarouselPanelState extends ConsumerState<CarouselPanel> {
   }
 }
 
-/// カルーセルアイテム
+// カルーセルアイテム
 class _CarouselItem extends StatelessWidget {
-  /// 角丸
+  // 角丸
   static const radius = 8.0;
-  /// テキストのマージン
+  // テキストのマージン
   static const textMargin = 8.0;
 
-  /// 作品
+  // 作品
   final Work work;
 
   const _CarouselItem({required this.work});

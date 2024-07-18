@@ -59,6 +59,7 @@ class Menu extends StatelessWidget {
                     ],
                   ),
                 const Spacer(),
+                // バージョン番号
                 _Version(),
               ],
             ),
@@ -95,7 +96,9 @@ class _Version extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    // パッケージ情報を取得する
     final packageInfo = ref.watch(packageInfoProvider);
+
     return Container(
       margin: const EdgeInsets.only(left: margin),
       child: switch (packageInfo) {

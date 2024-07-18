@@ -21,7 +21,7 @@ class PackagesPageState extends State<PackagesPage> {
   /// インジケーターの寸法
   static const dimension = 16.0;
 
-  // ライセンス情報
+  /// ライセンス情報
   Map<String, List<String>> packages = {};
 
   @override
@@ -71,7 +71,7 @@ class PackagesPageState extends State<PackagesPage> {
           packages[name]!.add(entry.paragraphs.map((e) => e.text).join('\n'));
         }
       }
-      // アルファベット順にソートしてリストを描画する
+      // アルファベット順にソートして状態を更新する
       setState(() => packages = SplayTreeMap.from(
         packages, (a, b) => a.toLowerCase().compareTo(b.toLowerCase()),
       ));

@@ -17,8 +17,9 @@ class AppMap extends ConsumerStatefulWidget {
 class AppMapState extends ConsumerState<AppMap> {
   @override
   Widget build(BuildContext context) {
-    // 選択されているシリーズに含まれるすべての作品と、選択されている作品インデックスからひとつの作品を取得する
+    // 選択されているシリーズに含まれるすべての作品を取得する
     final works = ref.watch(currentAllWorksProvider);
+
     return switch (works) {
       AsyncData(:final value) => GoogleMap(
         mapType: MapType.normal,
@@ -47,7 +48,6 @@ class AppMapState extends ConsumerState<AppMap> {
   // マーカーを作成する
   Set<Marker> _createMarkers(List<Work> works) {
     // マーカー画像を取得する
-    // 画像を取得できなければデフォルトのマーカーを使用する
     final image = ref.watch(markerImageNotifierProvider);
     return works.map((e) => Marker(
       markerId: MarkerId(e.index.toString()),
@@ -57,8 +57,8 @@ class AppMapState extends ConsumerState<AppMap> {
         title: e.getName(context),
       ),
       onTap: () async {
-        // カルーセルを回す
-        // カルーセルのアイテム変更イベントが発火して選択されている作品インデックスも更新される
+        // カルーセルに表示中のアイテムを変更する
+        // 選択されている作品インデックスの変更はカルーセルのアイテム変更イベントで実行される
         ref.watch(carouselControllerProvider).jumpToPage(e.index - 1);
       },
     )).toSet();
