@@ -1,8 +1,11 @@
 {
   "helloWorld": "こんにちわ、みなさん！",
   "page_home": "江戸浮世地図",
+  "page_favourites": "お気に入り",
   "page_licenses": "ライセンス",
   "page_debug": "デバッグ",
 
+  "text_page_favorites_01": "お気に入りはありません。",
+  "text_page_favorites_02": "作品画面のボタンからお気に入りに追加できます。",
   "text_page_licenses": "このアプリは、各種ソフトウェア使用許諾契約および使用方法に基づき、以下のソフトウェアを含む複数の種類のプログラムを使用しています。"
 }

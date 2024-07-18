@@ -1,11 +1,10 @@
 {
-  "helloWorld": "Hello World!",
-  "@helloWorld": {
-    "description": "The conventional newborn programmer greeting"
-  },
   "page_home": "Edo Ukiyo Map",
   "page_licenses": "Licenses",
+  "page_favourites": "Favourites",
   "page_debug": "Debug",
 
+  "text_page_favorites_01": "This list of favorites is empty.",
+  "text_page_favorites_02": "You can add from the button on the artwork screen.",
   "text_page_licenses": "This app utilizes various types of programs, including the software listed below, based on the terms of the respective software licenses and usage agreements."
 }
