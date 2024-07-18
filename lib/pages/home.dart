@@ -1,6 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:google_maps_flutter/google_maps_flutter.dart';
 
+import 'package:edo_ukiyo_map/providers/providers.dart';
+import 'package:edo_ukiyo_map/utils/location.dart';
+import 'package:edo_ukiyo_map/widgets/buttons.dart';
 import 'package:edo_ukiyo_map/widgets/carousel.dart';
 import 'package:edo_ukiyo_map/widgets/menu.dart';
 import 'package:edo_ukiyo_map/widgets/map.dart';
@@ -27,8 +31,9 @@ class HomePage extends ConsumerWidget {
           ),
           const Column(
             children: [
-              _Header(),
-              Spacer(),
+              Expanded(
+                child: _Header(),
+              ),
               _Footer(tabHeight: tabHeight, carouselHeight: carouselHeight),
             ],
           ),
@@ -40,25 +45,28 @@ class HomePage extends ConsumerWidget {
 
 // ヘッダー
 class _Header extends StatelessWidget {
-  // パディング
-  static const padding = 8.0;
+  // マージン
+  static const margin = 8.0;
 
   const _Header();
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      padding: EdgeInsets.only(
-        left: padding,
-        right: padding,
-        top: MediaQuery.of(context).padding.top,
-      ),
-      child: const Row(
-        children: [
-          MenuButton(),
-          Spacer(),
-        ],
-      ),
+    return Column(
+      children: [
+        SizedBox(height: MediaQuery.of(context).padding.top),
+        Container(
+          alignment: Alignment.topLeft,
+          margin: const EdgeInsets.only(left: margin),
+          child: const MenuButton(),
+        ),
+        const Spacer(),
+        Container(
+          alignment: Alignment.topRight,
+          margin: const EdgeInsets.all(margin),
+          child: const _LocateButton(),
+        ),
+      ],
     );
   }
 }
@@ -106,6 +114,32 @@ class _Footer extends StatelessWidget {
           child: const WorkCarousel(),
         ),
       ],
+    );
+  }
+}
+
+// 現在位置ボタン
+class _LocateButton extends ConsumerWidget {
+  // サイズ
+  static const dimension = 40.0;
+  // アイコンサイズ
+  static const iconSize = 16.0;
+
+  const _LocateButton();
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    return CircleButton(
+      dimension: dimension,
+      onPressed: () async {
+        final location = await LocationUtils.current();
+        if (location != null) {
+          ref.watch(mapControllerNotifierProvider)?.animateCamera(
+            CameraUpdate.newLatLng(LatLng(location.$1, location.$2))
+          );
+        }
+      },
+      child: const ImageIcon(AssetImage('assets/images/gps.png'), size: iconSize),
     );
   }
 }

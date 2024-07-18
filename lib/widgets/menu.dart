@@ -136,7 +136,7 @@ class MenuButton extends StatelessWidget {
           height: height,
           child: Transform.translate(
             offset: const Offset(0, iconMarginTop),
-            child: const Icon(Icons.menu),
+            child: const Icon(Icons.menu, color: Colors.white),
           ),
         ),
       ),
@@ -151,7 +151,7 @@ class _MenuButtonPainter extends CustomPainter {
   // 高さ
   static const height = 20.0;
   // 色
-  static const color = Colors.white;
+  static const color = Color(0xff165e83);
   // 枠線の色
   static const borderColor = Colors.grey;
   // 枠線の太さ
@@ -167,11 +167,11 @@ class _MenuButtonPainter extends CustomPainter {
       ..lineTo(0.0, size.height - height);
 
     final shapePaint = Paint()..color = color;
-    final borderPaint = Paint()..color = borderColor..style = PaintingStyle.stroke..strokeWidth = borderWidth;
+    // final borderPaint = Paint()..color = borderColor..style = PaintingStyle.stroke..strokeWidth = borderWidth;
 
     canvas.drawShadow(path, Colors.black.withOpacity(0.8), 2.4, false);
     canvas.drawPath(path, shapePaint);
-    canvas.drawPath(path, borderPaint);
+    // canvas.drawPath(path, borderPaint);
   }
 
   @override
