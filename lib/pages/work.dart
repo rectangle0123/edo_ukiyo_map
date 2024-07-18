@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import 'package:edo_ukiyo_map/providers/providers.dart';
@@ -158,6 +159,11 @@ class _Body extends StatelessWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
+        const SizedBox(height: textPaddingVertical / 2),
+        Container(
+          padding: const EdgeInsets.symmetric(horizontal: space),
+          child: _SourceText(work: work),
+        ),
         const SizedBox(height: textPaddingVertical),
         Container(
           padding: const EdgeInsets.symmetric(horizontal: space),
@@ -177,14 +183,11 @@ class _Body extends StatelessWidget {
           padding: const EdgeInsets.symmetric(horizontal: space),
           child: _PainterText(work: work),
         ),
-        Container(
-          padding: const EdgeInsets.symmetric(horizontal: space),
-          child: _SourceText(work: work),
-        ),
         const SizedBox(height: textPaddingVertical),
         Expanded(
           child: Scrollbar(
             child: SingleChildScrollView(
+              physics: const AlwaysScrollableScrollPhysics(),
               child: Container(
                 padding: const EdgeInsets.symmetric(horizontal: space),
                 child: Text(work.getDescription(context)),
@@ -258,11 +261,11 @@ class _SourceText extends ConsumerWidget {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Text(
-            value.getLicense(context),
+            AppLocalizations.of(context)!.label_permission + value.getLicense(context),
             style: Theme.of(context).textTheme.bodySmall?.copyWith(color: Colors.grey),
           ),
           Text(
-            value.getName(context),
+            AppLocalizations.of(context)!.label_collection + value.getName(context),
             style: Theme.of(context).textTheme.bodySmall?.copyWith(color: Colors.grey),
           ),
         ],

@@ -36,6 +36,7 @@ class AppTheme {
       primarySwatch: indigoSwatch,
       backgroundColor: milkyWhiteColor,
     ),
+    scaffoldBackgroundColor: milkyWhiteColor,
     // メニュー
     drawerTheme: const DrawerThemeData(
       backgroundColor: milkyWhiteColor,
@@ -54,6 +55,7 @@ class CupertinoAppTheme {
     brightness: Brightness.light,
     primaryColor: indigoSwatch,
     barBackgroundColor: unbleachedColor,
+    scaffoldBackgroundColor: milkyWhiteColor,
     // テキスト
     textTheme: CupertinoTextThemeData(
       // 通常のテキスト
