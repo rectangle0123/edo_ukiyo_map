@@ -71,6 +71,10 @@ class Database extends _$Database {
           id: Value(int.parse(data[0])),
           nameJa: Value(data[1]),
           nameEn: Value(data[2]),
+          shortNameJa: Value(data[3]),
+          shortNameEn: Value(data[4]),
+          descriptionJa: Value(data[5]),
+          descriptionEn: Value(data[6]),
         )).toList());
       });
       await batch((batch) async {
@@ -78,13 +82,15 @@ class Database extends _$Database {
           id: Value(int.parse(data[0])),
           nameJa: Value(data[1]),
           nameEn: Value(data[2]),
-          aliasJa: Value(data[3]),
-          aliasEn: Value(data[4]),
-          bornIn: Value(data[5].isEmpty ? null : int.parse(data[5])),
-          diedIn: Value(data[6].isEmpty ? null : int.parse(data[6])),
-          descriptionJa: Value(data[7]),
-          descriptionEn: Value(data[8]),
-          source: Value(data[9].isEmpty ? null : int.parse(data[9])),
+          shortNameJa: Value(data[3]),
+          shortNameEn: Value(data[4]),
+          aliasJa: Value(data[5]),
+          aliasEn: Value(data[6]),
+          bornIn: Value(data[7].isEmpty ? null : int.parse(data[7])),
+          diedIn: Value(data[8].isEmpty ? null : int.parse(data[8])),
+          descriptionJa: Value(data[9]),
+          descriptionEn: Value(data[10]),
+          source: Value(data[11].isEmpty ? null : int.parse(data[11])),
         )).toList());
       });
       await batch((batch) async {
@@ -213,12 +219,28 @@ class Serieses extends Table {
   TextColumn get nameJa => text()();
   /// 名前（英語）
   TextColumn get nameEn => text()();
+  /// 短縮名（日本語）
+  TextColumn get shortNameJa => text()();
+  /// 短縮名（英語）
+  TextColumn get shortNameEn => text()();
+  /// 解説（日本語）
+  TextColumn get descriptionJa => text()();
+  /// 解説（英語）
+  TextColumn get descriptionEn => text()();
 }
 
 extension SeriesExtension on Series {
   /// ロケールの言語に応じた名前を返す
   String getName(f.BuildContext context) {
     return f.Localizations.localeOf(context).languageCode == 'ja' ? nameJa : nameEn;
+  }
+  /// ロケールの言語に応じた短縮名を返す
+  String getShortName(f.BuildContext context) {
+    return f.Localizations.localeOf(context).languageCode == 'ja' ? shortNameJa : shortNameEn;
+  }
+  /// ロケールの言語に応じた解説を返す
+  String getDescription(f.BuildContext context) {
+    return f.Localizations.localeOf(context).languageCode == 'ja' ? descriptionJa : descriptionEn;
   }
 }
 
@@ -231,6 +253,10 @@ class Painters extends Table {
   TextColumn get nameJa => text()();
   /// 名前（英語）
   TextColumn get nameEn => text()();
+  /// 短縮名（日本語）
+  TextColumn get shortNameJa => text()();
+  /// 短縮名（英語）
+  TextColumn get shortNameEn => text()();
   /// 別名（日本語）
   TextColumn get aliasJa => text()();
   /// 別名（英語）
@@ -251,6 +277,10 @@ extension PainterExtension on Painter {
   /// ロケールの言語に応じた名前を返す
   String getName(f.BuildContext context) {
     return f.Localizations.localeOf(context).languageCode == 'ja' ? nameJa : nameEn;
+  }
+  /// ロケールの言語に応じた短縮名を返す
+  String getShortName(f.BuildContext context) {
+    return f.Localizations.localeOf(context).languageCode == 'ja' ? shortNameJa : shortNameEn;
   }
   /// ロケールの言語に応じた別名を返す
   String getAlias(f.BuildContext context) {

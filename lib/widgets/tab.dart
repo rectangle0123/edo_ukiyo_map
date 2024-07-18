@@ -62,7 +62,7 @@ class SeriesTabState extends ConsumerState<SeriesTab> with SingleTickerProviderS
 
     return TabBar(
       controller: _tabController,
-      tabs: _series.map((e) => Tab(text: e.getName(context))).toList(),
+      tabs: _series.map((e) => Tab(text: e.getShortName(context))).toList(),
     );
   }
 

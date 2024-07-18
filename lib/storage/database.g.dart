@@ -338,8 +338,40 @@ class $SeriesesTable extends Serieses with TableInfo<$SeriesesTable, Series> {
   late final GeneratedColumn<String> nameEn = GeneratedColumn<String>(
       'name_en', aliasedName, false,
       type: DriftSqlType.string, requiredDuringInsert: true);
+  static const VerificationMeta _shortNameJaMeta =
+      const VerificationMeta('shortNameJa');
   @override
-  List<GeneratedColumn> get $columns => [id, nameJa, nameEn];
+  late final GeneratedColumn<String> shortNameJa = GeneratedColumn<String>(
+      'short_name_ja', aliasedName, false,
+      type: DriftSqlType.string, requiredDuringInsert: true);
+  static const VerificationMeta _shortNameEnMeta =
+      const VerificationMeta('shortNameEn');
+  @override
+  late final GeneratedColumn<String> shortNameEn = GeneratedColumn<String>(
+      'short_name_en', aliasedName, false,
+      type: DriftSqlType.string, requiredDuringInsert: true);
+  static const VerificationMeta _descriptionJaMeta =
+      const VerificationMeta('descriptionJa');
+  @override
+  late final GeneratedColumn<String> descriptionJa = GeneratedColumn<String>(
+      'description_ja', aliasedName, false,
+      type: DriftSqlType.string, requiredDuringInsert: true);
+  static const VerificationMeta _descriptionEnMeta =
+      const VerificationMeta('descriptionEn');
+  @override
+  late final GeneratedColumn<String> descriptionEn = GeneratedColumn<String>(
+      'description_en', aliasedName, false,
+      type: DriftSqlType.string, requiredDuringInsert: true);
+  @override
+  List<GeneratedColumn> get $columns => [
+        id,
+        nameJa,
+        nameEn,
+        shortNameJa,
+        shortNameEn,
+        descriptionJa,
+        descriptionEn
+      ];
   @override
   String get aliasedName => _alias ?? actualTableName;
   @override
@@ -367,6 +399,38 @@ class $SeriesesTable extends Serieses with TableInfo<$SeriesesTable, Series> {
     } else if (isInserting) {
       context.missing(_nameEnMeta);
     }
+    if (data.containsKey('short_name_ja')) {
+      context.handle(
+          _shortNameJaMeta,
+          shortNameJa.isAcceptableOrUnknown(
+              data['short_name_ja']!, _shortNameJaMeta));
+    } else if (isInserting) {
+      context.missing(_shortNameJaMeta);
+    }
+    if (data.containsKey('short_name_en')) {
+      context.handle(
+          _shortNameEnMeta,
+          shortNameEn.isAcceptableOrUnknown(
+              data['short_name_en']!, _shortNameEnMeta));
+    } else if (isInserting) {
+      context.missing(_shortNameEnMeta);
+    }
+    if (data.containsKey('description_ja')) {
+      context.handle(
+          _descriptionJaMeta,
+          descriptionJa.isAcceptableOrUnknown(
+              data['description_ja']!, _descriptionJaMeta));
+    } else if (isInserting) {
+      context.missing(_descriptionJaMeta);
+    }
+    if (data.containsKey('description_en')) {
+      context.handle(
+          _descriptionEnMeta,
+          descriptionEn.isAcceptableOrUnknown(
+              data['description_en']!, _descriptionEnMeta));
+    } else if (isInserting) {
+      context.missing(_descriptionEnMeta);
+    }
     return context;
   }
 
@@ -382,6 +446,14 @@ class $SeriesesTable extends Serieses with TableInfo<$SeriesesTable, Series> {
           .read(DriftSqlType.string, data['${effectivePrefix}name_ja'])!,
       nameEn: attachedDatabase.typeMapping
           .read(DriftSqlType.string, data['${effectivePrefix}name_en'])!,
+      shortNameJa: attachedDatabase.typeMapping
+          .read(DriftSqlType.string, data['${effectivePrefix}short_name_ja'])!,
+      shortNameEn: attachedDatabase.typeMapping
+          .read(DriftSqlType.string, data['${effectivePrefix}short_name_en'])!,
+      descriptionJa: attachedDatabase.typeMapping
+          .read(DriftSqlType.string, data['${effectivePrefix}description_ja'])!,
+      descriptionEn: attachedDatabase.typeMapping
+          .read(DriftSqlType.string, data['${effectivePrefix}description_en'])!,
     );
   }
 
@@ -400,13 +472,36 @@ class Series extends DataClass implements Insertable<Series> {
 
   /// 名前（英語）
   final String nameEn;
-  const Series({required this.id, required this.nameJa, required this.nameEn});
+
+  /// 短縮名（日本語）
+  final String shortNameJa;
+
+  /// 短縮名（英語）
+  final String shortNameEn;
+
+  /// 解説（日本語）
+  final String descriptionJa;
+
+  /// 解説（英語）
+  final String descriptionEn;
+  const Series(
+      {required this.id,
+      required this.nameJa,
+      required this.nameEn,
+      required this.shortNameJa,
+      required this.shortNameEn,
+      required this.descriptionJa,
+      required this.descriptionEn});
   @override
   Map<String, Expression> toColumns(bool nullToAbsent) {
     final map = <String, Expression>{};
     map['id'] = Variable<int>(id);
     map['name_ja'] = Variable<String>(nameJa);
     map['name_en'] = Variable<String>(nameEn);
+    map['short_name_ja'] = Variable<String>(shortNameJa);
+    map['short_name_en'] = Variable<String>(shortNameEn);
+    map['description_ja'] = Variable<String>(descriptionJa);
+    map['description_en'] = Variable<String>(descriptionEn);
     return map;
   }
 
@@ -415,6 +510,10 @@ class Series extends DataClass implements Insertable<Series> {
       id: Value(id),
       nameJa: Value(nameJa),
       nameEn: Value(nameEn),
+      shortNameJa: Value(shortNameJa),
+      shortNameEn: Value(shortNameEn),
+      descriptionJa: Value(descriptionJa),
+      descriptionEn: Value(descriptionEn),
     );
   }
 
@@ -425,6 +524,10 @@ class Series extends DataClass implements Insertable<Series> {
       id: serializer.fromJson<int>(json['id']),
       nameJa: serializer.fromJson<String>(json['nameJa']),
       nameEn: serializer.fromJson<String>(json['nameEn']),
+      shortNameJa: serializer.fromJson<String>(json['shortNameJa']),
+      shortNameEn: serializer.fromJson<String>(json['shortNameEn']),
+      descriptionJa: serializer.fromJson<String>(json['descriptionJa']),
+      descriptionEn: serializer.fromJson<String>(json['descriptionEn']),
     );
   }
   @override
@@ -434,19 +537,45 @@ class Series extends DataClass implements Insertable<Series> {
       'id': serializer.toJson<int>(id),
       'nameJa': serializer.toJson<String>(nameJa),
       'nameEn': serializer.toJson<String>(nameEn),
+      'shortNameJa': serializer.toJson<String>(shortNameJa),
+      'shortNameEn': serializer.toJson<String>(shortNameEn),
+      'descriptionJa': serializer.toJson<String>(descriptionJa),
+      'descriptionEn': serializer.toJson<String>(descriptionEn),
     };
   }
 
-  Series copyWith({int? id, String? nameJa, String? nameEn}) => Series(
+  Series copyWith(
+          {int? id,
+          String? nameJa,
+          String? nameEn,
+          String? shortNameJa,
+          String? shortNameEn,
+          String? descriptionJa,
+          String? descriptionEn}) =>
+      Series(
         id: id ?? this.id,
         nameJa: nameJa ?? this.nameJa,
         nameEn: nameEn ?? this.nameEn,
+        shortNameJa: shortNameJa ?? this.shortNameJa,
+        shortNameEn: shortNameEn ?? this.shortNameEn,
+        descriptionJa: descriptionJa ?? this.descriptionJa,
+        descriptionEn: descriptionEn ?? this.descriptionEn,
       );
   Series copyWithCompanion(SeriesesCompanion data) {
     return Series(
       id: data.id.present ? data.id.value : this.id,
       nameJa: data.nameJa.present ? data.nameJa.value : this.nameJa,
       nameEn: data.nameEn.present ? data.nameEn.value : this.nameEn,
+      shortNameJa:
+          data.shortNameJa.present ? data.shortNameJa.value : this.shortNameJa,
+      shortNameEn:
+          data.shortNameEn.present ? data.shortNameEn.value : this.shortNameEn,
+      descriptionJa: data.descriptionJa.present
+          ? data.descriptionJa.value
+          : this.descriptionJa,
+      descriptionEn: data.descriptionEn.present
+          ? data.descriptionEn.value
+          : this.descriptionEn,
     );
   }
 
@@ -455,51 +584,84 @@ class Series extends DataClass implements Insertable<Series> {
     return (StringBuffer('Series(')
           ..write('id: $id, ')
           ..write('nameJa: $nameJa, ')
-          ..write('nameEn: $nameEn')
+          ..write('nameEn: $nameEn, ')
+          ..write('shortNameJa: $shortNameJa, ')
+          ..write('shortNameEn: $shortNameEn, ')
+          ..write('descriptionJa: $descriptionJa, ')
+          ..write('descriptionEn: $descriptionEn')
           ..write(')'))
         .toString();
   }
 
   @override
-  int get hashCode => Object.hash(id, nameJa, nameEn);
+  int get hashCode => Object.hash(id, nameJa, nameEn, shortNameJa, shortNameEn,
+      descriptionJa, descriptionEn);
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
       (other is Series &&
           other.id == this.id &&
           other.nameJa == this.nameJa &&
-          other.nameEn == this.nameEn);
+          other.nameEn == this.nameEn &&
+          other.shortNameJa == this.shortNameJa &&
+          other.shortNameEn == this.shortNameEn &&
+          other.descriptionJa == this.descriptionJa &&
+          other.descriptionEn == this.descriptionEn);
 }
 
 class SeriesesCompanion extends UpdateCompanion<Series> {
   final Value<int> id;
   final Value<String> nameJa;
   final Value<String> nameEn;
+  final Value<String> shortNameJa;
+  final Value<String> shortNameEn;
+  final Value<String> descriptionJa;
+  final Value<String> descriptionEn;
   final Value<int> rowid;
   const SeriesesCompanion({
     this.id = const Value.absent(),
     this.nameJa = const Value.absent(),
     this.nameEn = const Value.absent(),
+    this.shortNameJa = const Value.absent(),
+    this.shortNameEn = const Value.absent(),
+    this.descriptionJa = const Value.absent(),
+    this.descriptionEn = const Value.absent(),
     this.rowid = const Value.absent(),
   });
   SeriesesCompanion.insert({
     required int id,
     required String nameJa,
     required String nameEn,
+    required String shortNameJa,
+    required String shortNameEn,
+    required String descriptionJa,
+    required String descriptionEn,
     this.rowid = const Value.absent(),
   })  : id = Value(id),
         nameJa = Value(nameJa),
-        nameEn = Value(nameEn);
+        nameEn = Value(nameEn),
+        shortNameJa = Value(shortNameJa),
+        shortNameEn = Value(shortNameEn),
+        descriptionJa = Value(descriptionJa),
+        descriptionEn = Value(descriptionEn);
   static Insertable<Series> custom({
     Expression<int>? id,
     Expression<String>? nameJa,
     Expression<String>? nameEn,
+    Expression<String>? shortNameJa,
+    Expression<String>? shortNameEn,
+    Expression<String>? descriptionJa,
+    Expression<String>? descriptionEn,
     Expression<int>? rowid,
   }) {
     return RawValuesInsertable({
       if (id != null) 'id': id,
       if (nameJa != null) 'name_ja': nameJa,
       if (nameEn != null) 'name_en': nameEn,
+      if (shortNameJa != null) 'short_name_ja': shortNameJa,
+      if (shortNameEn != null) 'short_name_en': shortNameEn,
+      if (descriptionJa != null) 'description_ja': descriptionJa,
+      if (descriptionEn != null) 'description_en': descriptionEn,
       if (rowid != null) 'rowid': rowid,
     });
   }
@@ -508,11 +670,19 @@ class SeriesesCompanion extends UpdateCompanion<Series> {
       {Value<int>? id,
       Value<String>? nameJa,
       Value<String>? nameEn,
+      Value<String>? shortNameJa,
+      Value<String>? shortNameEn,
+      Value<String>? descriptionJa,
+      Value<String>? descriptionEn,
       Value<int>? rowid}) {
     return SeriesesCompanion(
       id: id ?? this.id,
       nameJa: nameJa ?? this.nameJa,
       nameEn: nameEn ?? this.nameEn,
+      shortNameJa: shortNameJa ?? this.shortNameJa,
+      shortNameEn: shortNameEn ?? this.shortNameEn,
+      descriptionJa: descriptionJa ?? this.descriptionJa,
+      descriptionEn: descriptionEn ?? this.descriptionEn,
       rowid: rowid ?? this.rowid,
     );
   }
@@ -529,6 +699,18 @@ class SeriesesCompanion extends UpdateCompanion<Series> {
     if (nameEn.present) {
       map['name_en'] = Variable<String>(nameEn.value);
     }
+    if (shortNameJa.present) {
+      map['short_name_ja'] = Variable<String>(shortNameJa.value);
+    }
+    if (shortNameEn.present) {
+      map['short_name_en'] = Variable<String>(shortNameEn.value);
+    }
+    if (descriptionJa.present) {
+      map['description_ja'] = Variable<String>(descriptionJa.value);
+    }
+    if (descriptionEn.present) {
+      map['description_en'] = Variable<String>(descriptionEn.value);
+    }
     if (rowid.present) {
       map['rowid'] = Variable<int>(rowid.value);
     }
@@ -541,6 +723,10 @@ class SeriesesCompanion extends UpdateCompanion<Series> {
           ..write('id: $id, ')
           ..write('nameJa: $nameJa, ')
           ..write('nameEn: $nameEn, ')
+          ..write('shortNameJa: $shortNameJa, ')
+          ..write('shortNameEn: $shortNameEn, ')
+          ..write('descriptionJa: $descriptionJa, ')
+          ..write('descriptionEn: $descriptionEn, ')
           ..write('rowid: $rowid')
           ..write(')'))
         .toString();
@@ -566,6 +752,18 @@ class $PaintersTable extends Painters with TableInfo<$PaintersTable, Painter> {
   @override
   late final GeneratedColumn<String> nameEn = GeneratedColumn<String>(
       'name_en', aliasedName, false,
+      type: DriftSqlType.string, requiredDuringInsert: true);
+  static const VerificationMeta _shortNameJaMeta =
+      const VerificationMeta('shortNameJa');
+  @override
+  late final GeneratedColumn<String> shortNameJa = GeneratedColumn<String>(
+      'short_name_ja', aliasedName, false,
+      type: DriftSqlType.string, requiredDuringInsert: true);
+  static const VerificationMeta _shortNameEnMeta =
+      const VerificationMeta('shortNameEn');
+  @override
+  late final GeneratedColumn<String> shortNameEn = GeneratedColumn<String>(
+      'short_name_en', aliasedName, false,
       type: DriftSqlType.string, requiredDuringInsert: true);
   static const VerificationMeta _aliasJaMeta =
       const VerificationMeta('aliasJa');
@@ -614,6 +812,8 @@ class $PaintersTable extends Painters with TableInfo<$PaintersTable, Painter> {
         id,
         nameJa,
         nameEn,
+        shortNameJa,
+        shortNameEn,
         aliasJa,
         aliasEn,
         bornIn,
@@ -648,6 +848,22 @@ class $PaintersTable extends Painters with TableInfo<$PaintersTable, Painter> {
           nameEn.isAcceptableOrUnknown(data['name_en']!, _nameEnMeta));
     } else if (isInserting) {
       context.missing(_nameEnMeta);
+    }
+    if (data.containsKey('short_name_ja')) {
+      context.handle(
+          _shortNameJaMeta,
+          shortNameJa.isAcceptableOrUnknown(
+              data['short_name_ja']!, _shortNameJaMeta));
+    } else if (isInserting) {
+      context.missing(_shortNameJaMeta);
+    }
+    if (data.containsKey('short_name_en')) {
+      context.handle(
+          _shortNameEnMeta,
+          shortNameEn.isAcceptableOrUnknown(
+              data['short_name_en']!, _shortNameEnMeta));
+    } else if (isInserting) {
+      context.missing(_shortNameEnMeta);
     }
     if (data.containsKey('alias_ja')) {
       context.handle(_aliasJaMeta,
@@ -704,6 +920,10 @@ class $PaintersTable extends Painters with TableInfo<$PaintersTable, Painter> {
           .read(DriftSqlType.string, data['${effectivePrefix}name_ja'])!,
       nameEn: attachedDatabase.typeMapping
           .read(DriftSqlType.string, data['${effectivePrefix}name_en'])!,
+      shortNameJa: attachedDatabase.typeMapping
+          .read(DriftSqlType.string, data['${effectivePrefix}short_name_ja'])!,
+      shortNameEn: attachedDatabase.typeMapping
+          .read(DriftSqlType.string, data['${effectivePrefix}short_name_en'])!,
       aliasJa: attachedDatabase.typeMapping
           .read(DriftSqlType.string, data['${effectivePrefix}alias_ja'])!,
       aliasEn: attachedDatabase.typeMapping
@@ -737,6 +957,12 @@ class Painter extends DataClass implements Insertable<Painter> {
   /// 名前（英語）
   final String nameEn;
 
+  /// 短縮名（日本語）
+  final String shortNameJa;
+
+  /// 短縮名（英語）
+  final String shortNameEn;
+
   /// 別名（日本語）
   final String aliasJa;
 
@@ -761,6 +987,8 @@ class Painter extends DataClass implements Insertable<Painter> {
       {required this.id,
       required this.nameJa,
       required this.nameEn,
+      required this.shortNameJa,
+      required this.shortNameEn,
       required this.aliasJa,
       required this.aliasEn,
       this.bornIn,
@@ -774,6 +1002,8 @@ class Painter extends DataClass implements Insertable<Painter> {
     map['id'] = Variable<int>(id);
     map['name_ja'] = Variable<String>(nameJa);
     map['name_en'] = Variable<String>(nameEn);
+    map['short_name_ja'] = Variable<String>(shortNameJa);
+    map['short_name_en'] = Variable<String>(shortNameEn);
     map['alias_ja'] = Variable<String>(aliasJa);
     map['alias_en'] = Variable<String>(aliasEn);
     if (!nullToAbsent || bornIn != null) {
@@ -795,6 +1025,8 @@ class Painter extends DataClass implements Insertable<Painter> {
       id: Value(id),
       nameJa: Value(nameJa),
       nameEn: Value(nameEn),
+      shortNameJa: Value(shortNameJa),
+      shortNameEn: Value(shortNameEn),
       aliasJa: Value(aliasJa),
       aliasEn: Value(aliasEn),
       bornIn:
@@ -815,6 +1047,8 @@ class Painter extends DataClass implements Insertable<Painter> {
       id: serializer.fromJson<int>(json['id']),
       nameJa: serializer.fromJson<String>(json['nameJa']),
       nameEn: serializer.fromJson<String>(json['nameEn']),
+      shortNameJa: serializer.fromJson<String>(json['shortNameJa']),
+      shortNameEn: serializer.fromJson<String>(json['shortNameEn']),
       aliasJa: serializer.fromJson<String>(json['aliasJa']),
       aliasEn: serializer.fromJson<String>(json['aliasEn']),
       bornIn: serializer.fromJson<int?>(json['bornIn']),
@@ -831,6 +1065,8 @@ class Painter extends DataClass implements Insertable<Painter> {
       'id': serializer.toJson<int>(id),
       'nameJa': serializer.toJson<String>(nameJa),
       'nameEn': serializer.toJson<String>(nameEn),
+      'shortNameJa': serializer.toJson<String>(shortNameJa),
+      'shortNameEn': serializer.toJson<String>(shortNameEn),
       'aliasJa': serializer.toJson<String>(aliasJa),
       'aliasEn': serializer.toJson<String>(aliasEn),
       'bornIn': serializer.toJson<int?>(bornIn),
@@ -845,6 +1081,8 @@ class Painter extends DataClass implements Insertable<Painter> {
           {int? id,
           String? nameJa,
           String? nameEn,
+          String? shortNameJa,
+          String? shortNameEn,
           String? aliasJa,
           String? aliasEn,
           Value<int?> bornIn = const Value.absent(),
@@ -856,6 +1094,8 @@ class Painter extends DataClass implements Insertable<Painter> {
         id: id ?? this.id,
         nameJa: nameJa ?? this.nameJa,
         nameEn: nameEn ?? this.nameEn,
+        shortNameJa: shortNameJa ?? this.shortNameJa,
+        shortNameEn: shortNameEn ?? this.shortNameEn,
         aliasJa: aliasJa ?? this.aliasJa,
         aliasEn: aliasEn ?? this.aliasEn,
         bornIn: bornIn.present ? bornIn.value : this.bornIn,
@@ -869,6 +1109,10 @@ class Painter extends DataClass implements Insertable<Painter> {
       id: data.id.present ? data.id.value : this.id,
       nameJa: data.nameJa.present ? data.nameJa.value : this.nameJa,
       nameEn: data.nameEn.present ? data.nameEn.value : this.nameEn,
+      shortNameJa:
+          data.shortNameJa.present ? data.shortNameJa.value : this.shortNameJa,
+      shortNameEn:
+          data.shortNameEn.present ? data.shortNameEn.value : this.shortNameEn,
       aliasJa: data.aliasJa.present ? data.aliasJa.value : this.aliasJa,
       aliasEn: data.aliasEn.present ? data.aliasEn.value : this.aliasEn,
       bornIn: data.bornIn.present ? data.bornIn.value : this.bornIn,
@@ -889,6 +1133,8 @@ class Painter extends DataClass implements Insertable<Painter> {
           ..write('id: $id, ')
           ..write('nameJa: $nameJa, ')
           ..write('nameEn: $nameEn, ')
+          ..write('shortNameJa: $shortNameJa, ')
+          ..write('shortNameEn: $shortNameEn, ')
           ..write('aliasJa: $aliasJa, ')
           ..write('aliasEn: $aliasEn, ')
           ..write('bornIn: $bornIn, ')
@@ -901,8 +1147,8 @@ class Painter extends DataClass implements Insertable<Painter> {
   }
 
   @override
-  int get hashCode => Object.hash(id, nameJa, nameEn, aliasJa, aliasEn, bornIn,
-      diedIn, descriptionJa, descriptionEn, source);
+  int get hashCode => Object.hash(id, nameJa, nameEn, shortNameJa, shortNameEn,
+      aliasJa, aliasEn, bornIn, diedIn, descriptionJa, descriptionEn, source);
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
@@ -910,6 +1156,8 @@ class Painter extends DataClass implements Insertable<Painter> {
           other.id == this.id &&
           other.nameJa == this.nameJa &&
           other.nameEn == this.nameEn &&
+          other.shortNameJa == this.shortNameJa &&
+          other.shortNameEn == this.shortNameEn &&
           other.aliasJa == this.aliasJa &&
           other.aliasEn == this.aliasEn &&
           other.bornIn == this.bornIn &&
@@ -923,6 +1171,8 @@ class PaintersCompanion extends UpdateCompanion<Painter> {
   final Value<int> id;
   final Value<String> nameJa;
   final Value<String> nameEn;
+  final Value<String> shortNameJa;
+  final Value<String> shortNameEn;
   final Value<String> aliasJa;
   final Value<String> aliasEn;
   final Value<int?> bornIn;
@@ -935,6 +1185,8 @@ class PaintersCompanion extends UpdateCompanion<Painter> {
     this.id = const Value.absent(),
     this.nameJa = const Value.absent(),
     this.nameEn = const Value.absent(),
+    this.shortNameJa = const Value.absent(),
+    this.shortNameEn = const Value.absent(),
     this.aliasJa = const Value.absent(),
     this.aliasEn = const Value.absent(),
     this.bornIn = const Value.absent(),
@@ -948,6 +1200,8 @@ class PaintersCompanion extends UpdateCompanion<Painter> {
     required int id,
     required String nameJa,
     required String nameEn,
+    required String shortNameJa,
+    required String shortNameEn,
     required String aliasJa,
     required String aliasEn,
     this.bornIn = const Value.absent(),
@@ -959,6 +1213,8 @@ class PaintersCompanion extends UpdateCompanion<Painter> {
   })  : id = Value(id),
         nameJa = Value(nameJa),
         nameEn = Value(nameEn),
+        shortNameJa = Value(shortNameJa),
+        shortNameEn = Value(shortNameEn),
         aliasJa = Value(aliasJa),
         aliasEn = Value(aliasEn),
         descriptionJa = Value(descriptionJa),
@@ -967,6 +1223,8 @@ class PaintersCompanion extends UpdateCompanion<Painter> {
     Expression<int>? id,
     Expression<String>? nameJa,
     Expression<String>? nameEn,
+    Expression<String>? shortNameJa,
+    Expression<String>? shortNameEn,
     Expression<String>? aliasJa,
     Expression<String>? aliasEn,
     Expression<int>? bornIn,
@@ -980,6 +1238,8 @@ class PaintersCompanion extends UpdateCompanion<Painter> {
       if (id != null) 'id': id,
       if (nameJa != null) 'name_ja': nameJa,
       if (nameEn != null) 'name_en': nameEn,
+      if (shortNameJa != null) 'short_name_ja': shortNameJa,
+      if (shortNameEn != null) 'short_name_en': shortNameEn,
       if (aliasJa != null) 'alias_ja': aliasJa,
       if (aliasEn != null) 'alias_en': aliasEn,
       if (bornIn != null) 'born_in': bornIn,
@@ -995,6 +1255,8 @@ class PaintersCompanion extends UpdateCompanion<Painter> {
       {Value<int>? id,
       Value<String>? nameJa,
       Value<String>? nameEn,
+      Value<String>? shortNameJa,
+      Value<String>? shortNameEn,
       Value<String>? aliasJa,
       Value<String>? aliasEn,
       Value<int?>? bornIn,
@@ -1007,6 +1269,8 @@ class PaintersCompanion extends UpdateCompanion<Painter> {
       id: id ?? this.id,
       nameJa: nameJa ?? this.nameJa,
       nameEn: nameEn ?? this.nameEn,
+      shortNameJa: shortNameJa ?? this.shortNameJa,
+      shortNameEn: shortNameEn ?? this.shortNameEn,
       aliasJa: aliasJa ?? this.aliasJa,
       aliasEn: aliasEn ?? this.aliasEn,
       bornIn: bornIn ?? this.bornIn,
@@ -1029,6 +1293,12 @@ class PaintersCompanion extends UpdateCompanion<Painter> {
     }
     if (nameEn.present) {
       map['name_en'] = Variable<String>(nameEn.value);
+    }
+    if (shortNameJa.present) {
+      map['short_name_ja'] = Variable<String>(shortNameJa.value);
+    }
+    if (shortNameEn.present) {
+      map['short_name_en'] = Variable<String>(shortNameEn.value);
     }
     if (aliasJa.present) {
       map['alias_ja'] = Variable<String>(aliasJa.value);
@@ -1063,6 +1333,8 @@ class PaintersCompanion extends UpdateCompanion<Painter> {
           ..write('id: $id, ')
           ..write('nameJa: $nameJa, ')
           ..write('nameEn: $nameEn, ')
+          ..write('shortNameJa: $shortNameJa, ')
+          ..write('shortNameEn: $shortNameEn, ')
           ..write('aliasJa: $aliasJa, ')
           ..write('aliasEn: $aliasEn, ')
           ..write('bornIn: $bornIn, ')
@@ -2201,12 +2473,20 @@ typedef $$SeriesesTableCreateCompanionBuilder = SeriesesCompanion Function({
   required int id,
   required String nameJa,
   required String nameEn,
+  required String shortNameJa,
+  required String shortNameEn,
+  required String descriptionJa,
+  required String descriptionEn,
   Value<int> rowid,
 });
 typedef $$SeriesesTableUpdateCompanionBuilder = SeriesesCompanion Function({
   Value<int> id,
   Value<String> nameJa,
   Value<String> nameEn,
+  Value<String> shortNameJa,
+  Value<String> shortNameEn,
+  Value<String> descriptionJa,
+  Value<String> descriptionEn,
   Value<int> rowid,
 });
 
@@ -2230,24 +2510,40 @@ class $$SeriesesTableTableManager extends RootTableManager<
             Value<int> id = const Value.absent(),
             Value<String> nameJa = const Value.absent(),
             Value<String> nameEn = const Value.absent(),
+            Value<String> shortNameJa = const Value.absent(),
+            Value<String> shortNameEn = const Value.absent(),
+            Value<String> descriptionJa = const Value.absent(),
+            Value<String> descriptionEn = const Value.absent(),
             Value<int> rowid = const Value.absent(),
           }) =>
               SeriesesCompanion(
             id: id,
             nameJa: nameJa,
             nameEn: nameEn,
+            shortNameJa: shortNameJa,
+            shortNameEn: shortNameEn,
+            descriptionJa: descriptionJa,
+            descriptionEn: descriptionEn,
             rowid: rowid,
           ),
           createCompanionCallback: ({
             required int id,
             required String nameJa,
             required String nameEn,
+            required String shortNameJa,
+            required String shortNameEn,
+            required String descriptionJa,
+            required String descriptionEn,
             Value<int> rowid = const Value.absent(),
           }) =>
               SeriesesCompanion.insert(
             id: id,
             nameJa: nameJa,
             nameEn: nameEn,
+            shortNameJa: shortNameJa,
+            shortNameEn: shortNameEn,
+            descriptionJa: descriptionJa,
+            descriptionEn: descriptionEn,
             rowid: rowid,
           ),
         ));
@@ -2268,6 +2564,26 @@ class $$SeriesesTableFilterComposer
 
   ColumnFilters<String> get nameEn => $state.composableBuilder(
       column: $state.table.nameEn,
+      builder: (column, joinBuilders) =>
+          ColumnFilters(column, joinBuilders: joinBuilders));
+
+  ColumnFilters<String> get shortNameJa => $state.composableBuilder(
+      column: $state.table.shortNameJa,
+      builder: (column, joinBuilders) =>
+          ColumnFilters(column, joinBuilders: joinBuilders));
+
+  ColumnFilters<String> get shortNameEn => $state.composableBuilder(
+      column: $state.table.shortNameEn,
+      builder: (column, joinBuilders) =>
+          ColumnFilters(column, joinBuilders: joinBuilders));
+
+  ColumnFilters<String> get descriptionJa => $state.composableBuilder(
+      column: $state.table.descriptionJa,
+      builder: (column, joinBuilders) =>
+          ColumnFilters(column, joinBuilders: joinBuilders));
+
+  ColumnFilters<String> get descriptionEn => $state.composableBuilder(
+      column: $state.table.descriptionEn,
       builder: (column, joinBuilders) =>
           ColumnFilters(column, joinBuilders: joinBuilders));
 
@@ -2302,12 +2618,34 @@ class $$SeriesesTableOrderingComposer
       column: $state.table.nameEn,
       builder: (column, joinBuilders) =>
           ColumnOrderings(column, joinBuilders: joinBuilders));
+
+  ColumnOrderings<String> get shortNameJa => $state.composableBuilder(
+      column: $state.table.shortNameJa,
+      builder: (column, joinBuilders) =>
+          ColumnOrderings(column, joinBuilders: joinBuilders));
+
+  ColumnOrderings<String> get shortNameEn => $state.composableBuilder(
+      column: $state.table.shortNameEn,
+      builder: (column, joinBuilders) =>
+          ColumnOrderings(column, joinBuilders: joinBuilders));
+
+  ColumnOrderings<String> get descriptionJa => $state.composableBuilder(
+      column: $state.table.descriptionJa,
+      builder: (column, joinBuilders) =>
+          ColumnOrderings(column, joinBuilders: joinBuilders));
+
+  ColumnOrderings<String> get descriptionEn => $state.composableBuilder(
+      column: $state.table.descriptionEn,
+      builder: (column, joinBuilders) =>
+          ColumnOrderings(column, joinBuilders: joinBuilders));
 }
 
 typedef $$PaintersTableCreateCompanionBuilder = PaintersCompanion Function({
   required int id,
   required String nameJa,
   required String nameEn,
+  required String shortNameJa,
+  required String shortNameEn,
   required String aliasJa,
   required String aliasEn,
   Value<int?> bornIn,
@@ -2321,6 +2659,8 @@ typedef $$PaintersTableUpdateCompanionBuilder = PaintersCompanion Function({
   Value<int> id,
   Value<String> nameJa,
   Value<String> nameEn,
+  Value<String> shortNameJa,
+  Value<String> shortNameEn,
   Value<String> aliasJa,
   Value<String> aliasEn,
   Value<int?> bornIn,
@@ -2351,6 +2691,8 @@ class $$PaintersTableTableManager extends RootTableManager<
             Value<int> id = const Value.absent(),
             Value<String> nameJa = const Value.absent(),
             Value<String> nameEn = const Value.absent(),
+            Value<String> shortNameJa = const Value.absent(),
+            Value<String> shortNameEn = const Value.absent(),
             Value<String> aliasJa = const Value.absent(),
             Value<String> aliasEn = const Value.absent(),
             Value<int?> bornIn = const Value.absent(),
@@ -2364,6 +2706,8 @@ class $$PaintersTableTableManager extends RootTableManager<
             id: id,
             nameJa: nameJa,
             nameEn: nameEn,
+            shortNameJa: shortNameJa,
+            shortNameEn: shortNameEn,
             aliasJa: aliasJa,
             aliasEn: aliasEn,
             bornIn: bornIn,
@@ -2377,6 +2721,8 @@ class $$PaintersTableTableManager extends RootTableManager<
             required int id,
             required String nameJa,
             required String nameEn,
+            required String shortNameJa,
+            required String shortNameEn,
             required String aliasJa,
             required String aliasEn,
             Value<int?> bornIn = const Value.absent(),
@@ -2390,6 +2736,8 @@ class $$PaintersTableTableManager extends RootTableManager<
             id: id,
             nameJa: nameJa,
             nameEn: nameEn,
+            shortNameJa: shortNameJa,
+            shortNameEn: shortNameEn,
             aliasJa: aliasJa,
             aliasEn: aliasEn,
             bornIn: bornIn,
@@ -2417,6 +2765,16 @@ class $$PaintersTableFilterComposer
 
   ColumnFilters<String> get nameEn => $state.composableBuilder(
       column: $state.table.nameEn,
+      builder: (column, joinBuilders) =>
+          ColumnFilters(column, joinBuilders: joinBuilders));
+
+  ColumnFilters<String> get shortNameJa => $state.composableBuilder(
+      column: $state.table.shortNameJa,
+      builder: (column, joinBuilders) =>
+          ColumnFilters(column, joinBuilders: joinBuilders));
+
+  ColumnFilters<String> get shortNameEn => $state.composableBuilder(
+      column: $state.table.shortNameEn,
       builder: (column, joinBuilders) =>
           ColumnFilters(column, joinBuilders: joinBuilders));
 
@@ -2491,6 +2849,16 @@ class $$PaintersTableOrderingComposer
 
   ColumnOrderings<String> get nameEn => $state.composableBuilder(
       column: $state.table.nameEn,
+      builder: (column, joinBuilders) =>
+          ColumnOrderings(column, joinBuilders: joinBuilders));
+
+  ColumnOrderings<String> get shortNameJa => $state.composableBuilder(
+      column: $state.table.shortNameJa,
+      builder: (column, joinBuilders) =>
+          ColumnOrderings(column, joinBuilders: joinBuilders));
+
+  ColumnOrderings<String> get shortNameEn => $state.composableBuilder(
+      column: $state.table.shortNameEn,
       builder: (column, joinBuilders) =>
           ColumnOrderings(column, joinBuilders: joinBuilders));
 
