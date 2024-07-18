@@ -105,8 +105,9 @@ class Database extends _$Database {
           latitude: Value(double.parse(data[7])),
           longitude: Value(double.parse(data[8])),
           direction: Value(data[9].isEmpty ? null : double.parse(data[9])),
-          descriptionJa: Value(data[10]),
-          descriptionEn: Value(data[11]),
+          source: Value(int.parse(data[10])),
+          descriptionJa: Value(data[11]),
+          descriptionEn: Value(data[12]),
         )).toList());
       });
       await batch((batch) async {
@@ -119,10 +120,10 @@ class Database extends _$Database {
   }
 
   /// 出典を取得する
-  // Future<Source> getSource(int id) => (select(sources)..where((e) => e.id.equals(id))).getSingle();
+  Future<Source> getSource(int id) => (select(sources)..where((e) => e.id.equals(id))).getSingle();
 
   /// シリーズを取得する
-  // Future<Series> getSeries(int id) => (select(serieses)..where((e) => e.id.equals(id))).getSingle();
+  Future<Series> getSeries(int id) => (select(serieses)..where((e) => e.id.equals(id))).getSingle();
 
   /// すべてのシリーズを取得する
   Future<List<Series>> getAllSeries() => select(serieses).get();
@@ -315,6 +316,8 @@ class Works extends Table {
   RealColumn get longitude => real()();
   /// 方角
   RealColumn get direction => real().nullable()();
+  /// 出典
+  IntColumn get source => integer().references(Sources, #id)();
   /// 解説（日本語）
   TextColumn get descriptionJa => text()();
   /// 解説（英語）

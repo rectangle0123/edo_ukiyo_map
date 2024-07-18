@@ -2,7 +2,9 @@ import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
+import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 
+import 'package:edo_ukiyo_map/pages/work.dart';
 import 'package:edo_ukiyo_map/providers/providers.dart';
 import 'package:edo_ukiyo_map/storage/database.dart';
 
@@ -81,7 +83,13 @@ class _CarouselItem extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
-      onTap: () {},
+      onTap: () {
+        showCupertinoModalBottomSheet(
+          context: context,
+          enableDrag: false,
+          builder: (context) => WorkPage(work: workWithPainters.$1),
+        );
+      },
       child: Card(
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(radius),
@@ -152,7 +160,10 @@ class _WorkIndex extends StatelessWidget {
         color: Colors.white70,
         borderRadius: BorderRadius.circular(radius),
       ),
-      child: Text('${work.index}', style: Theme.of(context).textTheme.labelSmall),
+      child: Text(
+        '${work.index}',
+        style: Theme.of(context).textTheme.labelSmall?.copyWith(fontWeight: FontWeight.bold),
+      ),
     );
   }
 }

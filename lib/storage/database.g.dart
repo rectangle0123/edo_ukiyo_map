@@ -1410,6 +1410,14 @@ class $WorksTable extends Works with TableInfo<$WorksTable, Work> {
   late final GeneratedColumn<double> direction = GeneratedColumn<double>(
       'direction', aliasedName, true,
       type: DriftSqlType.double, requiredDuringInsert: false);
+  static const VerificationMeta _sourceMeta = const VerificationMeta('source');
+  @override
+  late final GeneratedColumn<int> source = GeneratedColumn<int>(
+      'source', aliasedName, false,
+      type: DriftSqlType.int,
+      requiredDuringInsert: true,
+      defaultConstraints:
+          GeneratedColumn.constraintIsAlways('REFERENCES sources (id)'));
   static const VerificationMeta _descriptionJaMeta =
       const VerificationMeta('descriptionJa');
   @override
@@ -1434,6 +1442,7 @@ class $WorksTable extends Works with TableInfo<$WorksTable, Work> {
         latitude,
         longitude,
         direction,
+        source,
         descriptionJa,
         descriptionEn
       ];
@@ -1500,6 +1509,12 @@ class $WorksTable extends Works with TableInfo<$WorksTable, Work> {
       context.handle(_directionMeta,
           direction.isAcceptableOrUnknown(data['direction']!, _directionMeta));
     }
+    if (data.containsKey('source')) {
+      context.handle(_sourceMeta,
+          source.isAcceptableOrUnknown(data['source']!, _sourceMeta));
+    } else if (isInserting) {
+      context.missing(_sourceMeta);
+    }
     if (data.containsKey('description_ja')) {
       context.handle(
           _descriptionJaMeta,
@@ -1545,6 +1560,8 @@ class $WorksTable extends Works with TableInfo<$WorksTable, Work> {
           .read(DriftSqlType.double, data['${effectivePrefix}longitude'])!,
       direction: attachedDatabase.typeMapping
           .read(DriftSqlType.double, data['${effectivePrefix}direction']),
+      source: attachedDatabase.typeMapping
+          .read(DriftSqlType.int, data['${effectivePrefix}source'])!,
       descriptionJa: attachedDatabase.typeMapping
           .read(DriftSqlType.string, data['${effectivePrefix}description_ja'])!,
       descriptionEn: attachedDatabase.typeMapping
@@ -1589,6 +1606,9 @@ class Work extends DataClass implements Insertable<Work> {
   /// 方角
   final double? direction;
 
+  /// 出典
+  final int source;
+
   /// 解説（日本語）
   final String descriptionJa;
 
@@ -1605,6 +1625,7 @@ class Work extends DataClass implements Insertable<Work> {
       required this.latitude,
       required this.longitude,
       this.direction,
+      required this.source,
       required this.descriptionJa,
       required this.descriptionEn});
   @override
@@ -1628,6 +1649,7 @@ class Work extends DataClass implements Insertable<Work> {
     if (!nullToAbsent || direction != null) {
       map['direction'] = Variable<double>(direction);
     }
+    map['source'] = Variable<int>(source);
     map['description_ja'] = Variable<String>(descriptionJa);
     map['description_en'] = Variable<String>(descriptionEn);
     return map;
@@ -1651,6 +1673,7 @@ class Work extends DataClass implements Insertable<Work> {
       direction: direction == null && nullToAbsent
           ? const Value.absent()
           : Value(direction),
+      source: Value(source),
       descriptionJa: Value(descriptionJa),
       descriptionEn: Value(descriptionEn),
     );
@@ -1670,6 +1693,7 @@ class Work extends DataClass implements Insertable<Work> {
       latitude: serializer.fromJson<double>(json['latitude']),
       longitude: serializer.fromJson<double>(json['longitude']),
       direction: serializer.fromJson<double?>(json['direction']),
+      source: serializer.fromJson<int>(json['source']),
       descriptionJa: serializer.fromJson<String>(json['descriptionJa']),
       descriptionEn: serializer.fromJson<String>(json['descriptionEn']),
     );
@@ -1688,6 +1712,7 @@ class Work extends DataClass implements Insertable<Work> {
       'latitude': serializer.toJson<double>(latitude),
       'longitude': serializer.toJson<double>(longitude),
       'direction': serializer.toJson<double?>(direction),
+      'source': serializer.toJson<int>(source),
       'descriptionJa': serializer.toJson<String>(descriptionJa),
       'descriptionEn': serializer.toJson<String>(descriptionEn),
     };
@@ -1704,6 +1729,7 @@ class Work extends DataClass implements Insertable<Work> {
           double? latitude,
           double? longitude,
           Value<double?> direction = const Value.absent(),
+          int? source,
           String? descriptionJa,
           String? descriptionEn}) =>
       Work(
@@ -1717,6 +1743,7 @@ class Work extends DataClass implements Insertable<Work> {
         latitude: latitude ?? this.latitude,
         longitude: longitude ?? this.longitude,
         direction: direction.present ? direction.value : this.direction,
+        source: source ?? this.source,
         descriptionJa: descriptionJa ?? this.descriptionJa,
         descriptionEn: descriptionEn ?? this.descriptionEn,
       );
@@ -1733,6 +1760,7 @@ class Work extends DataClass implements Insertable<Work> {
       latitude: data.latitude.present ? data.latitude.value : this.latitude,
       longitude: data.longitude.present ? data.longitude.value : this.longitude,
       direction: data.direction.present ? data.direction.value : this.direction,
+      source: data.source.present ? data.source.value : this.source,
       descriptionJa: data.descriptionJa.present
           ? data.descriptionJa.value
           : this.descriptionJa,
@@ -1755,6 +1783,7 @@ class Work extends DataClass implements Insertable<Work> {
           ..write('latitude: $latitude, ')
           ..write('longitude: $longitude, ')
           ..write('direction: $direction, ')
+          ..write('source: $source, ')
           ..write('descriptionJa: $descriptionJa, ')
           ..write('descriptionEn: $descriptionEn')
           ..write(')'))
@@ -1773,6 +1802,7 @@ class Work extends DataClass implements Insertable<Work> {
       latitude,
       longitude,
       direction,
+      source,
       descriptionJa,
       descriptionEn);
   @override
@@ -1789,6 +1819,7 @@ class Work extends DataClass implements Insertable<Work> {
           other.latitude == this.latitude &&
           other.longitude == this.longitude &&
           other.direction == this.direction &&
+          other.source == this.source &&
           other.descriptionJa == this.descriptionJa &&
           other.descriptionEn == this.descriptionEn);
 }
@@ -1804,6 +1835,7 @@ class WorksCompanion extends UpdateCompanion<Work> {
   final Value<double> latitude;
   final Value<double> longitude;
   final Value<double?> direction;
+  final Value<int> source;
   final Value<String> descriptionJa;
   final Value<String> descriptionEn;
   final Value<int> rowid;
@@ -1818,6 +1850,7 @@ class WorksCompanion extends UpdateCompanion<Work> {
     this.latitude = const Value.absent(),
     this.longitude = const Value.absent(),
     this.direction = const Value.absent(),
+    this.source = const Value.absent(),
     this.descriptionJa = const Value.absent(),
     this.descriptionEn = const Value.absent(),
     this.rowid = const Value.absent(),
@@ -1833,6 +1866,7 @@ class WorksCompanion extends UpdateCompanion<Work> {
     required double latitude,
     required double longitude,
     this.direction = const Value.absent(),
+    required int source,
     required String descriptionJa,
     required String descriptionEn,
     this.rowid = const Value.absent(),
@@ -1842,6 +1876,7 @@ class WorksCompanion extends UpdateCompanion<Work> {
         nameEn = Value(nameEn),
         latitude = Value(latitude),
         longitude = Value(longitude),
+        source = Value(source),
         descriptionJa = Value(descriptionJa),
         descriptionEn = Value(descriptionEn);
   static Insertable<Work> custom({
@@ -1855,6 +1890,7 @@ class WorksCompanion extends UpdateCompanion<Work> {
     Expression<double>? latitude,
     Expression<double>? longitude,
     Expression<double>? direction,
+    Expression<int>? source,
     Expression<String>? descriptionJa,
     Expression<String>? descriptionEn,
     Expression<int>? rowid,
@@ -1870,6 +1906,7 @@ class WorksCompanion extends UpdateCompanion<Work> {
       if (latitude != null) 'latitude': latitude,
       if (longitude != null) 'longitude': longitude,
       if (direction != null) 'direction': direction,
+      if (source != null) 'source': source,
       if (descriptionJa != null) 'description_ja': descriptionJa,
       if (descriptionEn != null) 'description_en': descriptionEn,
       if (rowid != null) 'rowid': rowid,
@@ -1887,6 +1924,7 @@ class WorksCompanion extends UpdateCompanion<Work> {
       Value<double>? latitude,
       Value<double>? longitude,
       Value<double?>? direction,
+      Value<int>? source,
       Value<String>? descriptionJa,
       Value<String>? descriptionEn,
       Value<int>? rowid}) {
@@ -1901,6 +1939,7 @@ class WorksCompanion extends UpdateCompanion<Work> {
       latitude: latitude ?? this.latitude,
       longitude: longitude ?? this.longitude,
       direction: direction ?? this.direction,
+      source: source ?? this.source,
       descriptionJa: descriptionJa ?? this.descriptionJa,
       descriptionEn: descriptionEn ?? this.descriptionEn,
       rowid: rowid ?? this.rowid,
@@ -1940,6 +1979,9 @@ class WorksCompanion extends UpdateCompanion<Work> {
     if (direction.present) {
       map['direction'] = Variable<double>(direction.value);
     }
+    if (source.present) {
+      map['source'] = Variable<int>(source.value);
+    }
     if (descriptionJa.present) {
       map['description_ja'] = Variable<String>(descriptionJa.value);
     }
@@ -1965,6 +2007,7 @@ class WorksCompanion extends UpdateCompanion<Work> {
           ..write('latitude: $latitude, ')
           ..write('longitude: $longitude, ')
           ..write('direction: $direction, ')
+          ..write('source: $source, ')
           ..write('descriptionJa: $descriptionJa, ')
           ..write('descriptionEn: $descriptionEn, ')
           ..write('rowid: $rowid')
@@ -2436,6 +2479,19 @@ class $$SourcesTableFilterComposer
         builder: (joinBuilder, parentComposers) =>
             $$PaintersTableFilterComposer(ComposerState(
                 $state.db, $state.db.painters, joinBuilder, parentComposers)));
+    return f(composer);
+  }
+
+  ComposableFilter worksRefs(
+      ComposableFilter Function($$WorksTableFilterComposer f) f) {
+    final $$WorksTableFilterComposer composer = $state.composerBuilder(
+        composer: this,
+        getCurrentColumn: (t) => t.id,
+        referencedTable: $state.db.works,
+        getReferencedColumn: (t) => t.source,
+        builder: (joinBuilder, parentComposers) => $$WorksTableFilterComposer(
+            ComposerState(
+                $state.db, $state.db.works, joinBuilder, parentComposers)));
     return f(composer);
   }
 }
@@ -2916,6 +2972,7 @@ typedef $$WorksTableCreateCompanionBuilder = WorksCompanion Function({
   required double latitude,
   required double longitude,
   Value<double?> direction,
+  required int source,
   required String descriptionJa,
   required String descriptionEn,
   Value<int> rowid,
@@ -2931,6 +2988,7 @@ typedef $$WorksTableUpdateCompanionBuilder = WorksCompanion Function({
   Value<double> latitude,
   Value<double> longitude,
   Value<double?> direction,
+  Value<int> source,
   Value<String> descriptionJa,
   Value<String> descriptionEn,
   Value<int> rowid,
@@ -2963,6 +3021,7 @@ class $$WorksTableTableManager extends RootTableManager<
             Value<double> latitude = const Value.absent(),
             Value<double> longitude = const Value.absent(),
             Value<double?> direction = const Value.absent(),
+            Value<int> source = const Value.absent(),
             Value<String> descriptionJa = const Value.absent(),
             Value<String> descriptionEn = const Value.absent(),
             Value<int> rowid = const Value.absent(),
@@ -2978,6 +3037,7 @@ class $$WorksTableTableManager extends RootTableManager<
             latitude: latitude,
             longitude: longitude,
             direction: direction,
+            source: source,
             descriptionJa: descriptionJa,
             descriptionEn: descriptionEn,
             rowid: rowid,
@@ -2993,6 +3053,7 @@ class $$WorksTableTableManager extends RootTableManager<
             required double latitude,
             required double longitude,
             Value<double?> direction = const Value.absent(),
+            required int source,
             required String descriptionJa,
             required String descriptionEn,
             Value<int> rowid = const Value.absent(),
@@ -3008,6 +3069,7 @@ class $$WorksTableTableManager extends RootTableManager<
             latitude: latitude,
             longitude: longitude,
             direction: direction,
+            source: source,
             descriptionJa: descriptionJa,
             descriptionEn: descriptionEn,
             rowid: rowid,
@@ -3082,6 +3144,18 @@ class $$WorksTableFilterComposer
         builder: (joinBuilder, parentComposers) =>
             $$SeriesesTableFilterComposer(ComposerState(
                 $state.db, $state.db.serieses, joinBuilder, parentComposers)));
+    return composer;
+  }
+
+  $$SourcesTableFilterComposer get source {
+    final $$SourcesTableFilterComposer composer = $state.composerBuilder(
+        composer: this,
+        getCurrentColumn: (t) => t.source,
+        referencedTable: $state.db.sources,
+        getReferencedColumn: (t) => t.id,
+        builder: (joinBuilder, parentComposers) => $$SourcesTableFilterComposer(
+            ComposerState(
+                $state.db, $state.db.sources, joinBuilder, parentComposers)));
     return composer;
   }
 
@@ -3179,6 +3253,18 @@ class $$WorksTableOrderingComposer
         builder: (joinBuilder, parentComposers) =>
             $$SeriesesTableOrderingComposer(ComposerState(
                 $state.db, $state.db.serieses, joinBuilder, parentComposers)));
+    return composer;
+  }
+
+  $$SourcesTableOrderingComposer get source {
+    final $$SourcesTableOrderingComposer composer = $state.composerBuilder(
+        composer: this,
+        getCurrentColumn: (t) => t.source,
+        referencedTable: $state.db.sources,
+        getReferencedColumn: (t) => t.id,
+        builder: (joinBuilder, parentComposers) =>
+            $$SourcesTableOrderingComposer(ComposerState(
+                $state.db, $state.db.sources, joinBuilder, parentComposers)));
     return composer;
   }
 }

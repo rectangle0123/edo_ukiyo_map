@@ -1,10 +1,12 @@
 import 'dart:ui';
 
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
+import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 
 import 'package:edo_ukiyo_map/pages/home.dart';
 import 'package:edo_ukiyo_map/pages/splash.dart';
@@ -56,17 +58,24 @@ class AppState extends ConsumerState<App> with WidgetsBindingObserver {
       supportedLocales: AppLocalizations.supportedLocales,
       // テーマ
       theme: AppTheme.lightTheme,
-      // ホーム画面
-      home: FutureBuilder(
-        future: _initialize(),
-        builder: (context, snapshot) {
-          if (snapshot.connectionState == ConnectionState.waiting) {
-            return const SplashPage();
-          } else {
-            return const HomePage();
-          }
-        },
-      ),
+      // 画面遷移ルート
+      onGenerateRoute: (settings) {
+        return MaterialWithModalsPageRoute(
+          builder: (context) {
+            // ホーム画面
+            return FutureBuilder(
+              future: _initialize(),
+              builder: (context, snapshot) {
+                if (snapshot.connectionState == ConnectionState.waiting) {
+                  return const SplashPage();
+                } else {
+                  return const HomePage();
+                }
+              },
+            );
+          },
+        );
+      },
     );
   }
 
@@ -79,6 +88,11 @@ class AppState extends ConsumerState<App> with WidgetsBindingObserver {
     // Googleマップマーカー画像を生成する
     var image = await _loadCustomMarker('assets/images/pin.png');
     ref.read(markerImageNotifierProvider.notifier).updateState(image);
+    // ライセンス情報追加
+    LicenseRegistry.addLicense(() async* {
+      var text = await rootBundle.loadString('assets/fonts/OFL.txt');
+      yield LicenseEntryWithLineBreaks(['Noto Serif Japanese'], text);
+    });
   }
 
   // Googleマップマーカー画像を生成する

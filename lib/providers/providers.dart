@@ -47,16 +47,16 @@ CarouselController carouselController(CarouselControllerRef ref) {
 }
 
 /// 出典を取得する
-// @riverpod
-// Future<Source> sourceById(SourceByIdRef ref, int id) {
-//   return Database.instance.getSource(id);
-// }
+@riverpod
+Future<Source> sourceById(SourceByIdRef ref, int id) {
+  return Database.instance.getSource(id);
+}
 
 /// シリーズを取得する
-// @riverpod
-// Future<Series> seriesById(SeriesByIdRef ref, int id) {
-//   return Database.instance.getSeries(id);
-// }
+@riverpod
+Future<Series> seriesById(SeriesByIdRef ref, int id) {
+  return Database.instance.getSeries(id);
+}
 
 /// すべてのシリーズを取得する
 @riverpod
@@ -120,10 +120,10 @@ Future<Work> currentSingleWork(CurrentSingleWorkRef ref) {
 }
 
 /// 作品から絵師を取得する
-// @riverpod
-// Future<List<Painter>> paintersByWork(PaintersByWorkRef ref, Work work) {
-//   return Database.instance.getPaintersByWorkId(work.id);
-// }
+@riverpod
+Future<List<Painter>> paintersByWork(PaintersByWorkRef ref, Work work) {
+  return Database.instance.getPaintersByWorkId(work.id);
+}
 
 /// 絵師から作品を取得する
 // @riverpod

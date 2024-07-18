@@ -54,6 +54,8 @@ dependencies:
   package_info_plus: ^8.0.0
   # カルーセル
   carousel_slider: ^4.2.1
+  # ボトムシート
+  modal_bottom_sheet: ^3.0.0
   # その他
   path: ^1.9.0
   path_provider: ^2.1.3

@@ -4,6 +4,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 
 import 'package:edo_ukiyo_map/pages/lisenses.dart';
 
@@ -94,7 +95,7 @@ class _ListItem extends StatelessWidget {
       additionalInfo: Text('${package.value.length}'),
       trailing: const CupertinoListTileChevron(),
       onTap: () => Navigator.of(context).push(
-        MaterialPageRoute(
+        MaterialWithModalsPageRoute(
           builder: (context) => LicensesPage(
             packageName: package.key,
             licenses: package.value,
