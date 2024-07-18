@@ -119,7 +119,7 @@ class Database extends _$Database {
   // Future<Series> getSeries(int id) => (select(serieses)..where((e) => e.id.equals(id))).getSingle();
 
   /// すべてのシリーズを取得する
-  // Future<List<Series>> getAllSeries() => select(serieses).get();
+  Future<List<Series>> getAllSeries() => select(serieses).get();
 
   /// 絵師を取得する
   // Future<Painter> getPainter(int id) => (select(painters)..where((e) => e.id.equals(id))).getSingle();

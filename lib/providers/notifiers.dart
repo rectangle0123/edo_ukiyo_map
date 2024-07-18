@@ -1,3 +1,4 @@
+import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 
@@ -68,3 +69,12 @@ class MarkerImageNotifier extends StateNotifier<BitmapDescriptor?> {
   }
 }
 
+/// タブプコントローラーの状態通知
+class TabControllerNotifier extends StateNotifier<TabController?> {
+  TabControllerNotifier() : super(null);
+
+  /// 状態更新
+  void updateState(TabController controller) {
+    state = controller;
+  }
+}

@@ -1,4 +1,5 @@
 import 'package:carousel_slider/carousel_controller.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:package_info_plus/package_info_plus.dart';
@@ -34,6 +35,11 @@ final markerImageNotifierProvider = StateNotifierProvider<MarkerImageNotifier, B
       (ref) => MarkerImageNotifier(),
 );
 
+/// タブコントローラーの状態通知を取得する
+final tabControllerNotifierProvider = StateNotifierProvider<TabControllerNotifier, TabController?>(
+      (ref) => TabControllerNotifier(),
+);
+
 /// カルーセルコントローラーを取得する
 @riverpod
 CarouselController carouselController(CarouselControllerRef ref) {
@@ -53,10 +59,10 @@ CarouselController carouselController(CarouselControllerRef ref) {
 // }
 
 /// すべてのシリーズを取得する
-// @riverpod
-// Future<List<Series>> allSeries(AllSeriesRef ref) {
-//   return Database.instance.getAllSeries();
-// }
+@riverpod
+Future<List<Series>> allSeries(AllSeriesRef ref) {
+  return Database.instance.getAllSeries();
+}
 
 /// 絵師を取得する
 // @riverpod
@@ -89,14 +95,6 @@ Future<Work> currentSingleWork(CurrentSingleWorkRef ref) {
   final seriesId = ref.watch(selectedSeriesIdNotifierProvider);
   final index = ref.watch(selectedWorkIndexNotifierProvider);
   return Database.instance.getWorkBySeriesIdAndWorkIndex(seriesId, index);
-}
-
-/// 選択されているシリーズに含まれるすべての作品と、選択されている作品インデックスからひとつの作品を取得する
-@riverpod
-Future<(List<Work>, Work)> currentWorksAndWork(CurrentWorksAndWorkRef ref) async {
-  final works = await ref.watch(currentAllWorksProvider.future);
-  final work = await ref.watch(currentSingleWorkProvider.future);
-  return (works, work);
 }
 
 /// 作品から絵師を取得する
