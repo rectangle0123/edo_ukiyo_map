@@ -69,7 +69,7 @@ class WorkCarouselState extends ConsumerState<WorkCarousel> {
 }
 
 // カルーセルアイテム
-class _CarouselItem extends StatelessWidget {
+class _CarouselItem extends ConsumerWidget {
   // 角丸
   static const radius = 8.0;
   // テキストのマージン
@@ -81,9 +81,13 @@ class _CarouselItem extends StatelessWidget {
   const _CarouselItem({required this.workWithPainters});
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     return GestureDetector(
       onTap: () {
+        // カルーセルのカレントアイテムを変更する
+        // 選択されている作品インデックスの変更はカルーセルのアイテム変更イベントで実行される
+        ref.watch(carouselControllerProvider).jumpToPage(workWithPainters.$1.index - 1);
+        // 作品ページを開く
         showCupertinoModalBottomSheet(
           context: context,
           enableDrag: false,

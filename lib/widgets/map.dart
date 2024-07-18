@@ -58,7 +58,7 @@ class AppMapState extends ConsumerState<AppMap> {
         title: e.getName(context),
       ),
       onTap: () async {
-        // カルーセルに表示中のアイテムを変更する
+        // カルーセルのカレントアイテムを変更する
         // 選択されている作品インデックスの変更はカルーセルのアイテム変更イベントで実行される
         ref.watch(carouselControllerProvider).jumpToPage(e.index - 1);
       },
