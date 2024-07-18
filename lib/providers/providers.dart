@@ -64,6 +64,17 @@ Future<List<Series>> allSeries(AllSeriesRef ref) {
   return Database.instance.getAllSeries();
 }
 
+/// すべてのシリーズとそれに含まれる作品を取得する
+@riverpod
+Future<List<(Series, List<Work>)>> allSeriesWithWorks(AllSeriesWithWorksRef ref) async {
+  final series = await ref.watch(allSeriesProvider.future);
+  final result = await Future.wait(series.map((e) async {
+    final works = await Database.instance.getWorksBySeriesId(e.id);
+    return (e, works);
+  }).toList());
+  return result;
+}
+
 /// 絵師を取得する
 // @riverpod
 // Future<Painter> painterById(PainterByIdRef ref, int id) {
@@ -87,6 +98,17 @@ Future<List<Series>> allSeries(AllSeriesRef ref) {
 Future<List<Work>> currentAllWorks(CurrentAllWorksRef ref) {
   final seriesId = ref.watch(selectedSeriesIdNotifierProvider);
   return Database.instance.getWorksBySeriesId(seriesId);
+}
+
+/// 選択されているシリーズに含まれるすべての作品とそれを描いた絵師を取得する
+@riverpod
+Future<List<(Work, List<Painter>)>> currentAllWorksWithPainters(CurrentAllWorksWithPaintersRef ref) async {
+  final works = await ref.watch(currentAllWorksProvider.future);
+  final result = await Future.wait(works.map((e) async {
+    final painters = await Database.instance.getPaintersByWorkId(e.id);
+    return (e, painters);
+  }).toList());
+  return result;
 }
 
 /// 選択されているシリーズと作品インデックスからひとつの作品を取得する

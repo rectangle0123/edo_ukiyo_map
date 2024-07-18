@@ -22,15 +22,15 @@ class SeriesTabState extends ConsumerState<SeriesTab> with SingleTickerProviderS
   // タブコントローラー
   late TabController _tabController;
   // シリーズ情報
-  late List<Series> _series;
+  late List<(Series, List<Work>)> _series;
   // 読み込み中かどうか
   bool _isLoading = true;
 
   @override
   void initState() {
     Future(() async {
-      // すべてのシリーズを取得する
-      final series = await ref.watch(allSeriesProvider.future);
+      // すべてのシリーズとそれに含まれる作品を取得する
+      final series = await ref.watch(allSeriesWithWorksProvider.future);
       // タブコントローラーを作成してプロバイダに設定する
       final tabController = TabController(length: series.length, vsync: this);
       tabController.addListener(_handleTabChanged);
@@ -62,7 +62,11 @@ class SeriesTabState extends ConsumerState<SeriesTab> with SingleTickerProviderS
 
     return TabBar(
       controller: _tabController,
-      tabs: _series.map((e) => Tab(text: e.getShortName(context))).toList(),
+      tabs: _series.map((e) {
+        return Tab(
+          text: '${e.$1.getShortName(context)} (${e.$2.length})'
+        );
+      }).toList(),
     );
   }
 

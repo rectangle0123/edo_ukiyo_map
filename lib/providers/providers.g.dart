@@ -43,6 +43,26 @@ final allSeriesProvider = AutoDisposeFutureProvider<List<Series>>.internal(
 );
 
 typedef AllSeriesRef = AutoDisposeFutureProviderRef<List<Series>>;
+String _$allSeriesWithWorksHash() =>
+    r'8acf073c589e6a61e4153668be68ae23fd5471e8';
+
+/// すべてのシリーズとそれに含まれる作品を取得する
+///
+/// Copied from [allSeriesWithWorks].
+@ProviderFor(allSeriesWithWorks)
+final allSeriesWithWorksProvider =
+    AutoDisposeFutureProvider<List<(Series, List<Work>)>>.internal(
+  allSeriesWithWorks,
+  name: r'allSeriesWithWorksProvider',
+  debugGetCreateSourceHash: const bool.fromEnvironment('dart.vm.product')
+      ? null
+      : _$allSeriesWithWorksHash,
+  dependencies: null,
+  allTransitiveDependencies: null,
+);
+
+typedef AllSeriesWithWorksRef
+    = AutoDisposeFutureProviderRef<List<(Series, List<Work>)>>;
 String _$currentAllWorksHash() => r'c0a8c52d620cafcd7da218e0444c9b4d4199ba3c';
 
 /// 絵師を取得する
@@ -63,6 +83,26 @@ final currentAllWorksProvider = AutoDisposeFutureProvider<List<Work>>.internal(
 );
 
 typedef CurrentAllWorksRef = AutoDisposeFutureProviderRef<List<Work>>;
+String _$currentAllWorksWithPaintersHash() =>
+    r'e8ff9fd0a7533a9f497126f58927a05fcad55fe6';
+
+/// 選択されているシリーズに含まれるすべての作品とそれを描いた絵師を取得する
+///
+/// Copied from [currentAllWorksWithPainters].
+@ProviderFor(currentAllWorksWithPainters)
+final currentAllWorksWithPaintersProvider =
+    AutoDisposeFutureProvider<List<(Work, List<Painter>)>>.internal(
+  currentAllWorksWithPainters,
+  name: r'currentAllWorksWithPaintersProvider',
+  debugGetCreateSourceHash: const bool.fromEnvironment('dart.vm.product')
+      ? null
+      : _$currentAllWorksWithPaintersHash,
+  dependencies: null,
+  allTransitiveDependencies: null,
+);
+
+typedef CurrentAllWorksWithPaintersRef
+    = AutoDisposeFutureProviderRef<List<(Work, List<Painter>)>>;
 String _$currentSingleWorkHash() => r'beff4e62d9d2ea25edcb1beb0dd27def045f4efa';
 
 /// 選択されているシリーズと作品インデックスからひとつの作品を取得する

@@ -22,14 +22,14 @@ class WorkCarouselState extends ConsumerState<WorkCarousel> {
 
   @override
   Widget build(BuildContext context) {
-    // 選択されているシリーズに含まれるすべての作品を取得する
-    final works = ref.watch(currentAllWorksProvider);
+    // 選択されているシリーズに含まれるすべての作品とそれを描いた絵師を取得する
+    final worksWithPainters = ref.watch(currentAllWorksWithPaintersProvider);
     // カルーセルコントローラーを取得する
     final controller = ref.watch(carouselControllerProvider);
 
     return LayoutBuilder(
       builder: (context, constraints) {
-        return switch (works) {
+        return switch (worksWithPainters) {
           AsyncData(:final value) => CarouselSlider(
             carouselController: controller,
             options: CarouselOptions(
@@ -42,7 +42,7 @@ class WorkCarouselState extends ConsumerState<WorkCarousel> {
             items: value.map((e) {
               return Container(
                 padding: const EdgeInsets.only(bottom: bottomPadding),
-                child: _CarouselItem(work: e),
+                child: _CarouselItem(workWithPainters: e),
               );
             }).toList(),
           ),
@@ -73,10 +73,10 @@ class _CarouselItem extends StatelessWidget {
   // テキストのマージン
   static const textMargin = 8.0;
 
-  // 作品
-  final Work work;
+  // 作品と絵師
+  final (Work, List<Painter>) workWithPainters;
 
-  const _CarouselItem({required this.work});
+  const _CarouselItem({required this.workWithPainters});
 
   @override
   Widget build(BuildContext context) {
@@ -90,8 +90,16 @@ class _CarouselItem extends StatelessWidget {
         child: Column(
           children: [
             Expanded(
-              child: SizedBox.expand(
-                child: Image.asset('assets/works/${work.id}.jpg', fit: BoxFit.cover),
+              child: Stack(
+                children: [
+                  SizedBox.expand(
+                    child: Image.asset('assets/works/${workWithPainters.$1.id}.jpg', fit: BoxFit.cover),
+                  ),
+                  Align(
+                    alignment: Alignment.topRight,
+                    child: _WorkIndex(work: workWithPainters.$1),
+                  )
+                ],
               ),
             ),
             Container(
@@ -101,8 +109,12 @@ class _CarouselItem extends StatelessWidget {
               ),
               child: Column(
                 children: [
-                  Text(work.getName(context),
+                  Text(workWithPainters.$1.getName(context),
                     style: Theme.of(context).textTheme.bodySmall,
+                    overflow: TextOverflow.ellipsis,
+                  ),
+                  Text(workWithPainters.$2.map((e) => e.getShortName(context)).join(', '),
+                    style: Theme.of(context).textTheme.labelSmall,
                     overflow: TextOverflow.ellipsis,
                   ),
                 ],
@@ -111,6 +123,36 @@ class _CarouselItem extends StatelessWidget {
           ],
         ),
       ),
+    );
+  }
+}
+
+// 作品インデックス
+class _WorkIndex extends StatelessWidget {
+  // サイズ
+  static const dimension = 28.0;
+  // 角丸
+  static const radius = 28.0;
+  // マージン
+  static const margin = 4.0;
+
+  // 作品
+  final Work work;
+
+  const _WorkIndex({required this.work});
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      width: dimension,
+      height: dimension,
+      margin: const EdgeInsets.all(margin),
+      alignment: Alignment.center,
+      decoration: BoxDecoration(
+        color: Colors.white70,
+        borderRadius: BorderRadius.circular(radius),
+      ),
+      child: Text('${work.index}', style: Theme.of(context).textTheme.labelSmall),
     );
   }
 }

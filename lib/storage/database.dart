@@ -150,13 +150,13 @@ class Database extends _$Database {
   }
 
   /// 作品IDから絵師を取得する
-  // Future<List<Painter>> getPaintersByWorkId(int workId) async {
-  //   final query = select(painters).join(
-  //       [innerJoin(worksPainters, worksPainters.painterId.equalsExp(painters.id))]
-  //   )..where(worksPainters.workId.equals(workId));
-  //   final result = await query.get();
-  //   return result.map((e) => e.readTable(painters)).toList();
-  // }
+  Future<List<Painter>> getPaintersByWorkId(int workId) async {
+    final query = select(painters).join(
+        [innerJoin(worksPainters, worksPainters.painterId.equalsExp(painters.id))]
+    )..where(worksPainters.workId.equals(workId));
+    final result = await query.get();
+    return result.map((e) => e.readTable(painters)).toList();
+  }
 
   /// 絵師IDから作品を取得する
   // Future<List<Work>> getWorksByPainterId(int painterId) async {
