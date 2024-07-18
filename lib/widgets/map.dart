@@ -22,6 +22,7 @@ class AppMapState extends ConsumerState<AppMap> {
 
     return switch (works) {
       AsyncData(:final value) => GoogleMap(
+        padding: EdgeInsets.only(top: MediaQuery.of(context).padding.top),
         mapType: MapType.normal,
         myLocationEnabled: true,
         myLocationButtonEnabled: false,
