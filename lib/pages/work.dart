@@ -144,10 +144,10 @@ class _Canvas extends StatelessWidget {
 
 // ボディ
 class _Body extends StatelessWidget {
-  // テキストの縦パディング
-  static const textPaddingVertical = 16.0;
-  // 要素間のスペース
-  static const space = 24.0;
+  // 横パディング
+  static const paddingHorizontal = 24.0;
+  // 縦パディング
+  static const paddingVertical = 16.0;
 
   // 作品
   final Work work;
@@ -159,43 +159,56 @@ class _Body extends StatelessWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        const SizedBox(height: textPaddingVertical / 2),
-        Container(
-          padding: const EdgeInsets.symmetric(horizontal: space),
-          child: _SourceText(work: work),
-        ),
-        const SizedBox(height: textPaddingVertical),
-        Container(
-          padding: const EdgeInsets.symmetric(horizontal: space),
+        GestureDetector(
+          behavior: HitTestBehavior.opaque,
+          onVerticalDragUpdate: (details) {
+            if (details.delta.dy > 0) {
+              Navigator.of(context).pop();
+            }
+          },
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              if (work.series != 0) _SeriesText(work: work),
-              Text(
-                work.getName(context),
-                style: Theme.of(context).textTheme.bodyLarge?.copyWith(fontWeight: FontWeight.bold),
+              const SizedBox(height: paddingVertical / 2),
+              Container(
+                padding: const EdgeInsets.symmetric(horizontal: paddingHorizontal),
+                child: _SourceText(work: work),
               ),
+              const SizedBox(height: paddingVertical),
+              Container(
+                padding: const EdgeInsets.symmetric(horizontal: paddingHorizontal),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    if (work.series != 0) _SeriesText(work: work),
+                    Text(
+                      work.getName(context),
+                      style: Theme.of(context).textTheme.bodyLarge?.copyWith(fontWeight: FontWeight.bold),
+                    ),
+                  ],
+                ),
+              ),
+              const SizedBox(height: paddingVertical),
+              Container(
+                padding: const EdgeInsets.symmetric(horizontal: paddingHorizontal),
+                child: _PainterText(work: work),
+              ),
+              const SizedBox(height: paddingVertical),
             ],
           ),
         ),
-        const SizedBox(height: textPaddingVertical),
-        Container(
-          padding: const EdgeInsets.symmetric(horizontal: space),
-          child: _PainterText(work: work),
-        ),
-        const SizedBox(height: textPaddingVertical),
         Expanded(
           child: Scrollbar(
             child: SingleChildScrollView(
               physics: const AlwaysScrollableScrollPhysics(),
               child: Container(
-                padding: const EdgeInsets.symmetric(horizontal: space),
+                padding: const EdgeInsets.symmetric(horizontal: paddingHorizontal),
                 child: Text(work.getDescription(context)),
               ),
             ),
           ),
         ),
-        const SizedBox(height: textPaddingVertical),
+        const SizedBox(height: paddingVertical),
       ],
     );
   }
