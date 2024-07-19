@@ -86,8 +86,12 @@ class AppState extends ConsumerState<App> with WidgetsBindingObserver {
     // データベース初期化
     await Database.instance.initialize();
     // Googleマップマーカー画像を生成する
-    var image = await _loadCustomMarker('assets/images/pin.png');
-    ref.read(markerImageNotifierProvider.notifier).updateState(image);
+    var image1 = await _loadCustomMarker('assets/images/pin_black.png');
+    var image2 = await _loadCustomMarker('assets/images/pin_blue.png');
+    var image3 = await _loadCustomMarker('assets/images/pin_green.png');
+    var image4 = await _loadCustomMarker('assets/images/pin_pink.png');
+    var image5 = await _loadCustomMarker('assets/images/pin_red.png');
+    ref.read(markerImagesNotifierProvider.notifier).updateState((image1, image2, image3, image4, image5));
     // ライセンス情報追加
     LicenseRegistry.addLicense(() async* {
       var text = await rootBundle.loadString('assets/fonts/OFL.txt');

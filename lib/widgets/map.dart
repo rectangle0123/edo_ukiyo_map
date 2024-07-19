@@ -49,11 +49,16 @@ class AppMapState extends ConsumerState<AppMap> {
   // マーカーを作成する
   Set<Marker> _createMarkers(List<Work> works) {
     // マーカー画像を取得する
-    final image = ref.watch(markerImageNotifierProvider);
+    final images = ref.watch(markerImagesNotifierProvider);
     return works.map((e) => Marker(
       markerId: MarkerId(e.index.toString()),
       position: LatLng(e.latitude, e.longitude),
-      icon: image ?? BitmapDescriptor.defaultMarker,
+      icon: images == null ? BitmapDescriptor.defaultMarker
+          : e.season == 1 ? images.$4
+          : e.season == 2 ? images.$3
+          : e.season == 3 ? images.$5
+          : e.season == 4 ? images.$2
+          : images.$1,
       infoWindow: InfoWindow(
         title: e.getName(context),
       ),

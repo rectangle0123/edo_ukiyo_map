@@ -31,8 +31,8 @@ final mapControllerNotifierProvider = StateNotifierProvider<MapControllerNotifie
 );
 
 /// Googleマップマーカー画像の状態通知を取得する
-final markerImageNotifierProvider = StateNotifierProvider<MarkerImageNotifier, BitmapDescriptor?>(
-      (ref) => MarkerImageNotifier(),
+final markerImagesNotifierProvider = StateNotifierProvider<MarkerImagesNotifier, (BitmapDescriptor, BitmapDescriptor, BitmapDescriptor, BitmapDescriptor, BitmapDescriptor)?>(
+      (ref) => MarkerImagesNotifier(),
 );
 
 /// タブコントローラーの状態通知を取得する

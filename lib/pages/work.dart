@@ -62,7 +62,11 @@ class _Header extends StatelessWidget {
               children: [
                 Align(
                   alignment: Alignment.topRight,
-                  child: Image.asset('assets/images/suzume.png',
+                  child: Image.asset(
+                        work.season == 1 ? 'assets/images/uguisu.png'
+                      : work.season == 2 ? 'assets/images/kingyo.png'
+                      : work.season == 3 ? 'assets/images/susuki.png'
+                      : 'assets/images/suzume.png',
                     fit: BoxFit.contain,
                     opacity: const AlwaysStoppedAnimation(opacity),
                   ),

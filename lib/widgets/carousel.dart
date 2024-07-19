@@ -183,7 +183,7 @@ class _WorkIndex extends StatelessWidget {
       ),
       child: Text(
         '${work.index}',
-        style: Theme.of(context).textTheme.labelSmall?.copyWith(fontWeight: FontWeight.bold),
+        style: Theme.of(context).textTheme.labelSmall?.copyWith(fontFamily: ''),
       ),
     );
   }
