@@ -62,6 +62,10 @@ class FavouritesPage extends ConsumerWidget {
 class _ListItem extends ConsumerWidget {
   // 角丸
   static const radius = 2.0;
+  // ボタンのサイズ
+  static const buttonDimension = 22.0;
+  // ボタンの間隔
+  static const buttonSpace = 8.0;
 
   // 作品
   final Work work;
@@ -89,15 +93,22 @@ class _ListItem extends ConsumerWidget {
         trailing: Row(
           mainAxisSize: MainAxisSize.min,
           children: [
-            CupertinoButton(
-              padding: EdgeInsets.zero,
-              onPressed: () => _handleOpenButtonTapped(context),
-              child: const Icon(Icons.open_in_new_outlined),
+            SizedBox.square(
+              dimension: buttonDimension,
+              child: CupertinoButton(
+                padding: EdgeInsets.zero,
+                onPressed: () => _handleOpenButtonTapped(context),
+                child: const Icon(Icons.open_in_new_outlined, size: 22),
+              ),
             ),
-            CupertinoButton(
-              padding: EdgeInsets.zero,
-              onPressed: () => _handleMapButtonTapped(context, ref),
-              child: const Icon(CupertinoIcons.map),
+            const SizedBox(width: buttonSpace),
+            SizedBox.square(
+              dimension: buttonDimension,
+              child: CupertinoButton(
+                padding: EdgeInsets.zero,
+                onPressed: () => _handleMapButtonTapped(context, ref),
+                child: const Icon(CupertinoIcons.map, size: 22),
+              ),
             ),
           ],
         ),
