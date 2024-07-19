@@ -3,8 +3,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+import 'package:edo_ukiyo_map/pages/work.dart';
 import 'package:edo_ukiyo_map/providers/providers.dart';
 import 'package:edo_ukiyo_map/storage/database.dart';
+import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 
 /// お気に入り一覧画面
 class FavouritesPage extends ConsumerWidget {
@@ -84,27 +86,47 @@ class _ListItem extends ConsumerWidget {
           value.getName(context),
           overflow: TextOverflow.ellipsis,
         ),
-        trailing: const CupertinoListTileChevron(),
-        onTap: () async {
-          // シリーズタブを切り替える
-          // 選択されているシリーズIDの変更はシリーズタブの変更イベントで実行される
-          ref.watch(tabControllerNotifierProvider)?.animateTo(work.series - 1);
-          // シリーズタブの変更イベントが終了するまで少し待つ
-          await Future.delayed(const Duration(milliseconds: 500));
-          // カルーセルのカレントアイテムを変更する
-          // 選択されている作品インデックスの変更はカルーセルのアイテム変更イベントで実行される
-          ref.watch(carouselControllerProvider).jumpToPage(work.index - 1);
-          if (context.mounted) {
-            Navigator.of(context).pop();
-          }
-          // showCupertinoModalBottomSheet(
-          //   context: context,
-          //   enableDrag: false,
-          //   builder: (context) => WorkPage(work: work),
-          // );
-        },
+        trailing: Row(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            CupertinoButton(
+              padding: EdgeInsets.zero,
+              onPressed: () => _handleOpenButtonTapped(context),
+              child: const Icon(Icons.open_in_new_outlined),
+            ),
+            CupertinoButton(
+              padding: EdgeInsets.zero,
+              onPressed: () => _handleMapButtonTapped(context, ref),
+              child: const Icon(CupertinoIcons.map),
+            ),
+          ],
+        ),
       ),
       _ => Container(),
     };
+  }
+
+  // オープンボタンタップイベント
+  Future<void> _handleOpenButtonTapped(BuildContext context) async {
+    showCupertinoModalBottomSheet(
+      context: context,
+      enableDrag: false,
+      builder: (context) => WorkPage(work: work),
+    );
+  }
+
+  // マップボタンタップイベント
+  Future<void> _handleMapButtonTapped(BuildContext context, WidgetRef ref) async {
+    // シリーズタブを切り替える
+    // 選択されているシリーズIDの変更はシリーズタブの変更イベントで実行される
+    ref.watch(tabControllerNotifierProvider)?.animateTo(work.series - 1);
+    // シリーズタブの変更イベントが終了するまで少し待つ
+    await Future.delayed(const Duration(milliseconds: 500));
+    // カルーセルのカレントアイテムを変更する
+    // 選択されている作品インデックスの変更はカルーセルのアイテム変更イベントで実行される
+    ref.watch(carouselControllerProvider).jumpToPage(work.index - 1);
+    if (context.mounted) {
+      Navigator.of(context).pop();
+    }
   }
 }

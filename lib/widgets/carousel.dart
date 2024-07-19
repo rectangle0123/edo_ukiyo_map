@@ -83,31 +83,7 @@ class _CarouselItem extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     return GestureDetector(
-      onTap: () async {
-        final currentWorkIndex = ref.watch(selectedWorkIndexNotifierProvider);
-
-        if (currentWorkIndex == workWithPainters.$1.index) {
-          // タップされたものがカルーセルのカレントアイテムだった場合
-          // 選択されている作品の位置にGoogleマップのカメラを移動する
-          final work = await ref.watch(currentSingleWorkProvider.future);
-          ref.watch(mapControllerNotifierProvider)?.animateCamera(
-            CameraUpdate.newLatLng(LatLng(work.latitude, work.longitude)),
-          );
-        } else {
-          // タップされたものがカルーセルのカレントアイテムでない場合
-          // カルーセルのカレントアイテムを変更する
-          // 選択されている作品インデックスの変更はカルーセルのアイテム変更イベントで実行される
-          ref.watch(carouselControllerProvider).jumpToPage(workWithPainters.$1.index - 1);
-        }
-        // 作品ページを開く
-        if (context.mounted) {
-          showCupertinoModalBottomSheet(
-            context: context,
-            enableDrag: false,
-            builder: (context) => WorkPage(work: workWithPainters.$1),
-          );
-        }
-      },
+      onTap: () => _handleItemChanged(context, ref),
       child: Card(
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(radius),
@@ -150,6 +126,33 @@ class _CarouselItem extends ConsumerWidget {
         ),
       ),
     );
+  }
+
+  // アイテム変更イベント
+  Future<void> _handleItemChanged(BuildContext context, WidgetRef ref) async {
+    // タップされたものがカルーセルのカレントアイテムかどうかを判定する
+    final currentWorkIndex = ref.watch(selectedWorkIndexNotifierProvider);
+    if (currentWorkIndex == workWithPainters.$1.index) {
+      // カレントアイテムだった場合
+      // 選択されている作品の位置にGoogleマップのカメラを移動する
+      final work = await ref.watch(currentSingleWorkProvider.future);
+      ref.watch(mapControllerNotifierProvider)?.animateCamera(
+        CameraUpdate.newLatLng(LatLng(work.latitude, work.longitude)),
+      );
+    } else {
+      // カレントアイテムでない場合
+      // カルーセルのカレントアイテムを変更する
+      // 選択されている作品インデックスの変更はカルーセルのアイテム変更イベントで実行される
+      ref.watch(carouselControllerProvider).jumpToPage(workWithPainters.$1.index - 1);
+    }
+    // 作品ページを開く
+    if (context.mounted) {
+      showCupertinoModalBottomSheet(
+        context: context,
+        enableDrag: false,
+        builder: (context) => WorkPage(work: workWithPainters.$1),
+      );
+    }
   }
 }
 
