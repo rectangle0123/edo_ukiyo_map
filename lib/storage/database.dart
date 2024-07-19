@@ -69,28 +69,30 @@ class Database extends _$Database {
       await batch((batch) async {
         batch.insertAll(serieses, seriesData.map((data) => SeriesesCompanion(
           id: Value(int.parse(data[0])),
-          nameJa: Value(data[1]),
-          nameEn: Value(data[2]),
-          shortNameJa: Value(data[3]),
-          shortNameEn: Value(data[4]),
-          descriptionJa: Value(data[5]),
-          descriptionEn: Value(data[6]),
+          sort: Value(int.parse(data[1])),
+          nameJa: Value(data[2]),
+          nameEn: Value(data[3]),
+          shortNameJa: Value(data[4]),
+          shortNameEn: Value(data[5]),
+          descriptionJa: Value(data[6]),
+          descriptionEn: Value(data[7]),
         )).toList());
       });
       await batch((batch) async {
         batch.insertAll(painters, paintersData.map((data) => PaintersCompanion(
           id: Value(int.parse(data[0])),
-          nameJa: Value(data[1]),
-          nameEn: Value(data[2]),
-          shortNameJa: Value(data[3]),
-          shortNameEn: Value(data[4]),
-          aliasJa: Value(data[5]),
-          aliasEn: Value(data[6]),
-          bornIn: Value(data[7].isEmpty ? null : int.parse(data[7])),
-          diedIn: Value(data[8].isEmpty ? null : int.parse(data[8])),
-          descriptionJa: Value(data[9]),
-          descriptionEn: Value(data[10]),
-          source: Value(data[11].isEmpty ? null : int.parse(data[11])),
+          sort: Value(int.parse(data[1])),
+          nameJa: Value(data[2]),
+          nameEn: Value(data[3]),
+          shortNameJa: Value(data[4]),
+          shortNameEn: Value(data[5]),
+          aliasJa: Value(data[6]),
+          aliasEn: Value(data[7]),
+          bornIn: Value(data[8].isEmpty ? null : int.parse(data[8])),
+          diedIn: Value(data[9].isEmpty ? null : int.parse(data[9])),
+          descriptionJa: Value(data[10]),
+          descriptionEn: Value(data[11]),
+          hasPortrait: Value(bool.parse(data[12])),
         )).toList());
       });
       await batch((batch) async {
@@ -126,7 +128,13 @@ class Database extends _$Database {
   Future<Series> getSeries(int id) => (select(serieses)..where((e) => e.id.equals(id))).getSingle();
 
   /// すべてのシリーズを取得する
-  Future<List<Series>> getAllSeries() => select(serieses).get();
+  /// 「該当なし」はとりあえず取得せず、並び順でソートする
+  Future<List<Series>> getAllSeries() {
+    return (select(serieses)
+      ..where((e) => e.id.isBiggerThanValue(0))
+      ..orderBy([(e) => OrderingTerm(expression: e.sort)])
+    ).get();
+  }
 
   /// 絵師を取得する
   // Future<Painter> getPainter(int id) => (select(painters)..where((e) => e.id.equals(id))).getSingle();
@@ -168,10 +176,17 @@ class Database extends _$Database {
   //   return result.map((e) => e.readTable(works)).toList();
   // }
 
-  /// お気に入りを取得する
+  /// お気に入りの作品を取得する
+  /// シリーズIDと作品IDでソートする
   Future<List<Work>> getFavourites() async {
     final list = await select(favourites).map((e) => e.workId).get();
-    return (select(works)..where((e) => e.id.isIn(list))).get();
+    return (select(works)
+      ..where((e) => e.id.isIn(list))
+      ..orderBy([
+        (e) => OrderingTerm(expression: e.series),
+        (e) => OrderingTerm(expression: e.id),
+      ])
+    ).get();
   }
 
   /// お気に入りを登録する
@@ -216,6 +231,8 @@ extension SourceExtension on Source {
 class Serieses extends Table {
   /// ID
   IntColumn get id => integer()();
+  /// ソート
+  IntColumn get sort => integer()();
   /// 名前（日本語）
   TextColumn get nameJa => text()();
   /// 名前（英語）
@@ -250,6 +267,8 @@ extension SeriesExtension on Series {
 class Painters extends Table {
   /// ID
   IntColumn get id => integer()();
+  /// ソート
+  IntColumn get sort => integer()();
   /// 名前（日本語）
   TextColumn get nameJa => text()();
   /// 名前（英語）
@@ -270,8 +289,8 @@ class Painters extends Table {
   TextColumn get descriptionJa => text()();
   /// 解説（英語）
   TextColumn get descriptionEn => text()();
-  /// 肖像の出典
-  IntColumn get source => integer().nullable().references(Sources, #id)();
+  /// 肖像の有無
+  BoolColumn get hasPortrait => boolean()();
 }
 
 extension PainterExtension on Painter {

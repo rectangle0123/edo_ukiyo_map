@@ -26,5 +26,8 @@ void main() async {
 
     final work = await database.getWorkBySeriesIdAndWorkIndex(1, 1);
     expect(work.nameJa, '日本橋雪晴');
+
+    final painters = await database.getPaintersByWorkId(work.id);
+    expect(painters[0].hasPortrait, true);
   });
 }

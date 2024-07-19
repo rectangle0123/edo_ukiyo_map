@@ -328,6 +328,11 @@ class $SeriesesTable extends Serieses with TableInfo<$SeriesesTable, Series> {
   late final GeneratedColumn<int> id = GeneratedColumn<int>(
       'id', aliasedName, false,
       type: DriftSqlType.int, requiredDuringInsert: true);
+  static const VerificationMeta _sortMeta = const VerificationMeta('sort');
+  @override
+  late final GeneratedColumn<int> sort = GeneratedColumn<int>(
+      'sort', aliasedName, false,
+      type: DriftSqlType.int, requiredDuringInsert: true);
   static const VerificationMeta _nameJaMeta = const VerificationMeta('nameJa');
   @override
   late final GeneratedColumn<String> nameJa = GeneratedColumn<String>(
@@ -365,6 +370,7 @@ class $SeriesesTable extends Serieses with TableInfo<$SeriesesTable, Series> {
   @override
   List<GeneratedColumn> get $columns => [
         id,
+        sort,
         nameJa,
         nameEn,
         shortNameJa,
@@ -386,6 +392,12 @@ class $SeriesesTable extends Serieses with TableInfo<$SeriesesTable, Series> {
       context.handle(_idMeta, id.isAcceptableOrUnknown(data['id']!, _idMeta));
     } else if (isInserting) {
       context.missing(_idMeta);
+    }
+    if (data.containsKey('sort')) {
+      context.handle(
+          _sortMeta, sort.isAcceptableOrUnknown(data['sort']!, _sortMeta));
+    } else if (isInserting) {
+      context.missing(_sortMeta);
     }
     if (data.containsKey('name_ja')) {
       context.handle(_nameJaMeta,
@@ -442,6 +454,8 @@ class $SeriesesTable extends Serieses with TableInfo<$SeriesesTable, Series> {
     return Series(
       id: attachedDatabase.typeMapping
           .read(DriftSqlType.int, data['${effectivePrefix}id'])!,
+      sort: attachedDatabase.typeMapping
+          .read(DriftSqlType.int, data['${effectivePrefix}sort'])!,
       nameJa: attachedDatabase.typeMapping
           .read(DriftSqlType.string, data['${effectivePrefix}name_ja'])!,
       nameEn: attachedDatabase.typeMapping
@@ -467,6 +481,9 @@ class Series extends DataClass implements Insertable<Series> {
   /// ID
   final int id;
 
+  /// ソート
+  final int sort;
+
   /// 名前（日本語）
   final String nameJa;
 
@@ -486,6 +503,7 @@ class Series extends DataClass implements Insertable<Series> {
   final String descriptionEn;
   const Series(
       {required this.id,
+      required this.sort,
       required this.nameJa,
       required this.nameEn,
       required this.shortNameJa,
@@ -496,6 +514,7 @@ class Series extends DataClass implements Insertable<Series> {
   Map<String, Expression> toColumns(bool nullToAbsent) {
     final map = <String, Expression>{};
     map['id'] = Variable<int>(id);
+    map['sort'] = Variable<int>(sort);
     map['name_ja'] = Variable<String>(nameJa);
     map['name_en'] = Variable<String>(nameEn);
     map['short_name_ja'] = Variable<String>(shortNameJa);
@@ -508,6 +527,7 @@ class Series extends DataClass implements Insertable<Series> {
   SeriesesCompanion toCompanion(bool nullToAbsent) {
     return SeriesesCompanion(
       id: Value(id),
+      sort: Value(sort),
       nameJa: Value(nameJa),
       nameEn: Value(nameEn),
       shortNameJa: Value(shortNameJa),
@@ -522,6 +542,7 @@ class Series extends DataClass implements Insertable<Series> {
     serializer ??= driftRuntimeOptions.defaultSerializer;
     return Series(
       id: serializer.fromJson<int>(json['id']),
+      sort: serializer.fromJson<int>(json['sort']),
       nameJa: serializer.fromJson<String>(json['nameJa']),
       nameEn: serializer.fromJson<String>(json['nameEn']),
       shortNameJa: serializer.fromJson<String>(json['shortNameJa']),
@@ -535,6 +556,7 @@ class Series extends DataClass implements Insertable<Series> {
     serializer ??= driftRuntimeOptions.defaultSerializer;
     return <String, dynamic>{
       'id': serializer.toJson<int>(id),
+      'sort': serializer.toJson<int>(sort),
       'nameJa': serializer.toJson<String>(nameJa),
       'nameEn': serializer.toJson<String>(nameEn),
       'shortNameJa': serializer.toJson<String>(shortNameJa),
@@ -546,6 +568,7 @@ class Series extends DataClass implements Insertable<Series> {
 
   Series copyWith(
           {int? id,
+          int? sort,
           String? nameJa,
           String? nameEn,
           String? shortNameJa,
@@ -554,6 +577,7 @@ class Series extends DataClass implements Insertable<Series> {
           String? descriptionEn}) =>
       Series(
         id: id ?? this.id,
+        sort: sort ?? this.sort,
         nameJa: nameJa ?? this.nameJa,
         nameEn: nameEn ?? this.nameEn,
         shortNameJa: shortNameJa ?? this.shortNameJa,
@@ -564,6 +588,7 @@ class Series extends DataClass implements Insertable<Series> {
   Series copyWithCompanion(SeriesesCompanion data) {
     return Series(
       id: data.id.present ? data.id.value : this.id,
+      sort: data.sort.present ? data.sort.value : this.sort,
       nameJa: data.nameJa.present ? data.nameJa.value : this.nameJa,
       nameEn: data.nameEn.present ? data.nameEn.value : this.nameEn,
       shortNameJa:
@@ -583,6 +608,7 @@ class Series extends DataClass implements Insertable<Series> {
   String toString() {
     return (StringBuffer('Series(')
           ..write('id: $id, ')
+          ..write('sort: $sort, ')
           ..write('nameJa: $nameJa, ')
           ..write('nameEn: $nameEn, ')
           ..write('shortNameJa: $shortNameJa, ')
@@ -594,13 +620,14 @@ class Series extends DataClass implements Insertable<Series> {
   }
 
   @override
-  int get hashCode => Object.hash(id, nameJa, nameEn, shortNameJa, shortNameEn,
-      descriptionJa, descriptionEn);
+  int get hashCode => Object.hash(id, sort, nameJa, nameEn, shortNameJa,
+      shortNameEn, descriptionJa, descriptionEn);
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
       (other is Series &&
           other.id == this.id &&
+          other.sort == this.sort &&
           other.nameJa == this.nameJa &&
           other.nameEn == this.nameEn &&
           other.shortNameJa == this.shortNameJa &&
@@ -611,6 +638,7 @@ class Series extends DataClass implements Insertable<Series> {
 
 class SeriesesCompanion extends UpdateCompanion<Series> {
   final Value<int> id;
+  final Value<int> sort;
   final Value<String> nameJa;
   final Value<String> nameEn;
   final Value<String> shortNameJa;
@@ -620,6 +648,7 @@ class SeriesesCompanion extends UpdateCompanion<Series> {
   final Value<int> rowid;
   const SeriesesCompanion({
     this.id = const Value.absent(),
+    this.sort = const Value.absent(),
     this.nameJa = const Value.absent(),
     this.nameEn = const Value.absent(),
     this.shortNameJa = const Value.absent(),
@@ -630,6 +659,7 @@ class SeriesesCompanion extends UpdateCompanion<Series> {
   });
   SeriesesCompanion.insert({
     required int id,
+    required int sort,
     required String nameJa,
     required String nameEn,
     required String shortNameJa,
@@ -638,6 +668,7 @@ class SeriesesCompanion extends UpdateCompanion<Series> {
     required String descriptionEn,
     this.rowid = const Value.absent(),
   })  : id = Value(id),
+        sort = Value(sort),
         nameJa = Value(nameJa),
         nameEn = Value(nameEn),
         shortNameJa = Value(shortNameJa),
@@ -646,6 +677,7 @@ class SeriesesCompanion extends UpdateCompanion<Series> {
         descriptionEn = Value(descriptionEn);
   static Insertable<Series> custom({
     Expression<int>? id,
+    Expression<int>? sort,
     Expression<String>? nameJa,
     Expression<String>? nameEn,
     Expression<String>? shortNameJa,
@@ -656,6 +688,7 @@ class SeriesesCompanion extends UpdateCompanion<Series> {
   }) {
     return RawValuesInsertable({
       if (id != null) 'id': id,
+      if (sort != null) 'sort': sort,
       if (nameJa != null) 'name_ja': nameJa,
       if (nameEn != null) 'name_en': nameEn,
       if (shortNameJa != null) 'short_name_ja': shortNameJa,
@@ -668,6 +701,7 @@ class SeriesesCompanion extends UpdateCompanion<Series> {
 
   SeriesesCompanion copyWith(
       {Value<int>? id,
+      Value<int>? sort,
       Value<String>? nameJa,
       Value<String>? nameEn,
       Value<String>? shortNameJa,
@@ -677,6 +711,7 @@ class SeriesesCompanion extends UpdateCompanion<Series> {
       Value<int>? rowid}) {
     return SeriesesCompanion(
       id: id ?? this.id,
+      sort: sort ?? this.sort,
       nameJa: nameJa ?? this.nameJa,
       nameEn: nameEn ?? this.nameEn,
       shortNameJa: shortNameJa ?? this.shortNameJa,
@@ -692,6 +727,9 @@ class SeriesesCompanion extends UpdateCompanion<Series> {
     final map = <String, Expression>{};
     if (id.present) {
       map['id'] = Variable<int>(id.value);
+    }
+    if (sort.present) {
+      map['sort'] = Variable<int>(sort.value);
     }
     if (nameJa.present) {
       map['name_ja'] = Variable<String>(nameJa.value);
@@ -721,6 +759,7 @@ class SeriesesCompanion extends UpdateCompanion<Series> {
   String toString() {
     return (StringBuffer('SeriesesCompanion(')
           ..write('id: $id, ')
+          ..write('sort: $sort, ')
           ..write('nameJa: $nameJa, ')
           ..write('nameEn: $nameEn, ')
           ..write('shortNameJa: $shortNameJa, ')
@@ -742,6 +781,11 @@ class $PaintersTable extends Painters with TableInfo<$PaintersTable, Painter> {
   @override
   late final GeneratedColumn<int> id = GeneratedColumn<int>(
       'id', aliasedName, false,
+      type: DriftSqlType.int, requiredDuringInsert: true);
+  static const VerificationMeta _sortMeta = const VerificationMeta('sort');
+  @override
+  late final GeneratedColumn<int> sort = GeneratedColumn<int>(
+      'sort', aliasedName, false,
       type: DriftSqlType.int, requiredDuringInsert: true);
   static const VerificationMeta _nameJaMeta = const VerificationMeta('nameJa');
   @override
@@ -799,17 +843,19 @@ class $PaintersTable extends Painters with TableInfo<$PaintersTable, Painter> {
   late final GeneratedColumn<String> descriptionEn = GeneratedColumn<String>(
       'description_en', aliasedName, false,
       type: DriftSqlType.string, requiredDuringInsert: true);
-  static const VerificationMeta _sourceMeta = const VerificationMeta('source');
+  static const VerificationMeta _hasPortraitMeta =
+      const VerificationMeta('hasPortrait');
   @override
-  late final GeneratedColumn<int> source = GeneratedColumn<int>(
-      'source', aliasedName, true,
-      type: DriftSqlType.int,
-      requiredDuringInsert: false,
-      defaultConstraints:
-          GeneratedColumn.constraintIsAlways('REFERENCES sources (id)'));
+  late final GeneratedColumn<bool> hasPortrait = GeneratedColumn<bool>(
+      'has_portrait', aliasedName, false,
+      type: DriftSqlType.bool,
+      requiredDuringInsert: true,
+      defaultConstraints: GeneratedColumn.constraintIsAlways(
+          'CHECK ("has_portrait" IN (0, 1))'));
   @override
   List<GeneratedColumn> get $columns => [
         id,
+        sort,
         nameJa,
         nameEn,
         shortNameJa,
@@ -820,7 +866,7 @@ class $PaintersTable extends Painters with TableInfo<$PaintersTable, Painter> {
         diedIn,
         descriptionJa,
         descriptionEn,
-        source
+        hasPortrait
       ];
   @override
   String get aliasedName => _alias ?? actualTableName;
@@ -836,6 +882,12 @@ class $PaintersTable extends Painters with TableInfo<$PaintersTable, Painter> {
       context.handle(_idMeta, id.isAcceptableOrUnknown(data['id']!, _idMeta));
     } else if (isInserting) {
       context.missing(_idMeta);
+    }
+    if (data.containsKey('sort')) {
+      context.handle(
+          _sortMeta, sort.isAcceptableOrUnknown(data['sort']!, _sortMeta));
+    } else if (isInserting) {
+      context.missing(_sortMeta);
     }
     if (data.containsKey('name_ja')) {
       context.handle(_nameJaMeta,
@@ -901,9 +953,13 @@ class $PaintersTable extends Painters with TableInfo<$PaintersTable, Painter> {
     } else if (isInserting) {
       context.missing(_descriptionEnMeta);
     }
-    if (data.containsKey('source')) {
-      context.handle(_sourceMeta,
-          source.isAcceptableOrUnknown(data['source']!, _sourceMeta));
+    if (data.containsKey('has_portrait')) {
+      context.handle(
+          _hasPortraitMeta,
+          hasPortrait.isAcceptableOrUnknown(
+              data['has_portrait']!, _hasPortraitMeta));
+    } else if (isInserting) {
+      context.missing(_hasPortraitMeta);
     }
     return context;
   }
@@ -916,6 +972,8 @@ class $PaintersTable extends Painters with TableInfo<$PaintersTable, Painter> {
     return Painter(
       id: attachedDatabase.typeMapping
           .read(DriftSqlType.int, data['${effectivePrefix}id'])!,
+      sort: attachedDatabase.typeMapping
+          .read(DriftSqlType.int, data['${effectivePrefix}sort'])!,
       nameJa: attachedDatabase.typeMapping
           .read(DriftSqlType.string, data['${effectivePrefix}name_ja'])!,
       nameEn: attachedDatabase.typeMapping
@@ -936,8 +994,8 @@ class $PaintersTable extends Painters with TableInfo<$PaintersTable, Painter> {
           .read(DriftSqlType.string, data['${effectivePrefix}description_ja'])!,
       descriptionEn: attachedDatabase.typeMapping
           .read(DriftSqlType.string, data['${effectivePrefix}description_en'])!,
-      source: attachedDatabase.typeMapping
-          .read(DriftSqlType.int, data['${effectivePrefix}source']),
+      hasPortrait: attachedDatabase.typeMapping
+          .read(DriftSqlType.bool, data['${effectivePrefix}has_portrait'])!,
     );
   }
 
@@ -950,6 +1008,9 @@ class $PaintersTable extends Painters with TableInfo<$PaintersTable, Painter> {
 class Painter extends DataClass implements Insertable<Painter> {
   /// ID
   final int id;
+
+  /// ソート
+  final int sort;
 
   /// 名前（日本語）
   final String nameJa;
@@ -981,10 +1042,11 @@ class Painter extends DataClass implements Insertable<Painter> {
   /// 解説（英語）
   final String descriptionEn;
 
-  /// 肖像の出典
-  final int? source;
+  /// 肖像の有無
+  final bool hasPortrait;
   const Painter(
       {required this.id,
+      required this.sort,
       required this.nameJa,
       required this.nameEn,
       required this.shortNameJa,
@@ -995,11 +1057,12 @@ class Painter extends DataClass implements Insertable<Painter> {
       this.diedIn,
       required this.descriptionJa,
       required this.descriptionEn,
-      this.source});
+      required this.hasPortrait});
   @override
   Map<String, Expression> toColumns(bool nullToAbsent) {
     final map = <String, Expression>{};
     map['id'] = Variable<int>(id);
+    map['sort'] = Variable<int>(sort);
     map['name_ja'] = Variable<String>(nameJa);
     map['name_en'] = Variable<String>(nameEn);
     map['short_name_ja'] = Variable<String>(shortNameJa);
@@ -1014,15 +1077,14 @@ class Painter extends DataClass implements Insertable<Painter> {
     }
     map['description_ja'] = Variable<String>(descriptionJa);
     map['description_en'] = Variable<String>(descriptionEn);
-    if (!nullToAbsent || source != null) {
-      map['source'] = Variable<int>(source);
-    }
+    map['has_portrait'] = Variable<bool>(hasPortrait);
     return map;
   }
 
   PaintersCompanion toCompanion(bool nullToAbsent) {
     return PaintersCompanion(
       id: Value(id),
+      sort: Value(sort),
       nameJa: Value(nameJa),
       nameEn: Value(nameEn),
       shortNameJa: Value(shortNameJa),
@@ -1035,8 +1097,7 @@ class Painter extends DataClass implements Insertable<Painter> {
           diedIn == null && nullToAbsent ? const Value.absent() : Value(diedIn),
       descriptionJa: Value(descriptionJa),
       descriptionEn: Value(descriptionEn),
-      source:
-          source == null && nullToAbsent ? const Value.absent() : Value(source),
+      hasPortrait: Value(hasPortrait),
     );
   }
 
@@ -1045,6 +1106,7 @@ class Painter extends DataClass implements Insertable<Painter> {
     serializer ??= driftRuntimeOptions.defaultSerializer;
     return Painter(
       id: serializer.fromJson<int>(json['id']),
+      sort: serializer.fromJson<int>(json['sort']),
       nameJa: serializer.fromJson<String>(json['nameJa']),
       nameEn: serializer.fromJson<String>(json['nameEn']),
       shortNameJa: serializer.fromJson<String>(json['shortNameJa']),
@@ -1055,7 +1117,7 @@ class Painter extends DataClass implements Insertable<Painter> {
       diedIn: serializer.fromJson<int?>(json['diedIn']),
       descriptionJa: serializer.fromJson<String>(json['descriptionJa']),
       descriptionEn: serializer.fromJson<String>(json['descriptionEn']),
-      source: serializer.fromJson<int?>(json['source']),
+      hasPortrait: serializer.fromJson<bool>(json['hasPortrait']),
     );
   }
   @override
@@ -1063,6 +1125,7 @@ class Painter extends DataClass implements Insertable<Painter> {
     serializer ??= driftRuntimeOptions.defaultSerializer;
     return <String, dynamic>{
       'id': serializer.toJson<int>(id),
+      'sort': serializer.toJson<int>(sort),
       'nameJa': serializer.toJson<String>(nameJa),
       'nameEn': serializer.toJson<String>(nameEn),
       'shortNameJa': serializer.toJson<String>(shortNameJa),
@@ -1073,12 +1136,13 @@ class Painter extends DataClass implements Insertable<Painter> {
       'diedIn': serializer.toJson<int?>(diedIn),
       'descriptionJa': serializer.toJson<String>(descriptionJa),
       'descriptionEn': serializer.toJson<String>(descriptionEn),
-      'source': serializer.toJson<int?>(source),
+      'hasPortrait': serializer.toJson<bool>(hasPortrait),
     };
   }
 
   Painter copyWith(
           {int? id,
+          int? sort,
           String? nameJa,
           String? nameEn,
           String? shortNameJa,
@@ -1089,9 +1153,10 @@ class Painter extends DataClass implements Insertable<Painter> {
           Value<int?> diedIn = const Value.absent(),
           String? descriptionJa,
           String? descriptionEn,
-          Value<int?> source = const Value.absent()}) =>
+          bool? hasPortrait}) =>
       Painter(
         id: id ?? this.id,
+        sort: sort ?? this.sort,
         nameJa: nameJa ?? this.nameJa,
         nameEn: nameEn ?? this.nameEn,
         shortNameJa: shortNameJa ?? this.shortNameJa,
@@ -1102,11 +1167,12 @@ class Painter extends DataClass implements Insertable<Painter> {
         diedIn: diedIn.present ? diedIn.value : this.diedIn,
         descriptionJa: descriptionJa ?? this.descriptionJa,
         descriptionEn: descriptionEn ?? this.descriptionEn,
-        source: source.present ? source.value : this.source,
+        hasPortrait: hasPortrait ?? this.hasPortrait,
       );
   Painter copyWithCompanion(PaintersCompanion data) {
     return Painter(
       id: data.id.present ? data.id.value : this.id,
+      sort: data.sort.present ? data.sort.value : this.sort,
       nameJa: data.nameJa.present ? data.nameJa.value : this.nameJa,
       nameEn: data.nameEn.present ? data.nameEn.value : this.nameEn,
       shortNameJa:
@@ -1123,7 +1189,8 @@ class Painter extends DataClass implements Insertable<Painter> {
       descriptionEn: data.descriptionEn.present
           ? data.descriptionEn.value
           : this.descriptionEn,
-      source: data.source.present ? data.source.value : this.source,
+      hasPortrait:
+          data.hasPortrait.present ? data.hasPortrait.value : this.hasPortrait,
     );
   }
 
@@ -1131,6 +1198,7 @@ class Painter extends DataClass implements Insertable<Painter> {
   String toString() {
     return (StringBuffer('Painter(')
           ..write('id: $id, ')
+          ..write('sort: $sort, ')
           ..write('nameJa: $nameJa, ')
           ..write('nameEn: $nameEn, ')
           ..write('shortNameJa: $shortNameJa, ')
@@ -1141,19 +1209,32 @@ class Painter extends DataClass implements Insertable<Painter> {
           ..write('diedIn: $diedIn, ')
           ..write('descriptionJa: $descriptionJa, ')
           ..write('descriptionEn: $descriptionEn, ')
-          ..write('source: $source')
+          ..write('hasPortrait: $hasPortrait')
           ..write(')'))
         .toString();
   }
 
   @override
-  int get hashCode => Object.hash(id, nameJa, nameEn, shortNameJa, shortNameEn,
-      aliasJa, aliasEn, bornIn, diedIn, descriptionJa, descriptionEn, source);
+  int get hashCode => Object.hash(
+      id,
+      sort,
+      nameJa,
+      nameEn,
+      shortNameJa,
+      shortNameEn,
+      aliasJa,
+      aliasEn,
+      bornIn,
+      diedIn,
+      descriptionJa,
+      descriptionEn,
+      hasPortrait);
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
       (other is Painter &&
           other.id == this.id &&
+          other.sort == this.sort &&
           other.nameJa == this.nameJa &&
           other.nameEn == this.nameEn &&
           other.shortNameJa == this.shortNameJa &&
@@ -1164,11 +1245,12 @@ class Painter extends DataClass implements Insertable<Painter> {
           other.diedIn == this.diedIn &&
           other.descriptionJa == this.descriptionJa &&
           other.descriptionEn == this.descriptionEn &&
-          other.source == this.source);
+          other.hasPortrait == this.hasPortrait);
 }
 
 class PaintersCompanion extends UpdateCompanion<Painter> {
   final Value<int> id;
+  final Value<int> sort;
   final Value<String> nameJa;
   final Value<String> nameEn;
   final Value<String> shortNameJa;
@@ -1179,10 +1261,11 @@ class PaintersCompanion extends UpdateCompanion<Painter> {
   final Value<int?> diedIn;
   final Value<String> descriptionJa;
   final Value<String> descriptionEn;
-  final Value<int?> source;
+  final Value<bool> hasPortrait;
   final Value<int> rowid;
   const PaintersCompanion({
     this.id = const Value.absent(),
+    this.sort = const Value.absent(),
     this.nameJa = const Value.absent(),
     this.nameEn = const Value.absent(),
     this.shortNameJa = const Value.absent(),
@@ -1193,11 +1276,12 @@ class PaintersCompanion extends UpdateCompanion<Painter> {
     this.diedIn = const Value.absent(),
     this.descriptionJa = const Value.absent(),
     this.descriptionEn = const Value.absent(),
-    this.source = const Value.absent(),
+    this.hasPortrait = const Value.absent(),
     this.rowid = const Value.absent(),
   });
   PaintersCompanion.insert({
     required int id,
+    required int sort,
     required String nameJa,
     required String nameEn,
     required String shortNameJa,
@@ -1208,9 +1292,10 @@ class PaintersCompanion extends UpdateCompanion<Painter> {
     this.diedIn = const Value.absent(),
     required String descriptionJa,
     required String descriptionEn,
-    this.source = const Value.absent(),
+    required bool hasPortrait,
     this.rowid = const Value.absent(),
   })  : id = Value(id),
+        sort = Value(sort),
         nameJa = Value(nameJa),
         nameEn = Value(nameEn),
         shortNameJa = Value(shortNameJa),
@@ -1218,9 +1303,11 @@ class PaintersCompanion extends UpdateCompanion<Painter> {
         aliasJa = Value(aliasJa),
         aliasEn = Value(aliasEn),
         descriptionJa = Value(descriptionJa),
-        descriptionEn = Value(descriptionEn);
+        descriptionEn = Value(descriptionEn),
+        hasPortrait = Value(hasPortrait);
   static Insertable<Painter> custom({
     Expression<int>? id,
+    Expression<int>? sort,
     Expression<String>? nameJa,
     Expression<String>? nameEn,
     Expression<String>? shortNameJa,
@@ -1231,11 +1318,12 @@ class PaintersCompanion extends UpdateCompanion<Painter> {
     Expression<int>? diedIn,
     Expression<String>? descriptionJa,
     Expression<String>? descriptionEn,
-    Expression<int>? source,
+    Expression<bool>? hasPortrait,
     Expression<int>? rowid,
   }) {
     return RawValuesInsertable({
       if (id != null) 'id': id,
+      if (sort != null) 'sort': sort,
       if (nameJa != null) 'name_ja': nameJa,
       if (nameEn != null) 'name_en': nameEn,
       if (shortNameJa != null) 'short_name_ja': shortNameJa,
@@ -1246,13 +1334,14 @@ class PaintersCompanion extends UpdateCompanion<Painter> {
       if (diedIn != null) 'died_in': diedIn,
       if (descriptionJa != null) 'description_ja': descriptionJa,
       if (descriptionEn != null) 'description_en': descriptionEn,
-      if (source != null) 'source': source,
+      if (hasPortrait != null) 'has_portrait': hasPortrait,
       if (rowid != null) 'rowid': rowid,
     });
   }
 
   PaintersCompanion copyWith(
       {Value<int>? id,
+      Value<int>? sort,
       Value<String>? nameJa,
       Value<String>? nameEn,
       Value<String>? shortNameJa,
@@ -1263,10 +1352,11 @@ class PaintersCompanion extends UpdateCompanion<Painter> {
       Value<int?>? diedIn,
       Value<String>? descriptionJa,
       Value<String>? descriptionEn,
-      Value<int?>? source,
+      Value<bool>? hasPortrait,
       Value<int>? rowid}) {
     return PaintersCompanion(
       id: id ?? this.id,
+      sort: sort ?? this.sort,
       nameJa: nameJa ?? this.nameJa,
       nameEn: nameEn ?? this.nameEn,
       shortNameJa: shortNameJa ?? this.shortNameJa,
@@ -1277,7 +1367,7 @@ class PaintersCompanion extends UpdateCompanion<Painter> {
       diedIn: diedIn ?? this.diedIn,
       descriptionJa: descriptionJa ?? this.descriptionJa,
       descriptionEn: descriptionEn ?? this.descriptionEn,
-      source: source ?? this.source,
+      hasPortrait: hasPortrait ?? this.hasPortrait,
       rowid: rowid ?? this.rowid,
     );
   }
@@ -1287,6 +1377,9 @@ class PaintersCompanion extends UpdateCompanion<Painter> {
     final map = <String, Expression>{};
     if (id.present) {
       map['id'] = Variable<int>(id.value);
+    }
+    if (sort.present) {
+      map['sort'] = Variable<int>(sort.value);
     }
     if (nameJa.present) {
       map['name_ja'] = Variable<String>(nameJa.value);
@@ -1318,8 +1411,8 @@ class PaintersCompanion extends UpdateCompanion<Painter> {
     if (descriptionEn.present) {
       map['description_en'] = Variable<String>(descriptionEn.value);
     }
-    if (source.present) {
-      map['source'] = Variable<int>(source.value);
+    if (hasPortrait.present) {
+      map['has_portrait'] = Variable<bool>(hasPortrait.value);
     }
     if (rowid.present) {
       map['rowid'] = Variable<int>(rowid.value);
@@ -1331,6 +1424,7 @@ class PaintersCompanion extends UpdateCompanion<Painter> {
   String toString() {
     return (StringBuffer('PaintersCompanion(')
           ..write('id: $id, ')
+          ..write('sort: $sort, ')
           ..write('nameJa: $nameJa, ')
           ..write('nameEn: $nameEn, ')
           ..write('shortNameJa: $shortNameJa, ')
@@ -1341,7 +1435,7 @@ class PaintersCompanion extends UpdateCompanion<Painter> {
           ..write('diedIn: $diedIn, ')
           ..write('descriptionJa: $descriptionJa, ')
           ..write('descriptionEn: $descriptionEn, ')
-          ..write('source: $source, ')
+          ..write('hasPortrait: $hasPortrait, ')
           ..write('rowid: $rowid')
           ..write(')'))
         .toString();
@@ -2469,19 +2563,6 @@ class $$SourcesTableFilterComposer
       builder: (column, joinBuilders) =>
           ColumnFilters(column, joinBuilders: joinBuilders));
 
-  ComposableFilter paintersRefs(
-      ComposableFilter Function($$PaintersTableFilterComposer f) f) {
-    final $$PaintersTableFilterComposer composer = $state.composerBuilder(
-        composer: this,
-        getCurrentColumn: (t) => t.id,
-        referencedTable: $state.db.painters,
-        getReferencedColumn: (t) => t.source,
-        builder: (joinBuilder, parentComposers) =>
-            $$PaintersTableFilterComposer(ComposerState(
-                $state.db, $state.db.painters, joinBuilder, parentComposers)));
-    return f(composer);
-  }
-
   ComposableFilter worksRefs(
       ComposableFilter Function($$WorksTableFilterComposer f) f) {
     final $$WorksTableFilterComposer composer = $state.composerBuilder(
@@ -2527,6 +2608,7 @@ class $$SourcesTableOrderingComposer
 
 typedef $$SeriesesTableCreateCompanionBuilder = SeriesesCompanion Function({
   required int id,
+  required int sort,
   required String nameJa,
   required String nameEn,
   required String shortNameJa,
@@ -2537,6 +2619,7 @@ typedef $$SeriesesTableCreateCompanionBuilder = SeriesesCompanion Function({
 });
 typedef $$SeriesesTableUpdateCompanionBuilder = SeriesesCompanion Function({
   Value<int> id,
+  Value<int> sort,
   Value<String> nameJa,
   Value<String> nameEn,
   Value<String> shortNameJa,
@@ -2564,6 +2647,7 @@ class $$SeriesesTableTableManager extends RootTableManager<
               $$SeriesesTableOrderingComposer(ComposerState(db, table)),
           updateCompanionCallback: ({
             Value<int> id = const Value.absent(),
+            Value<int> sort = const Value.absent(),
             Value<String> nameJa = const Value.absent(),
             Value<String> nameEn = const Value.absent(),
             Value<String> shortNameJa = const Value.absent(),
@@ -2574,6 +2658,7 @@ class $$SeriesesTableTableManager extends RootTableManager<
           }) =>
               SeriesesCompanion(
             id: id,
+            sort: sort,
             nameJa: nameJa,
             nameEn: nameEn,
             shortNameJa: shortNameJa,
@@ -2584,6 +2669,7 @@ class $$SeriesesTableTableManager extends RootTableManager<
           ),
           createCompanionCallback: ({
             required int id,
+            required int sort,
             required String nameJa,
             required String nameEn,
             required String shortNameJa,
@@ -2594,6 +2680,7 @@ class $$SeriesesTableTableManager extends RootTableManager<
           }) =>
               SeriesesCompanion.insert(
             id: id,
+            sort: sort,
             nameJa: nameJa,
             nameEn: nameEn,
             shortNameJa: shortNameJa,
@@ -2610,6 +2697,11 @@ class $$SeriesesTableFilterComposer
   $$SeriesesTableFilterComposer(super.$state);
   ColumnFilters<int> get id => $state.composableBuilder(
       column: $state.table.id,
+      builder: (column, joinBuilders) =>
+          ColumnFilters(column, joinBuilders: joinBuilders));
+
+  ColumnFilters<int> get sort => $state.composableBuilder(
+      column: $state.table.sort,
       builder: (column, joinBuilders) =>
           ColumnFilters(column, joinBuilders: joinBuilders));
 
@@ -2665,6 +2757,11 @@ class $$SeriesesTableOrderingComposer
       builder: (column, joinBuilders) =>
           ColumnOrderings(column, joinBuilders: joinBuilders));
 
+  ColumnOrderings<int> get sort => $state.composableBuilder(
+      column: $state.table.sort,
+      builder: (column, joinBuilders) =>
+          ColumnOrderings(column, joinBuilders: joinBuilders));
+
   ColumnOrderings<String> get nameJa => $state.composableBuilder(
       column: $state.table.nameJa,
       builder: (column, joinBuilders) =>
@@ -2698,6 +2795,7 @@ class $$SeriesesTableOrderingComposer
 
 typedef $$PaintersTableCreateCompanionBuilder = PaintersCompanion Function({
   required int id,
+  required int sort,
   required String nameJa,
   required String nameEn,
   required String shortNameJa,
@@ -2708,11 +2806,12 @@ typedef $$PaintersTableCreateCompanionBuilder = PaintersCompanion Function({
   Value<int?> diedIn,
   required String descriptionJa,
   required String descriptionEn,
-  Value<int?> source,
+  required bool hasPortrait,
   Value<int> rowid,
 });
 typedef $$PaintersTableUpdateCompanionBuilder = PaintersCompanion Function({
   Value<int> id,
+  Value<int> sort,
   Value<String> nameJa,
   Value<String> nameEn,
   Value<String> shortNameJa,
@@ -2723,7 +2822,7 @@ typedef $$PaintersTableUpdateCompanionBuilder = PaintersCompanion Function({
   Value<int?> diedIn,
   Value<String> descriptionJa,
   Value<String> descriptionEn,
-  Value<int?> source,
+  Value<bool> hasPortrait,
   Value<int> rowid,
 });
 
@@ -2745,6 +2844,7 @@ class $$PaintersTableTableManager extends RootTableManager<
               $$PaintersTableOrderingComposer(ComposerState(db, table)),
           updateCompanionCallback: ({
             Value<int> id = const Value.absent(),
+            Value<int> sort = const Value.absent(),
             Value<String> nameJa = const Value.absent(),
             Value<String> nameEn = const Value.absent(),
             Value<String> shortNameJa = const Value.absent(),
@@ -2755,11 +2855,12 @@ class $$PaintersTableTableManager extends RootTableManager<
             Value<int?> diedIn = const Value.absent(),
             Value<String> descriptionJa = const Value.absent(),
             Value<String> descriptionEn = const Value.absent(),
-            Value<int?> source = const Value.absent(),
+            Value<bool> hasPortrait = const Value.absent(),
             Value<int> rowid = const Value.absent(),
           }) =>
               PaintersCompanion(
             id: id,
+            sort: sort,
             nameJa: nameJa,
             nameEn: nameEn,
             shortNameJa: shortNameJa,
@@ -2770,11 +2871,12 @@ class $$PaintersTableTableManager extends RootTableManager<
             diedIn: diedIn,
             descriptionJa: descriptionJa,
             descriptionEn: descriptionEn,
-            source: source,
+            hasPortrait: hasPortrait,
             rowid: rowid,
           ),
           createCompanionCallback: ({
             required int id,
+            required int sort,
             required String nameJa,
             required String nameEn,
             required String shortNameJa,
@@ -2785,11 +2887,12 @@ class $$PaintersTableTableManager extends RootTableManager<
             Value<int?> diedIn = const Value.absent(),
             required String descriptionJa,
             required String descriptionEn,
-            Value<int?> source = const Value.absent(),
+            required bool hasPortrait,
             Value<int> rowid = const Value.absent(),
           }) =>
               PaintersCompanion.insert(
             id: id,
+            sort: sort,
             nameJa: nameJa,
             nameEn: nameEn,
             shortNameJa: shortNameJa,
@@ -2800,7 +2903,7 @@ class $$PaintersTableTableManager extends RootTableManager<
             diedIn: diedIn,
             descriptionJa: descriptionJa,
             descriptionEn: descriptionEn,
-            source: source,
+            hasPortrait: hasPortrait,
             rowid: rowid,
           ),
         ));
@@ -2811,6 +2914,11 @@ class $$PaintersTableFilterComposer
   $$PaintersTableFilterComposer(super.$state);
   ColumnFilters<int> get id => $state.composableBuilder(
       column: $state.table.id,
+      builder: (column, joinBuilders) =>
+          ColumnFilters(column, joinBuilders: joinBuilders));
+
+  ColumnFilters<int> get sort => $state.composableBuilder(
+      column: $state.table.sort,
       builder: (column, joinBuilders) =>
           ColumnFilters(column, joinBuilders: joinBuilders));
 
@@ -2864,17 +2972,10 @@ class $$PaintersTableFilterComposer
       builder: (column, joinBuilders) =>
           ColumnFilters(column, joinBuilders: joinBuilders));
 
-  $$SourcesTableFilterComposer get source {
-    final $$SourcesTableFilterComposer composer = $state.composerBuilder(
-        composer: this,
-        getCurrentColumn: (t) => t.source,
-        referencedTable: $state.db.sources,
-        getReferencedColumn: (t) => t.id,
-        builder: (joinBuilder, parentComposers) => $$SourcesTableFilterComposer(
-            ComposerState(
-                $state.db, $state.db.sources, joinBuilder, parentComposers)));
-    return composer;
-  }
+  ColumnFilters<bool> get hasPortrait => $state.composableBuilder(
+      column: $state.table.hasPortrait,
+      builder: (column, joinBuilders) =>
+          ColumnFilters(column, joinBuilders: joinBuilders));
 
   ComposableFilter worksPaintersRefs(
       ComposableFilter Function($$WorksPaintersTableFilterComposer f) f) {
@@ -2895,6 +2996,11 @@ class $$PaintersTableOrderingComposer
   $$PaintersTableOrderingComposer(super.$state);
   ColumnOrderings<int> get id => $state.composableBuilder(
       column: $state.table.id,
+      builder: (column, joinBuilders) =>
+          ColumnOrderings(column, joinBuilders: joinBuilders));
+
+  ColumnOrderings<int> get sort => $state.composableBuilder(
+      column: $state.table.sort,
       builder: (column, joinBuilders) =>
           ColumnOrderings(column, joinBuilders: joinBuilders));
 
@@ -2948,17 +3054,10 @@ class $$PaintersTableOrderingComposer
       builder: (column, joinBuilders) =>
           ColumnOrderings(column, joinBuilders: joinBuilders));
 
-  $$SourcesTableOrderingComposer get source {
-    final $$SourcesTableOrderingComposer composer = $state.composerBuilder(
-        composer: this,
-        getCurrentColumn: (t) => t.source,
-        referencedTable: $state.db.sources,
-        getReferencedColumn: (t) => t.id,
-        builder: (joinBuilder, parentComposers) =>
-            $$SourcesTableOrderingComposer(ComposerState(
-                $state.db, $state.db.sources, joinBuilder, parentComposers)));
-    return composer;
-  }
+  ColumnOrderings<bool> get hasPortrait => $state.composableBuilder(
+      column: $state.table.hasPortrait,
+      builder: (column, joinBuilders) =>
+          ColumnOrderings(column, joinBuilders: joinBuilders));
 }
 
 typedef $$WorksTableCreateCompanionBuilder = WorksCompanion Function({
