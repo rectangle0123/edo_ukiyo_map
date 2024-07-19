@@ -1455,9 +1455,9 @@ class $WorksTable extends Works with TableInfo<$WorksTable, Work> {
   static const VerificationMeta _seriesMeta = const VerificationMeta('series');
   @override
   late final GeneratedColumn<int> series = GeneratedColumn<int>(
-      'series', aliasedName, true,
+      'series', aliasedName, false,
       type: DriftSqlType.int,
-      requiredDuringInsert: false,
+      requiredDuringInsert: true,
       defaultConstraints:
           GeneratedColumn.constraintIsAlways('REFERENCES serieses (id)'));
   static const VerificationMeta _indexMeta = const VerificationMeta('index');
@@ -1558,6 +1558,8 @@ class $WorksTable extends Works with TableInfo<$WorksTable, Work> {
     if (data.containsKey('series')) {
       context.handle(_seriesMeta,
           series.isAcceptableOrUnknown(data['series']!, _seriesMeta));
+    } else if (isInserting) {
+      context.missing(_seriesMeta);
     }
     if (data.containsKey('index')) {
       context.handle(
@@ -1637,7 +1639,7 @@ class $WorksTable extends Works with TableInfo<$WorksTable, Work> {
       id: attachedDatabase.typeMapping
           .read(DriftSqlType.int, data['${effectivePrefix}id'])!,
       series: attachedDatabase.typeMapping
-          .read(DriftSqlType.int, data['${effectivePrefix}series']),
+          .read(DriftSqlType.int, data['${effectivePrefix}series'])!,
       index: attachedDatabase.typeMapping
           .read(DriftSqlType.int, data['${effectivePrefix}index'])!,
       nameJa: attachedDatabase.typeMapping
@@ -1674,7 +1676,7 @@ class Work extends DataClass implements Insertable<Work> {
   final int id;
 
   /// シリーズ
-  final int? series;
+  final int series;
 
   /// 作品インデックス
   final int index;
@@ -1710,7 +1712,7 @@ class Work extends DataClass implements Insertable<Work> {
   final String descriptionEn;
   const Work(
       {required this.id,
-      this.series,
+      required this.series,
       required this.index,
       required this.nameJa,
       required this.nameEn,
@@ -1726,9 +1728,7 @@ class Work extends DataClass implements Insertable<Work> {
   Map<String, Expression> toColumns(bool nullToAbsent) {
     final map = <String, Expression>{};
     map['id'] = Variable<int>(id);
-    if (!nullToAbsent || series != null) {
-      map['series'] = Variable<int>(series);
-    }
+    map['series'] = Variable<int>(series);
     map['index'] = Variable<int>(index);
     map['name_ja'] = Variable<String>(nameJa);
     map['name_en'] = Variable<String>(nameEn);
@@ -1752,8 +1752,7 @@ class Work extends DataClass implements Insertable<Work> {
   WorksCompanion toCompanion(bool nullToAbsent) {
     return WorksCompanion(
       id: Value(id),
-      series:
-          series == null && nullToAbsent ? const Value.absent() : Value(series),
+      series: Value(series),
       index: Value(index),
       nameJa: Value(nameJa),
       nameEn: Value(nameEn),
@@ -1778,7 +1777,7 @@ class Work extends DataClass implements Insertable<Work> {
     serializer ??= driftRuntimeOptions.defaultSerializer;
     return Work(
       id: serializer.fromJson<int>(json['id']),
-      series: serializer.fromJson<int?>(json['series']),
+      series: serializer.fromJson<int>(json['series']),
       index: serializer.fromJson<int>(json['index']),
       nameJa: serializer.fromJson<String>(json['nameJa']),
       nameEn: serializer.fromJson<String>(json['nameEn']),
@@ -1797,7 +1796,7 @@ class Work extends DataClass implements Insertable<Work> {
     serializer ??= driftRuntimeOptions.defaultSerializer;
     return <String, dynamic>{
       'id': serializer.toJson<int>(id),
-      'series': serializer.toJson<int?>(series),
+      'series': serializer.toJson<int>(series),
       'index': serializer.toJson<int>(index),
       'nameJa': serializer.toJson<String>(nameJa),
       'nameEn': serializer.toJson<String>(nameEn),
@@ -1814,7 +1813,7 @@ class Work extends DataClass implements Insertable<Work> {
 
   Work copyWith(
           {int? id,
-          Value<int?> series = const Value.absent(),
+          int? series,
           int? index,
           String? nameJa,
           String? nameEn,
@@ -1828,7 +1827,7 @@ class Work extends DataClass implements Insertable<Work> {
           String? descriptionEn}) =>
       Work(
         id: id ?? this.id,
-        series: series.present ? series.value : this.series,
+        series: series ?? this.series,
         index: index ?? this.index,
         nameJa: nameJa ?? this.nameJa,
         nameEn: nameEn ?? this.nameEn,
@@ -1920,7 +1919,7 @@ class Work extends DataClass implements Insertable<Work> {
 
 class WorksCompanion extends UpdateCompanion<Work> {
   final Value<int> id;
-  final Value<int?> series;
+  final Value<int> series;
   final Value<int> index;
   final Value<String> nameJa;
   final Value<String> nameEn;
@@ -1951,7 +1950,7 @@ class WorksCompanion extends UpdateCompanion<Work> {
   });
   WorksCompanion.insert({
     required int id,
-    this.series = const Value.absent(),
+    required int series,
     required int index,
     required String nameJa,
     required String nameEn,
@@ -1965,6 +1964,7 @@ class WorksCompanion extends UpdateCompanion<Work> {
     required String descriptionEn,
     this.rowid = const Value.absent(),
   })  : id = Value(id),
+        series = Value(series),
         index = Value(index),
         nameJa = Value(nameJa),
         nameEn = Value(nameEn),
@@ -2009,7 +2009,7 @@ class WorksCompanion extends UpdateCompanion<Work> {
 
   WorksCompanion copyWith(
       {Value<int>? id,
-      Value<int?>? series,
+      Value<int>? series,
       Value<int>? index,
       Value<String>? nameJa,
       Value<String>? nameEn,
@@ -3062,7 +3062,7 @@ class $$PaintersTableOrderingComposer
 
 typedef $$WorksTableCreateCompanionBuilder = WorksCompanion Function({
   required int id,
-  Value<int?> series,
+  required int series,
   required int index,
   required String nameJa,
   required String nameEn,
@@ -3078,7 +3078,7 @@ typedef $$WorksTableCreateCompanionBuilder = WorksCompanion Function({
 });
 typedef $$WorksTableUpdateCompanionBuilder = WorksCompanion Function({
   Value<int> id,
-  Value<int?> series,
+  Value<int> series,
   Value<int> index,
   Value<String> nameJa,
   Value<String> nameEn,
@@ -3111,7 +3111,7 @@ class $$WorksTableTableManager extends RootTableManager<
               $$WorksTableOrderingComposer(ComposerState(db, table)),
           updateCompanionCallback: ({
             Value<int> id = const Value.absent(),
-            Value<int?> series = const Value.absent(),
+            Value<int> series = const Value.absent(),
             Value<int> index = const Value.absent(),
             Value<String> nameJa = const Value.absent(),
             Value<String> nameEn = const Value.absent(),
@@ -3143,7 +3143,7 @@ class $$WorksTableTableManager extends RootTableManager<
           ),
           createCompanionCallback: ({
             required int id,
-            Value<int?> series = const Value.absent(),
+            required int series,
             required int index,
             required String nameJa,
             required String nameEn,

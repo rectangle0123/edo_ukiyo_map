@@ -174,9 +174,9 @@ class _MenuButtonPainter extends CustomPainter {
   // 色
   static const color = Color(0xff165e83);
   // 枠線の色
-  static const borderColor = Colors.grey;
+  // static const borderColor = Colors.grey;
   // 枠線の太さ
-  static const borderWidth = 1.0;
+  // static const borderWidth = 1.0;
 
   @override
   void paint(Canvas canvas, Size size) {

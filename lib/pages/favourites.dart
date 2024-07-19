@@ -2,9 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 
-import 'package:edo_ukiyo_map/pages/work.dart';
 import 'package:edo_ukiyo_map/providers/providers.dart';
 import 'package:edo_ukiyo_map/storage/database.dart';
 
@@ -19,7 +17,7 @@ class FavouritesPage extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    // お気に入りを取得する
+    // お気に入りの作品を取得する
     final favourites = ref.watch(favouritesNotifierProvider);
 
     return CupertinoPageScaffold(
@@ -70,10 +68,10 @@ class _ListItem extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    // 作品から絵師を取得する
-    final painters = ref.watch(paintersByWorkProvider(work));
+    // 作品からシリーズを取得する
+    final series = ref.watch(seriesByIdProvider(work.series));
 
-    return switch (painters) {
+    return switch (series) {
       AsyncData(:final value) => CupertinoListTile.notched(
         title: Text(work.getName(context), overflow: TextOverflow.ellipsis),
         leading: ClipRRect(
@@ -83,14 +81,14 @@ class _ListItem extends ConsumerWidget {
           ),
         ),
         subtitle: Text(
-          value.map((e) => e.getName(context)).toList().join(', '),
+          value.getName(context),
           overflow: TextOverflow.ellipsis,
         ),
         trailing: const CupertinoListTileChevron(),
         onTap: () async {
           // シリーズタブを切り替える
           // 選択されているシリーズIDの変更はシリーズタブの変更イベントで実行される
-          ref.watch(tabControllerNotifierProvider)?.animateTo(work.series! - 1);
+          ref.watch(tabControllerNotifierProvider)?.animateTo(work.series - 1);
           // シリーズタブの変更イベントが終了するまで少し待つ
           await Future.delayed(const Duration(milliseconds: 500));
           // カルーセルのカレントアイテムを変更する

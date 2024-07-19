@@ -98,7 +98,7 @@ class Database extends _$Database {
       await batch((batch) async {
         batch.insertAll(works, worksData.map((data) =>  WorksCompanion(
           id: Value(int.parse(data[0])),
-          series: Value(data[1].isEmpty ? null : int.parse(data[1])),
+          series: Value(int.parse(data[1])),
           index: Value(int.parse(data[2])),
           nameJa: Value(data[3]),
           nameEn: Value(data[4]),
@@ -318,7 +318,7 @@ class Works extends Table {
   /// ID
   IntColumn get id => integer()();
   /// シリーズ
-  IntColumn get series => integer().nullable().references(Serieses, #id)();
+  IntColumn get series => integer().references(Serieses, #id)();
   /// 作品インデックス
   IntColumn get index => integer()();
   /// 名前（日本語）

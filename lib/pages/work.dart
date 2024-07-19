@@ -170,7 +170,7 @@ class _Body extends StatelessWidget {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              if (work.series != null)_SeriesText(work: work),
+              if (work.series != 0) _SeriesText(work: work),
               Text(
                 work.getName(context),
                 style: Theme.of(context).textTheme.bodyLarge?.copyWith(fontWeight: FontWeight.bold),
@@ -211,7 +211,7 @@ class _SeriesText extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     // 作品からシリーズを取得する
-    final series = ref.watch(seriesByIdProvider(work.series!));
+    final series = ref.watch(seriesByIdProvider(work.series));
 
     return switch (series) {
       AsyncData(:final value) => Text(
