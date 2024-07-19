@@ -41,9 +41,12 @@ class Menu extends StatelessWidget {
                   children: [
                     _MenuItem(
                       title: AppLocalizations.of(context)!.page_favourites,
-                      onTap: () => Navigator.of(context).push(
-                        MaterialWithModalsPageRoute(builder: (context) => const FavouritesPage()),
-                      ),
+                      onTap: () {
+                        Navigator.of(context).pop();
+                        Navigator.of(context).push(
+                          MaterialWithModalsPageRoute(builder: (context) => const FavouritesPage()),
+                        );
+                      }
                     ),
                   ],
                 ),
@@ -52,9 +55,12 @@ class Menu extends StatelessWidget {
                   children: [
                     _MenuItem(
                       title: AppLocalizations.of(context)!.page_licenses,
-                      onTap: () => Navigator.of(context).push(
-                        MaterialWithModalsPageRoute(builder: (context) => const PackagesPage()),
-                      ),
+                      onTap: () {
+                        Navigator.of(context).pop();
+                        Navigator.of(context).push(
+                          MaterialWithModalsPageRoute(builder: (context) => const PackagesPage()),
+                        );
+                      }
                     ),
                   ],
                 ),
@@ -65,9 +71,12 @@ class Menu extends StatelessWidget {
                     children: [
                       _MenuItem(
                         title: AppLocalizations.of(context)!.page_debug,
-                        onTap: () => Navigator.of(context).push(
-                          MaterialWithModalsPageRoute(builder: (context) => const DebugPage()),
-                        ),
+                        onTap: () {
+                          Navigator.of(context).pop();
+                          Navigator.of(context).push(
+                            MaterialWithModalsPageRoute(builder: (context) => const DebugPage()),
+                          );
+                        }
                       ),
                     ],
                   ),

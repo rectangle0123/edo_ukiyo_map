@@ -87,12 +87,23 @@ class _ListItem extends ConsumerWidget {
           overflow: TextOverflow.ellipsis,
         ),
         trailing: const CupertinoListTileChevron(),
-        onTap: () {
-          showCupertinoModalBottomSheet(
-            context: context,
-            enableDrag: false,
-            builder: (context) => WorkPage(work: work),
-          );
+        onTap: () async {
+          // シリーズタブを切り替える
+          // 選択されているシリーズIDの変更はシリーズタブの変更イベントで実行される
+          ref.watch(tabControllerNotifierProvider)?.animateTo(work.series! - 1);
+          // シリーズタブの変更イベントが終了するまで少し待つ
+          await Future.delayed(const Duration(milliseconds: 500));
+          // カルーセルのカレントアイテムを変更する
+          // 選択されている作品インデックスの変更はカルーセルのアイテム変更イベントで実行される
+          ref.watch(carouselControllerProvider).jumpToPage(work.index - 1);
+          if (context.mounted) {
+            Navigator.of(context).pop();
+          }
+          // showCupertinoModalBottomSheet(
+          //   context: context,
+          //   enableDrag: false,
+          //   builder: (context) => WorkPage(work: work),
+          // );
         },
       ),
       _ => Container(),
