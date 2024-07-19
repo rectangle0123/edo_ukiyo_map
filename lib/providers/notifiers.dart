@@ -39,7 +39,7 @@ class FavouritesNotifier extends StateNotifier<List<Work>> {
   /// お気に入りに追加する
   void add(Work work) async {
     await Database.instance.addFavourite(work.id);
-    state = [...state, work];
+    state = [...state, work]..sort((a, b) => a.id.compareTo(b.id));
   }
 
   /// お気に入りから削除する

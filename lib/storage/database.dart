@@ -177,16 +177,9 @@ class Database extends _$Database {
   // }
 
   /// お気に入りの作品を取得する
-  /// シリーズIDと作品IDでソートする
   Future<List<Work>> getFavourites() async {
     final list = await select(favourites).map((e) => e.workId).get();
-    return (select(works)
-      ..where((e) => e.id.isIn(list))
-      ..orderBy([
-        (e) => OrderingTerm(expression: e.series),
-        (e) => OrderingTerm(expression: e.id),
-      ])
-    ).get();
+    return (select(works)..where((e) => e.id.isIn(list))).get();
   }
 
   /// お気に入りを登録する
