@@ -139,6 +139,8 @@ class _CarouselItem extends ConsumerWidget {
       ref.watch(mapControllerNotifierProvider)?.animateCamera(
         CameraUpdate.newLatLng(LatLng(work.latitude, work.longitude)),
       );
+      // Googleマップのマーカーに設定したバルーンを表示する
+      ref.read(mapControllerNotifierProvider)?.showMarkerInfoWindow(MarkerId('$currentWorkIndex'));
     } else {
       // カレントアイテムでない場合
       // カルーセルのカレントアイテムを変更する
