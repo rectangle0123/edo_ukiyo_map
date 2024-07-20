@@ -75,6 +75,10 @@ class _CarouselItem extends ConsumerWidget {
   static const radius = 8.0;
   // テキストのマージン
   static const textMargin = 8.0;
+  /// 丸数字のサイズ
+  static const numberDimension = 28.0;
+  /// 丸数字のマージン
+  static const numberMargin = 4.0;
 
   // 作品と絵師
   final (Work, List<Painter>) workWithPainters;
@@ -101,9 +105,9 @@ class _CarouselItem extends ConsumerWidget {
                   Align(
                     alignment: Alignment.topRight,
                     child: CircleNumber(
-                      dimension: 28.0,
+                      dimension: numberDimension,
                       color: Colors.white70,
-                      margin: const EdgeInsets.all(4.0),
+                      margin: const EdgeInsets.all(numberMargin),
                       value: workWithPainters.$1.index,
                     ),
                   )

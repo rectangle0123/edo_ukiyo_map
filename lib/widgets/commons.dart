@@ -37,7 +37,7 @@ class CircleButton extends StatelessWidget {
   }
 }
 
-/// 数字を表示する丸いウィジェット
+/// 丸数字
 class CircleNumber extends StatelessWidget {
   /// サイズ
   final double dimension;

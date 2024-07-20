@@ -19,6 +19,12 @@ class SeriesTabState extends ConsumerState<SeriesTab> with SingleTickerProviderS
   static const shadowOffset = Offset(0.0, -1.0);
   /// 影のぼかし
   static const shadowBlur = 1.0;
+  /// 丸数字のサイズ
+  static const numberDimension = 20.0;
+  /// 丸数字のマージン
+  static const numberMargin = 8.0;
+  /// 丸数字のフォントサイズ
+  static const numberFontSize = 10.0;
 
   // タブコントローラー
   late TabController _tabController;
@@ -70,11 +76,11 @@ class SeriesTabState extends ConsumerState<SeriesTab> with SingleTickerProviderS
             children: [
               Text(e.$1.getShortName(context)),
               CircleNumber(
-                dimension: 18.0,
+                dimension: numberDimension,
                 color: Colors.black12,
-                margin: const EdgeInsets.only(left: 8.0),
+                margin: const EdgeInsets.only(left: numberMargin),
                 value: e.$2.length,
-                fontSize: 10.0,
+                fontSize: numberFontSize,
               ),
             ],
           ),
