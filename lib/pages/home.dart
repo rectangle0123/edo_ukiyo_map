@@ -4,8 +4,8 @@ import 'package:google_maps_flutter/google_maps_flutter.dart';
 
 import 'package:edo_ukiyo_map/providers/providers.dart';
 import 'package:edo_ukiyo_map/utils/location.dart';
-import 'package:edo_ukiyo_map/widgets/buttons.dart';
 import 'package:edo_ukiyo_map/widgets/carousel.dart';
+import 'package:edo_ukiyo_map/widgets/commons.dart';
 import 'package:edo_ukiyo_map/widgets/menu.dart';
 import 'package:edo_ukiyo_map/widgets/map.dart';
 import 'package:edo_ukiyo_map/widgets/tab.dart';

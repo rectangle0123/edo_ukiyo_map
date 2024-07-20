@@ -5,7 +5,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import 'package:edo_ukiyo_map/providers/providers.dart';
 import 'package:edo_ukiyo_map/storage/database.dart';
-import 'package:edo_ukiyo_map/widgets/buttons.dart';
+import 'package:edo_ukiyo_map/widgets/commons.dart';
 
 /// 作品ページ
 class WorkPage extends StatelessWidget {

@@ -7,6 +7,7 @@ import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 import 'package:edo_ukiyo_map/pages/work.dart';
 import 'package:edo_ukiyo_map/providers/providers.dart';
 import 'package:edo_ukiyo_map/storage/database.dart';
+import 'package:edo_ukiyo_map/widgets/commons.dart';
 
 /// 作品カルーセル
 class WorkCarousel extends ConsumerStatefulWidget {
@@ -99,7 +100,12 @@ class _CarouselItem extends ConsumerWidget {
                   ),
                   Align(
                     alignment: Alignment.topRight,
-                    child: _WorkIndex(work: workWithPainters.$1),
+                    child: CircleNumber(
+                      dimension: 28.0,
+                      color: Colors.white70,
+                      margin: const EdgeInsets.all(4.0),
+                      value: workWithPainters.$1.index,
+                    ),
                   )
                 ],
               ),
@@ -155,38 +161,5 @@ class _CarouselItem extends ConsumerWidget {
         builder: (context) => WorkPage(work: workWithPainters.$1),
       );
     }
-  }
-}
-
-// 作品インデックス
-class _WorkIndex extends StatelessWidget {
-  // サイズ
-  static const dimension = 28.0;
-  // 角丸
-  static const radius = 28.0;
-  // マージン
-  static const margin = 4.0;
-
-  // 作品
-  final Work work;
-
-  const _WorkIndex({required this.work});
-
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      width: dimension,
-      height: dimension,
-      margin: const EdgeInsets.all(margin),
-      alignment: Alignment.center,
-      decoration: BoxDecoration(
-        color: Colors.white70,
-        borderRadius: BorderRadius.circular(radius),
-      ),
-      child: Text(
-        '${work.index}',
-        style: Theme.of(context).textTheme.labelSmall?.copyWith(fontFamily: ''),
-      ),
-    );
   }
 }

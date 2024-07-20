@@ -1,3 +1,4 @@
+import 'package:edo_ukiyo_map/widgets/commons.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
@@ -64,7 +65,19 @@ class SeriesTabState extends ConsumerState<SeriesTab> with SingleTickerProviderS
       controller: _tabController,
       tabs: _series.map((e) {
         return Tab(
-          text: '${e.$1.getShortName(context)} (${e.$2.length})'
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Text(e.$1.getShortName(context)),
+              CircleNumber(
+                dimension: 18.0,
+                color: Colors.black12,
+                margin: const EdgeInsets.only(left: 8.0),
+                value: e.$2.length,
+                fontSize: 10.0,
+              ),
+            ],
+          ),
         );
       }).toList(),
     );
