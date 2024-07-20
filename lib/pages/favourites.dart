@@ -34,8 +34,10 @@ class FavouritesPage extends ConsumerWidget {
               child: SafeArea(
                 child: Container(
                   padding: const EdgeInsets.all(padding),
+                  alignment: Alignment.center,
                   child: favourites.isEmpty
                       ? RichText(
+                          textAlign: TextAlign.center,
                           text: TextSpan(
                             style: Theme.of(context).textTheme.bodyMedium,
                             children: [
