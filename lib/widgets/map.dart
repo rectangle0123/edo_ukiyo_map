@@ -26,6 +26,7 @@ class AppMapState extends ConsumerState<AppMap> {
         mapType: MapType.normal,
         myLocationEnabled: true,
         myLocationButtonEnabled: false,
+        zoomControlsEnabled: false,
         style: '[{"featureType": "poi", "stylers": [{"visibility": "off"}]}]',
         // カメラ位置の設定
         initialCameraPosition: CameraPosition(

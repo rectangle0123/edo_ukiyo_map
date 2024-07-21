@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
@@ -99,6 +101,8 @@ class _Header extends StatelessWidget {
 
 // キャンバス
 class _Canvas extends StatelessWidget {
+  // 最大の高さ（折りたたみ端末対応）
+  static const maxHeight = 300.0;
   // アイコンのパディング
   static const padding = 8.0;
 
@@ -110,8 +114,14 @@ class _Canvas extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final transformationController = TransformationController();
-    return SizedBox.square(
-      dimension: MediaQuery.of(context).size.width,
+    // アスペクト比を取得する（折りたたみ端末対応）
+    // アスペクト比が0.6以下の端末は高さを300にする
+    double screenWidth = MediaQuery.of(context).size.width;
+    double screenHeight = MediaQuery.of(context).size.height;
+    double aspectRatio = screenWidth / screenHeight;
+    return SizedBox(
+      width: double.infinity,
+      height: aspectRatio <= 0.6 ? MediaQuery.of(context).size.width : maxHeight,
       child: Container(
         color: Colors.black12,
         child: Stack(

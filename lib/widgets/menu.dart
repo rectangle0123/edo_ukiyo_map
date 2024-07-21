@@ -218,7 +218,7 @@ class _MenuButtonPainter extends CustomPainter {
   // 中骨の太さ
   static const boneWidth = 2.4;
   // 中骨の影の太さ
-  static const shadowWidth = 2.0;
+  static const shadowWidth = 1.0;
 
   @override
   void paint(Canvas canvas, Size size) {
@@ -238,7 +238,7 @@ class _MenuButtonPainter extends CustomPainter {
       ..color = boneColor
       ..strokeWidth = boneWidth
       ..strokeCap = StrokeCap.round
-      ..maskFilter = const MaskFilter.blur(BlurStyle.normal, shadowWidth);
+      ..maskFilter = const MaskFilter.blur(BlurStyle.solid, shadowWidth);
     canvas.drawLine(Offset(p4.dx + 2, p4.dy), p8, bonePaint);
     canvas.drawLine(p5, p8, bonePaint);
     canvas.drawLine(p6, p8, bonePaint);
