@@ -217,12 +217,17 @@ class _MenuButtonPainter extends CustomPainter {
 
   @override
   void paint(Canvas canvas, Size size) {
+    final p1 = Offset(0.0, size.height - height);
+    final p2 = Offset(size.width, size.height - height);
+    final p3 = Offset((size.width - width) / 2 + width, size.height);
+    final p4 = Offset((size.width - width) / 2, size.height);
+
     final Path path = Path()
-      ..moveTo(0.0, size.height - height)
-      ..quadraticBezierTo(size.width / 2, -(size.height - height), size.width, size.height - height)
-      ..lineTo((size.width - width) / 2 + width, size.height)
-      ..quadraticBezierTo(size.width / 2, size.height - height, (size.width - width) / 2, size.height)
-      ..lineTo(0.0, size.height - height);
+      ..moveTo(p1.dx, p1.dy)
+      ..quadraticBezierTo(size.width / 2, -(size.height - height), p2.dx, p2.dy)
+      ..lineTo(p3.dx, p3.dy)
+      ..quadraticBezierTo(size.width / 2, size.height - height, p4.dx, p4.dy)
+      ..lineTo(p1.dx, p1.dy);
 
     final shapePaint = Paint()..color = color;
     // final borderPaint = Paint()..color = borderColor..style = PaintingStyle.stroke..strokeWidth = borderWidth;
