@@ -35,11 +35,20 @@ class AppMapState extends ConsumerState<AppMap> {
         ),
         // マーカーの設定
         markers: _createMarkers(value),
-        onMapCreated: (controller) {
-          // 最初のマーカーのバルーンを表示する
-          controller.showMarkerInfoWindow(const MarkerId('1'));
+        onMapCreated: (controller) async {
+          final temp = await controller.getLatLng(
+            ScreenCoordinate(x: (MediaQuery.of(context).size.width / 2).round() , y: (MediaQuery.of(context).size.height / 2).round())
+          );
+          print('${temp.latitude} : ${temp.longitude}');
           // Googleマップコントローラーをプロバイダに設定する
           ref.read(mapControllerNotifierProvider.notifier).updateState(controller);
+          // 最初のマーカーのバルーンを表示する
+          await controller.showMarkerInfoWindow(const MarkerId('1'));
+          // 初回インストール後の起動で座標の計算がずれる障害への対応
+          // このタイミングでカメラの位置を再設定する
+          controller.moveCamera(CameraUpdate.newLatLng(
+            LatLng(value[0].latitude, value[0].longitude))
+          );
         },
       ),
       _ => Container(),
