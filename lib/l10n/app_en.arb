@@ -1,5 +1,8 @@
 {
   "page_home": "Edo Ukiyo Map",
+  "page_series": "Series List",
+  "page_painters": "Painters List",
+  "page_about": "About this",
   "page_licenses": "Licenses",
   "page_favourites": "Favourites",
   "page_debug": "Debug",

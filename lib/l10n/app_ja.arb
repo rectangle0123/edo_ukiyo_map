@@ -1,6 +1,8 @@
 {
-  "helloWorld": "こんにちわ、みなさん！",
   "page_home": "江戸浮世地図",
+  "page_series": "シリーズの一覧",
+  "page_painters": "絵師の一覧",
+  "page_about": "このアプリについて",
   "page_favourites": "お気に入り",
   "page_licenses": "ライセンス",
   "page_debug": "デバッグ",

@@ -86,12 +86,12 @@ class Database extends _$Database {
           nameEn: Value(data[3]),
           shortNameJa: Value(data[4]),
           shortNameEn: Value(data[5]),
-          aliasJa: Value(data[6]),
-          aliasEn: Value(data[7]),
+          aliasJa: Value(data[6].isEmpty ? null : data[6]),
+          aliasEn: Value(data[7].isEmpty ? null : data[7]),
           bornIn: Value(data[8].isEmpty ? null : int.parse(data[8])),
           diedIn: Value(data[9].isEmpty ? null : int.parse(data[9])),
-          descriptionJa: Value(data[10]),
-          descriptionEn: Value(data[11]),
+          descriptionJa: Value(data[10].isEmpty ? null : data[10]),
+          descriptionEn: Value(data[11].isEmpty ? null : data[11]),
           hasPortrait: Value(bool.parse(data[12])),
         )).toList());
       });
@@ -140,7 +140,13 @@ class Database extends _$Database {
   // Future<Painter> getPainter(int id) => (select(painters)..where((e) => e.id.equals(id))).getSingle();
 
   /// すべての絵師を取得する
-  // Future<List<Painter>> getAllPainters() => select(painters).get();
+  /// 「不祥」はとりあえず取得せず、並び順でソートする
+  Future<List<Painter>> getAllPainters() {
+    return (select(painters)
+      ..where((e) => e.id.isBiggerThanValue(0))
+      ..orderBy([(e) => OrderingTerm(expression: e.sort)])
+    ).get();
+  }
 
   /// 作品を取得する
   // Future<Work> getWork(int id) => (select(works)..where((e) => e.id.equals(id))).getSingle();
@@ -168,13 +174,13 @@ class Database extends _$Database {
   }
 
   /// 絵師IDから作品を取得する
-  // Future<List<Work>> getWorksByPainterId(int painterId) async {
-  //   final query = select(works).join(
-  //       [innerJoin(worksPainters, worksPainters.workId.equalsExp(works.id))]
-  //   )..where(worksPainters.painterId.equals(painterId));
-  //   final result = await query.get();
-  //   return result.map((e) => e.readTable(works)).toList();
-  // }
+  Future<List<Work>> getWorksByPainterId(int painterId) async {
+    final query = select(works).join(
+        [innerJoin(worksPainters, worksPainters.workId.equalsExp(works.id))]
+    )..where(worksPainters.painterId.equals(painterId));
+    final result = await query.get();
+    return result.map((e) => e.readTable(works)).toList();
+  }
 
   /// お気に入りの作品を取得する
   Future<List<Work>> getFavourites() async {
@@ -271,17 +277,17 @@ class Painters extends Table {
   /// 短縮名（英語）
   TextColumn get shortNameEn => text()();
   /// 別名（日本語）
-  TextColumn get aliasJa => text()();
+  TextColumn get aliasJa => text().nullable()();
   /// 別名（英語）
-  TextColumn get aliasEn => text()();
+  TextColumn get aliasEn => text().nullable()();
   /// 生年
   IntColumn get bornIn => integer().nullable()();
   /// 没年
   IntColumn get diedIn => integer().nullable()();
   /// 解説（日本語）
-  TextColumn get descriptionJa => text()();
+  TextColumn get descriptionJa => text().nullable()();
   /// 解説（英語）
-  TextColumn get descriptionEn => text()();
+  TextColumn get descriptionEn => text().nullable()();
   /// 肖像の有無
   BoolColumn get hasPortrait => boolean()();
 }
@@ -296,11 +302,11 @@ extension PainterExtension on Painter {
     return f.Localizations.localeOf(context).languageCode == 'ja' ? shortNameJa : shortNameEn;
   }
   /// ロケールの言語に応じた別名を返す
-  String getAlias(f.BuildContext context) {
+  String? getAlias(f.BuildContext context) {
     return f.Localizations.localeOf(context).languageCode == 'ja' ? aliasJa : aliasEn;
   }
   /// ロケールの言語に応じた解説を返す
-  String getDescription(f.BuildContext context) {
+  String? getDescription(f.BuildContext context) {
     return f.Localizations.localeOf(context).languageCode == 'ja' ? descriptionJa : descriptionEn;
   }
 }

@@ -813,14 +813,14 @@ class $PaintersTable extends Painters with TableInfo<$PaintersTable, Painter> {
       const VerificationMeta('aliasJa');
   @override
   late final GeneratedColumn<String> aliasJa = GeneratedColumn<String>(
-      'alias_ja', aliasedName, false,
-      type: DriftSqlType.string, requiredDuringInsert: true);
+      'alias_ja', aliasedName, true,
+      type: DriftSqlType.string, requiredDuringInsert: false);
   static const VerificationMeta _aliasEnMeta =
       const VerificationMeta('aliasEn');
   @override
   late final GeneratedColumn<String> aliasEn = GeneratedColumn<String>(
-      'alias_en', aliasedName, false,
-      type: DriftSqlType.string, requiredDuringInsert: true);
+      'alias_en', aliasedName, true,
+      type: DriftSqlType.string, requiredDuringInsert: false);
   static const VerificationMeta _bornInMeta = const VerificationMeta('bornIn');
   @override
   late final GeneratedColumn<int> bornIn = GeneratedColumn<int>(
@@ -835,14 +835,14 @@ class $PaintersTable extends Painters with TableInfo<$PaintersTable, Painter> {
       const VerificationMeta('descriptionJa');
   @override
   late final GeneratedColumn<String> descriptionJa = GeneratedColumn<String>(
-      'description_ja', aliasedName, false,
-      type: DriftSqlType.string, requiredDuringInsert: true);
+      'description_ja', aliasedName, true,
+      type: DriftSqlType.string, requiredDuringInsert: false);
   static const VerificationMeta _descriptionEnMeta =
       const VerificationMeta('descriptionEn');
   @override
   late final GeneratedColumn<String> descriptionEn = GeneratedColumn<String>(
-      'description_en', aliasedName, false,
-      type: DriftSqlType.string, requiredDuringInsert: true);
+      'description_en', aliasedName, true,
+      type: DriftSqlType.string, requiredDuringInsert: false);
   static const VerificationMeta _hasPortraitMeta =
       const VerificationMeta('hasPortrait');
   @override
@@ -920,14 +920,10 @@ class $PaintersTable extends Painters with TableInfo<$PaintersTable, Painter> {
     if (data.containsKey('alias_ja')) {
       context.handle(_aliasJaMeta,
           aliasJa.isAcceptableOrUnknown(data['alias_ja']!, _aliasJaMeta));
-    } else if (isInserting) {
-      context.missing(_aliasJaMeta);
     }
     if (data.containsKey('alias_en')) {
       context.handle(_aliasEnMeta,
           aliasEn.isAcceptableOrUnknown(data['alias_en']!, _aliasEnMeta));
-    } else if (isInserting) {
-      context.missing(_aliasEnMeta);
     }
     if (data.containsKey('born_in')) {
       context.handle(_bornInMeta,
@@ -942,16 +938,12 @@ class $PaintersTable extends Painters with TableInfo<$PaintersTable, Painter> {
           _descriptionJaMeta,
           descriptionJa.isAcceptableOrUnknown(
               data['description_ja']!, _descriptionJaMeta));
-    } else if (isInserting) {
-      context.missing(_descriptionJaMeta);
     }
     if (data.containsKey('description_en')) {
       context.handle(
           _descriptionEnMeta,
           descriptionEn.isAcceptableOrUnknown(
               data['description_en']!, _descriptionEnMeta));
-    } else if (isInserting) {
-      context.missing(_descriptionEnMeta);
     }
     if (data.containsKey('has_portrait')) {
       context.handle(
@@ -983,17 +975,17 @@ class $PaintersTable extends Painters with TableInfo<$PaintersTable, Painter> {
       shortNameEn: attachedDatabase.typeMapping
           .read(DriftSqlType.string, data['${effectivePrefix}short_name_en'])!,
       aliasJa: attachedDatabase.typeMapping
-          .read(DriftSqlType.string, data['${effectivePrefix}alias_ja'])!,
+          .read(DriftSqlType.string, data['${effectivePrefix}alias_ja']),
       aliasEn: attachedDatabase.typeMapping
-          .read(DriftSqlType.string, data['${effectivePrefix}alias_en'])!,
+          .read(DriftSqlType.string, data['${effectivePrefix}alias_en']),
       bornIn: attachedDatabase.typeMapping
           .read(DriftSqlType.int, data['${effectivePrefix}born_in']),
       diedIn: attachedDatabase.typeMapping
           .read(DriftSqlType.int, data['${effectivePrefix}died_in']),
       descriptionJa: attachedDatabase.typeMapping
-          .read(DriftSqlType.string, data['${effectivePrefix}description_ja'])!,
+          .read(DriftSqlType.string, data['${effectivePrefix}description_ja']),
       descriptionEn: attachedDatabase.typeMapping
-          .read(DriftSqlType.string, data['${effectivePrefix}description_en'])!,
+          .read(DriftSqlType.string, data['${effectivePrefix}description_en']),
       hasPortrait: attachedDatabase.typeMapping
           .read(DriftSqlType.bool, data['${effectivePrefix}has_portrait'])!,
     );
@@ -1025,10 +1017,10 @@ class Painter extends DataClass implements Insertable<Painter> {
   final String shortNameEn;
 
   /// 別名（日本語）
-  final String aliasJa;
+  final String? aliasJa;
 
   /// 別名（英語）
-  final String aliasEn;
+  final String? aliasEn;
 
   /// 生年
   final int? bornIn;
@@ -1037,10 +1029,10 @@ class Painter extends DataClass implements Insertable<Painter> {
   final int? diedIn;
 
   /// 解説（日本語）
-  final String descriptionJa;
+  final String? descriptionJa;
 
   /// 解説（英語）
-  final String descriptionEn;
+  final String? descriptionEn;
 
   /// 肖像の有無
   final bool hasPortrait;
@@ -1051,12 +1043,12 @@ class Painter extends DataClass implements Insertable<Painter> {
       required this.nameEn,
       required this.shortNameJa,
       required this.shortNameEn,
-      required this.aliasJa,
-      required this.aliasEn,
+      this.aliasJa,
+      this.aliasEn,
       this.bornIn,
       this.diedIn,
-      required this.descriptionJa,
-      required this.descriptionEn,
+      this.descriptionJa,
+      this.descriptionEn,
       required this.hasPortrait});
   @override
   Map<String, Expression> toColumns(bool nullToAbsent) {
@@ -1067,16 +1059,24 @@ class Painter extends DataClass implements Insertable<Painter> {
     map['name_en'] = Variable<String>(nameEn);
     map['short_name_ja'] = Variable<String>(shortNameJa);
     map['short_name_en'] = Variable<String>(shortNameEn);
-    map['alias_ja'] = Variable<String>(aliasJa);
-    map['alias_en'] = Variable<String>(aliasEn);
+    if (!nullToAbsent || aliasJa != null) {
+      map['alias_ja'] = Variable<String>(aliasJa);
+    }
+    if (!nullToAbsent || aliasEn != null) {
+      map['alias_en'] = Variable<String>(aliasEn);
+    }
     if (!nullToAbsent || bornIn != null) {
       map['born_in'] = Variable<int>(bornIn);
     }
     if (!nullToAbsent || diedIn != null) {
       map['died_in'] = Variable<int>(diedIn);
     }
-    map['description_ja'] = Variable<String>(descriptionJa);
-    map['description_en'] = Variable<String>(descriptionEn);
+    if (!nullToAbsent || descriptionJa != null) {
+      map['description_ja'] = Variable<String>(descriptionJa);
+    }
+    if (!nullToAbsent || descriptionEn != null) {
+      map['description_en'] = Variable<String>(descriptionEn);
+    }
     map['has_portrait'] = Variable<bool>(hasPortrait);
     return map;
   }
@@ -1089,14 +1089,22 @@ class Painter extends DataClass implements Insertable<Painter> {
       nameEn: Value(nameEn),
       shortNameJa: Value(shortNameJa),
       shortNameEn: Value(shortNameEn),
-      aliasJa: Value(aliasJa),
-      aliasEn: Value(aliasEn),
+      aliasJa: aliasJa == null && nullToAbsent
+          ? const Value.absent()
+          : Value(aliasJa),
+      aliasEn: aliasEn == null && nullToAbsent
+          ? const Value.absent()
+          : Value(aliasEn),
       bornIn:
           bornIn == null && nullToAbsent ? const Value.absent() : Value(bornIn),
       diedIn:
           diedIn == null && nullToAbsent ? const Value.absent() : Value(diedIn),
-      descriptionJa: Value(descriptionJa),
-      descriptionEn: Value(descriptionEn),
+      descriptionJa: descriptionJa == null && nullToAbsent
+          ? const Value.absent()
+          : Value(descriptionJa),
+      descriptionEn: descriptionEn == null && nullToAbsent
+          ? const Value.absent()
+          : Value(descriptionEn),
       hasPortrait: Value(hasPortrait),
     );
   }
@@ -1111,12 +1119,12 @@ class Painter extends DataClass implements Insertable<Painter> {
       nameEn: serializer.fromJson<String>(json['nameEn']),
       shortNameJa: serializer.fromJson<String>(json['shortNameJa']),
       shortNameEn: serializer.fromJson<String>(json['shortNameEn']),
-      aliasJa: serializer.fromJson<String>(json['aliasJa']),
-      aliasEn: serializer.fromJson<String>(json['aliasEn']),
+      aliasJa: serializer.fromJson<String?>(json['aliasJa']),
+      aliasEn: serializer.fromJson<String?>(json['aliasEn']),
       bornIn: serializer.fromJson<int?>(json['bornIn']),
       diedIn: serializer.fromJson<int?>(json['diedIn']),
-      descriptionJa: serializer.fromJson<String>(json['descriptionJa']),
-      descriptionEn: serializer.fromJson<String>(json['descriptionEn']),
+      descriptionJa: serializer.fromJson<String?>(json['descriptionJa']),
+      descriptionEn: serializer.fromJson<String?>(json['descriptionEn']),
       hasPortrait: serializer.fromJson<bool>(json['hasPortrait']),
     );
   }
@@ -1130,12 +1138,12 @@ class Painter extends DataClass implements Insertable<Painter> {
       'nameEn': serializer.toJson<String>(nameEn),
       'shortNameJa': serializer.toJson<String>(shortNameJa),
       'shortNameEn': serializer.toJson<String>(shortNameEn),
-      'aliasJa': serializer.toJson<String>(aliasJa),
-      'aliasEn': serializer.toJson<String>(aliasEn),
+      'aliasJa': serializer.toJson<String?>(aliasJa),
+      'aliasEn': serializer.toJson<String?>(aliasEn),
       'bornIn': serializer.toJson<int?>(bornIn),
       'diedIn': serializer.toJson<int?>(diedIn),
-      'descriptionJa': serializer.toJson<String>(descriptionJa),
-      'descriptionEn': serializer.toJson<String>(descriptionEn),
+      'descriptionJa': serializer.toJson<String?>(descriptionJa),
+      'descriptionEn': serializer.toJson<String?>(descriptionEn),
       'hasPortrait': serializer.toJson<bool>(hasPortrait),
     };
   }
@@ -1147,12 +1155,12 @@ class Painter extends DataClass implements Insertable<Painter> {
           String? nameEn,
           String? shortNameJa,
           String? shortNameEn,
-          String? aliasJa,
-          String? aliasEn,
+          Value<String?> aliasJa = const Value.absent(),
+          Value<String?> aliasEn = const Value.absent(),
           Value<int?> bornIn = const Value.absent(),
           Value<int?> diedIn = const Value.absent(),
-          String? descriptionJa,
-          String? descriptionEn,
+          Value<String?> descriptionJa = const Value.absent(),
+          Value<String?> descriptionEn = const Value.absent(),
           bool? hasPortrait}) =>
       Painter(
         id: id ?? this.id,
@@ -1161,12 +1169,14 @@ class Painter extends DataClass implements Insertable<Painter> {
         nameEn: nameEn ?? this.nameEn,
         shortNameJa: shortNameJa ?? this.shortNameJa,
         shortNameEn: shortNameEn ?? this.shortNameEn,
-        aliasJa: aliasJa ?? this.aliasJa,
-        aliasEn: aliasEn ?? this.aliasEn,
+        aliasJa: aliasJa.present ? aliasJa.value : this.aliasJa,
+        aliasEn: aliasEn.present ? aliasEn.value : this.aliasEn,
         bornIn: bornIn.present ? bornIn.value : this.bornIn,
         diedIn: diedIn.present ? diedIn.value : this.diedIn,
-        descriptionJa: descriptionJa ?? this.descriptionJa,
-        descriptionEn: descriptionEn ?? this.descriptionEn,
+        descriptionJa:
+            descriptionJa.present ? descriptionJa.value : this.descriptionJa,
+        descriptionEn:
+            descriptionEn.present ? descriptionEn.value : this.descriptionEn,
         hasPortrait: hasPortrait ?? this.hasPortrait,
       );
   Painter copyWithCompanion(PaintersCompanion data) {
@@ -1255,12 +1265,12 @@ class PaintersCompanion extends UpdateCompanion<Painter> {
   final Value<String> nameEn;
   final Value<String> shortNameJa;
   final Value<String> shortNameEn;
-  final Value<String> aliasJa;
-  final Value<String> aliasEn;
+  final Value<String?> aliasJa;
+  final Value<String?> aliasEn;
   final Value<int?> bornIn;
   final Value<int?> diedIn;
-  final Value<String> descriptionJa;
-  final Value<String> descriptionEn;
+  final Value<String?> descriptionJa;
+  final Value<String?> descriptionEn;
   final Value<bool> hasPortrait;
   final Value<int> rowid;
   const PaintersCompanion({
@@ -1286,12 +1296,12 @@ class PaintersCompanion extends UpdateCompanion<Painter> {
     required String nameEn,
     required String shortNameJa,
     required String shortNameEn,
-    required String aliasJa,
-    required String aliasEn,
+    this.aliasJa = const Value.absent(),
+    this.aliasEn = const Value.absent(),
     this.bornIn = const Value.absent(),
     this.diedIn = const Value.absent(),
-    required String descriptionJa,
-    required String descriptionEn,
+    this.descriptionJa = const Value.absent(),
+    this.descriptionEn = const Value.absent(),
     required bool hasPortrait,
     this.rowid = const Value.absent(),
   })  : id = Value(id),
@@ -1300,10 +1310,6 @@ class PaintersCompanion extends UpdateCompanion<Painter> {
         nameEn = Value(nameEn),
         shortNameJa = Value(shortNameJa),
         shortNameEn = Value(shortNameEn),
-        aliasJa = Value(aliasJa),
-        aliasEn = Value(aliasEn),
-        descriptionJa = Value(descriptionJa),
-        descriptionEn = Value(descriptionEn),
         hasPortrait = Value(hasPortrait);
   static Insertable<Painter> custom({
     Expression<int>? id,
@@ -1346,12 +1352,12 @@ class PaintersCompanion extends UpdateCompanion<Painter> {
       Value<String>? nameEn,
       Value<String>? shortNameJa,
       Value<String>? shortNameEn,
-      Value<String>? aliasJa,
-      Value<String>? aliasEn,
+      Value<String?>? aliasJa,
+      Value<String?>? aliasEn,
       Value<int?>? bornIn,
       Value<int?>? diedIn,
-      Value<String>? descriptionJa,
-      Value<String>? descriptionEn,
+      Value<String?>? descriptionJa,
+      Value<String?>? descriptionEn,
       Value<bool>? hasPortrait,
       Value<int>? rowid}) {
     return PaintersCompanion(
@@ -2800,12 +2806,12 @@ typedef $$PaintersTableCreateCompanionBuilder = PaintersCompanion Function({
   required String nameEn,
   required String shortNameJa,
   required String shortNameEn,
-  required String aliasJa,
-  required String aliasEn,
+  Value<String?> aliasJa,
+  Value<String?> aliasEn,
   Value<int?> bornIn,
   Value<int?> diedIn,
-  required String descriptionJa,
-  required String descriptionEn,
+  Value<String?> descriptionJa,
+  Value<String?> descriptionEn,
   required bool hasPortrait,
   Value<int> rowid,
 });
@@ -2816,12 +2822,12 @@ typedef $$PaintersTableUpdateCompanionBuilder = PaintersCompanion Function({
   Value<String> nameEn,
   Value<String> shortNameJa,
   Value<String> shortNameEn,
-  Value<String> aliasJa,
-  Value<String> aliasEn,
+  Value<String?> aliasJa,
+  Value<String?> aliasEn,
   Value<int?> bornIn,
   Value<int?> diedIn,
-  Value<String> descriptionJa,
-  Value<String> descriptionEn,
+  Value<String?> descriptionJa,
+  Value<String?> descriptionEn,
   Value<bool> hasPortrait,
   Value<int> rowid,
 });
@@ -2849,12 +2855,12 @@ class $$PaintersTableTableManager extends RootTableManager<
             Value<String> nameEn = const Value.absent(),
             Value<String> shortNameJa = const Value.absent(),
             Value<String> shortNameEn = const Value.absent(),
-            Value<String> aliasJa = const Value.absent(),
-            Value<String> aliasEn = const Value.absent(),
+            Value<String?> aliasJa = const Value.absent(),
+            Value<String?> aliasEn = const Value.absent(),
             Value<int?> bornIn = const Value.absent(),
             Value<int?> diedIn = const Value.absent(),
-            Value<String> descriptionJa = const Value.absent(),
-            Value<String> descriptionEn = const Value.absent(),
+            Value<String?> descriptionJa = const Value.absent(),
+            Value<String?> descriptionEn = const Value.absent(),
             Value<bool> hasPortrait = const Value.absent(),
             Value<int> rowid = const Value.absent(),
           }) =>
@@ -2881,12 +2887,12 @@ class $$PaintersTableTableManager extends RootTableManager<
             required String nameEn,
             required String shortNameJa,
             required String shortNameEn,
-            required String aliasJa,
-            required String aliasEn,
+            Value<String?> aliasJa = const Value.absent(),
+            Value<String?> aliasEn = const Value.absent(),
             Value<int?> bornIn = const Value.absent(),
             Value<int?> diedIn = const Value.absent(),
-            required String descriptionJa,
-            required String descriptionEn,
+            Value<String?> descriptionJa = const Value.absent(),
+            Value<String?> descriptionEn = const Value.absent(),
             required bool hasPortrait,
             Value<int> rowid = const Value.absent(),
           }) =>

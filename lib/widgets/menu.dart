@@ -8,6 +8,7 @@ import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 import 'package:edo_ukiyo_map/pages/debug.dart';
 import 'package:edo_ukiyo_map/pages/favourites.dart';
 import 'package:edo_ukiyo_map/pages/packages.dart';
+import 'package:edo_ukiyo_map/pages/painters.dart';
 import 'package:edo_ukiyo_map/providers/providers.dart';
 
 /// メニュー
@@ -33,6 +34,20 @@ class Menu extends StatelessWidget {
                     _MenuItem(
                       title: AppLocalizations.of(context)!.page_home,
                       onTap: () => Navigator.of(context).pop(),
+                    ),
+                  ],
+                ),
+                CupertinoListSection(
+                  backgroundColor: Theme.of(context).drawerTheme.backgroundColor!,
+                  children: [
+                    _MenuItem(
+                      title: AppLocalizations.of(context)!.page_painters,
+                        onTap: () {
+                          Navigator.of(context).pop();
+                          Navigator.of(context).push(
+                            MaterialWithModalsPageRoute(builder: (context) => const PaintersPage()),
+                          );
+                        }
                     ),
                   ],
                 ),

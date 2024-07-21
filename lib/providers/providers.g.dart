@@ -444,10 +444,25 @@ final allSeriesWithWorksProvider =
 
 typedef AllSeriesWithWorksRef
     = AutoDisposeFutureProviderRef<List<(Series, List<Work>)>>;
-String _$currentAllWorksHash() => r'c0a8c52d620cafcd7da218e0444c9b4d4199ba3c';
+String _$allPaintersHash() => r'd32b73458299b9219f59fcbd6d1598182b5addb8';
 
 /// 絵師を取得する
 /// すべての絵師を取得する
+///
+/// Copied from [allPainters].
+@ProviderFor(allPainters)
+final allPaintersProvider = AutoDisposeFutureProvider<List<Painter>>.internal(
+  allPainters,
+  name: r'allPaintersProvider',
+  debugGetCreateSourceHash:
+      const bool.fromEnvironment('dart.vm.product') ? null : _$allPaintersHash,
+  dependencies: null,
+  allTransitiveDependencies: null,
+);
+
+typedef AllPaintersRef = AutoDisposeFutureProviderRef<List<Painter>>;
+String _$currentAllWorksHash() => r'c0a8c52d620cafcd7da218e0444c9b4d4199ba3c';
+
 /// シリーズから作品を取得する
 /// 選択されているシリーズに含まれるすべての作品を取得する
 ///
@@ -684,9 +699,191 @@ class _PaintersByWorkProviderElement
   Work get work => (origin as PaintersByWorkProvider).work;
 }
 
-String _$packageInfoHash() => r'6d24887a45825322730812d638eae4192104901b';
+String _$worksByPainterHash() => r'7934dde731be3ec6737d474b59e7e1b8c2d89e8e';
 
 /// 絵師から作品を取得する
+///
+/// Copied from [worksByPainter].
+@ProviderFor(worksByPainter)
+const worksByPainterProvider = WorksByPainterFamily();
+
+/// 絵師から作品を取得する
+///
+/// Copied from [worksByPainter].
+class WorksByPainterFamily extends Family {
+  /// 絵師から作品を取得する
+  ///
+  /// Copied from [worksByPainter].
+  const WorksByPainterFamily();
+
+  static const Iterable<ProviderOrFamily>? _dependencies = null;
+
+  static const Iterable<ProviderOrFamily>? _allTransitiveDependencies = null;
+
+  @override
+  Iterable<ProviderOrFamily>? get dependencies => _dependencies;
+
+  @override
+  Iterable<ProviderOrFamily>? get allTransitiveDependencies =>
+      _allTransitiveDependencies;
+
+  @override
+  String? get name => r'worksByPainterProvider';
+
+  /// 絵師から作品を取得する
+  ///
+  /// Copied from [worksByPainter].
+  WorksByPainterProvider call(
+    Painter painter,
+  ) {
+    return WorksByPainterProvider(
+      painter,
+    );
+  }
+
+  @visibleForOverriding
+  @override
+  WorksByPainterProvider getProviderOverride(
+    covariant WorksByPainterProvider provider,
+  ) {
+    return call(
+      provider.painter,
+    );
+  }
+
+  /// Enables overriding the behavior of this provider, no matter the parameters.
+  Override overrideWith(
+      FutureOr<List<Work>> Function(WorksByPainterRef ref) create) {
+    return _$WorksByPainterFamilyOverride(this, create);
+  }
+}
+
+class _$WorksByPainterFamilyOverride implements FamilyOverride {
+  _$WorksByPainterFamilyOverride(this.overriddenFamily, this.create);
+
+  final FutureOr<List<Work>> Function(WorksByPainterRef ref) create;
+
+  @override
+  final WorksByPainterFamily overriddenFamily;
+
+  @override
+  WorksByPainterProvider getProviderOverride(
+    covariant WorksByPainterProvider provider,
+  ) {
+    return provider._copyWith(create);
+  }
+}
+
+/// 絵師から作品を取得する
+///
+/// Copied from [worksByPainter].
+class WorksByPainterProvider extends AutoDisposeFutureProvider<List<Work>> {
+  /// 絵師から作品を取得する
+  ///
+  /// Copied from [worksByPainter].
+  WorksByPainterProvider(
+    Painter painter,
+  ) : this._internal(
+          (ref) => worksByPainter(
+            ref as WorksByPainterRef,
+            painter,
+          ),
+          from: worksByPainterProvider,
+          name: r'worksByPainterProvider',
+          debugGetCreateSourceHash:
+              const bool.fromEnvironment('dart.vm.product')
+                  ? null
+                  : _$worksByPainterHash,
+          dependencies: WorksByPainterFamily._dependencies,
+          allTransitiveDependencies:
+              WorksByPainterFamily._allTransitiveDependencies,
+          painter: painter,
+        );
+
+  WorksByPainterProvider._internal(
+    super.create, {
+    required super.name,
+    required super.dependencies,
+    required super.allTransitiveDependencies,
+    required super.debugGetCreateSourceHash,
+    required super.from,
+    required this.painter,
+  }) : super.internal();
+
+  final Painter painter;
+
+  @override
+  Override overrideWith(
+    FutureOr<List<Work>> Function(WorksByPainterRef ref) create,
+  ) {
+    return ProviderOverride(
+      origin: this,
+      override: WorksByPainterProvider._internal(
+        (ref) => create(ref as WorksByPainterRef),
+        from: from,
+        name: null,
+        dependencies: null,
+        allTransitiveDependencies: null,
+        debugGetCreateSourceHash: null,
+        painter: painter,
+      ),
+    );
+  }
+
+  @override
+  (Painter,) get argument {
+    return (painter,);
+  }
+
+  @override
+  AutoDisposeFutureProviderElement<List<Work>> createElement() {
+    return _WorksByPainterProviderElement(this);
+  }
+
+  WorksByPainterProvider _copyWith(
+    FutureOr<List<Work>> Function(WorksByPainterRef ref) create,
+  ) {
+    return WorksByPainterProvider._internal(
+      (ref) => create(ref as WorksByPainterRef),
+      name: name,
+      dependencies: dependencies,
+      allTransitiveDependencies: allTransitiveDependencies,
+      debugGetCreateSourceHash: debugGetCreateSourceHash,
+      from: from,
+      painter: painter,
+    );
+  }
+
+  @override
+  bool operator ==(Object other) {
+    return other is WorksByPainterProvider && other.painter == painter;
+  }
+
+  @override
+  int get hashCode {
+    var hash = _SystemHash.combine(0, runtimeType.hashCode);
+    hash = _SystemHash.combine(hash, painter.hashCode);
+
+    return _SystemHash.finish(hash);
+  }
+}
+
+mixin WorksByPainterRef on AutoDisposeFutureProviderRef<List<Work>> {
+  /// The parameter `painter` of this provider.
+  Painter get painter;
+}
+
+class _WorksByPainterProviderElement
+    extends AutoDisposeFutureProviderElement<List<Work>>
+    with WorksByPainterRef {
+  _WorksByPainterProviderElement(super.provider);
+
+  @override
+  Painter get painter => (origin as WorksByPainterProvider).painter;
+}
+
+String _$packageInfoHash() => r'6d24887a45825322730812d638eae4192104901b';
+
 /// 全ての作品を取得する
 /// パッケージ情報を取得する
 ///

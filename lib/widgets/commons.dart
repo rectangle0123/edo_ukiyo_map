@@ -194,7 +194,7 @@ class WorkListItem extends ConsumerWidget {
     }
     // ページを閉じる
     if (context.mounted) {
-      Navigator.of(context).pop();
+      Navigator.of(context).popUntil((route) => route.isFirst);
     }
   }
 }
