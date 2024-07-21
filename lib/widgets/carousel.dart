@@ -40,7 +40,7 @@ class WorkCarouselState extends ConsumerState<WorkCarousel> {
               enlargeCenterPage: true,
               enableInfiniteScroll: false,
               viewportFraction: viewPortFraction,
-              onPageChanged: onItemChanged,
+              onPageChanged: _onItemChanged,
             ),
             items: value.map((e) {
               return Container(
@@ -56,7 +56,7 @@ class WorkCarouselState extends ConsumerState<WorkCarousel> {
   }
 
   // アイテム変更イベント
-  void onItemChanged(int index, CarouselPageChangedReason reason) async {
+  void _onItemChanged(int index, CarouselPageChangedReason reason) async {
     // 選択されている作品IDを更新する
     ref.read(selectedWorkIndexNotifierProvider.notifier).updateState(index + 1);
     // 選択されている作品の位置にGoogleマップのカメラを移動する
@@ -145,11 +145,11 @@ class _CarouselItem extends ConsumerWidget {
       // カレントアイテムだった場合
       // 選択されている作品の位置にGoogleマップのカメラを移動する
       final work = await ref.watch(currentSingleWorkProvider.future);
-      ref.watch(mapControllerNotifierProvider)?.animateCamera(
+      await ref.watch(mapControllerNotifierProvider)?.animateCamera(
         CameraUpdate.newLatLng(LatLng(work.latitude, work.longitude)),
       );
       // Googleマップのマーカーに設定したバルーンを表示する
-      ref.read(mapControllerNotifierProvider)?.showMarkerInfoWindow(MarkerId('$currentWorkIndex'));
+      await ref.read(mapControllerNotifierProvider)?.showMarkerInfoWindow(MarkerId('$currentWorkIndex'));
     } else {
       // カレントアイテムでない場合
       // カルーセルのカレントアイテムを変更する
@@ -158,7 +158,7 @@ class _CarouselItem extends ConsumerWidget {
     }
     // 作品ページを開く
     if (context.mounted) {
-      showCupertinoModalBottomSheet(
+      await showCupertinoModalBottomSheet(
         context: context,
         enableDrag: false,
         builder: (context) => WorkPage(work: workWithPainters.$1),

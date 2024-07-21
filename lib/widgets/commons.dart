@@ -151,7 +151,7 @@ class WorkListItem extends ConsumerWidget {
 
   // オープンボタンタップイベント
   Future<void> _handleOpenButtonTapped(BuildContext context) async {
-    showCupertinoModalBottomSheet(
+    await showCupertinoModalBottomSheet(
       context: context,
       enableDrag: false,
       builder: (context) => WorkPage(work: work),
@@ -170,11 +170,11 @@ class WorkListItem extends ConsumerWidget {
         // カレントアイテムだった場合
         // 選択されている作品の位置にGoogleマップのカメラを移動する
         final work = await ref.watch(currentSingleWorkProvider.future);
-        ref.watch(mapControllerNotifierProvider)?.animateCamera(
+        await ref.watch(mapControllerNotifierProvider)?.animateCamera(
           CameraUpdate.newLatLng(LatLng(work.latitude, work.longitude)),
         );
         // Googleマップのマーカーに設定したバルーンを表示する
-        ref.read(mapControllerNotifierProvider)?.showMarkerInfoWindow(MarkerId('$currentWorkIndex'));
+        await ref.read(mapControllerNotifierProvider)?.showMarkerInfoWindow(MarkerId('$currentWorkIndex'));
       } else {
         // カレントアイテムでない場合
         // カルーセルのカレントアイテムを変更する
