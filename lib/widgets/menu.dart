@@ -173,9 +173,9 @@ class MenuButton extends StatelessWidget {
   /// 幅
   static const width = 80.0;
   /// 高さ
-  static const height = 40.0;
+  static const height = 50.0;
   /// アイコンの上マージン
-  static const iconMarginTop = -3.0;
+  static const iconMarginTop = -8.0;
 
   const MenuButton({super.key});
 
@@ -205,36 +205,56 @@ class MenuButton extends StatelessWidget {
 // メニューボタン描画
 class _MenuButtonPainter extends CustomPainter {
   // 幅
-  static const width = 40.0;
+  static const width = 32.0;
   // 高さ
-  static const height = 20.0;
-  // 色
-  static const color = Color(0xff165e83);
-  // 枠線の色
-  // static const borderColor = Colors.grey;
-  // 枠線の太さ
-  // static const borderWidth = 1.0;
+  static const height = 18.0;
+  // 扇面の色
+  static const bodyColor = Color(0xff165e83);
+  // 中骨の高さ
+  static const honeHeight = 10.0;
+  // 中骨の色
+  // static const boneColor = Color(0xffe0c38c);
+  static const boneColor = Color(0xffb98c46);
+  // 中骨の太さ
+  static const boneWidth = 2.4;
+  // 中骨の影の太さ
+  static const shadowWidth = 2.0;
 
   @override
   void paint(Canvas canvas, Size size) {
-    final p1 = Offset(0.0, size.height - height);
-    final p2 = Offset(size.width, size.height - height);
-    final p3 = Offset((size.width - width) / 2 + width, size.height);
-    final p4 = Offset((size.width - width) / 2, size.height);
+    // 扇面
+    final p1 = Offset(0.0, size.height - honeHeight - height);
+    final p2 = Offset(size.width, size.height - honeHeight - height);
+    final p3 = Offset((size.width - width) / 2 + width, size.height - honeHeight);
+    final p4 = Offset((size.width - width) / 2, size.height - honeHeight);
+    // 中骨
+    final p5 = Offset(size.width / 3.5, height);
+    final p6 = Offset(size.width / 2, height);
+    final p7 = Offset(size.width / 1.4, height);
+    final p8 = Offset(size.width / 2, size.height);
 
+    // 中骨を描く
+    final bonePaint = Paint()
+      ..color = boneColor
+      ..strokeWidth = boneWidth
+      ..strokeCap = StrokeCap.round
+      ..maskFilter = const MaskFilter.blur(BlurStyle.normal, shadowWidth);
+    canvas.drawLine(Offset(p4.dx + 2, p4.dy), p8, bonePaint);
+    canvas.drawLine(p5, p8, bonePaint);
+    canvas.drawLine(p6, p8, bonePaint);
+    canvas.drawLine(p7, p8, bonePaint);
+    canvas.drawLine(Offset(p3.dx - 2, p3.dy), p8, bonePaint);
+
+    // 扇面を描く
+    final shapePaint = Paint()..color = bodyColor;
     final Path path = Path()
       ..moveTo(p1.dx, p1.dy)
-      ..quadraticBezierTo(size.width / 2, -(size.height - height), p2.dx, p2.dy)
+      ..quadraticBezierTo(size.width / 2, -(size.height - honeHeight - height), p2.dx, p2.dy)
       ..lineTo(p3.dx, p3.dy)
-      ..quadraticBezierTo(size.width / 2, size.height - height, p4.dx, p4.dy)
+      ..quadraticBezierTo(size.width / 2, size.height - honeHeight - height, p4.dx, p4.dy)
       ..lineTo(p1.dx, p1.dy);
-
-    final shapePaint = Paint()..color = color;
-    // final borderPaint = Paint()..color = borderColor..style = PaintingStyle.stroke..strokeWidth = borderWidth;
-
     canvas.drawShadow(path, Colors.black.withOpacity(0.8), 2.4, false);
     canvas.drawPath(path, shapePaint);
-    // canvas.drawPath(path, borderPaint);
   }
 
   @override
