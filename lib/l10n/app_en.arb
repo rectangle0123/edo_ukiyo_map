@@ -10,6 +10,26 @@
   "label_permission": "Permission: ",
   "label_collection": "Collection: ",
 
+  "text_welcome_title": "Welcome!",
+  "text_welcome_body_01": "Thank you for using!",
+  "text_welcome_body_02": "This app shows Edo scenic spots depicted in ukiyo-e on a map of modern Tokyo.",
+  "text_welcome_body_03": "We hope that this app will be a great companion for you ukiyo-e lovers on your stroll through Tokyo.",
+  "text_disclaimer_title": "Disclaimer for this app",
+  "text_disclaimer_body_01": "Please read and understand the following disclaimer before using this application (referred to as \"the App\"). By using the App, you agree to the terms outlined below.",
+  "text_disclaimer_body_02": "1. Accuracy of Information",
+  "text_disclaimer_body_03": "While we strive to provide accurate and up-to-date information through the App, we cannot guarantee the accuracy or completeness of the information. The information may change without notice. Before making any decisions based on the information provided, we recommend cross-referencing with other sources and using your own judgment.",
+  "text_disclaimer_body_04": "2. Damages from App Usage",
+  "text_disclaimer_body_05": "Under no circumstances shall we be held responsible for any actions taken or damages incurred as a result of using the App or relying on its information. We disclaim all liability for any damages, disadvantages, or losses arising from the information provided by the App.",
+  "text_disclaimer_body_06": "3. Service Interruption or Suspension",
+  "text_disclaimer_body_07": "We reserve the right to interrupt or suspend the services provided by the App without prior notice. We shall not be liable for any damages resulting from such interruptions or suspensions.",
+  "text_disclaimer_body_08": "4. Third-party Content and Services",
+  "text_disclaimer_body_09": "The App may include links to content or services provided by third parties. However, we do not take responsibility for the accuracy or content of such third-party content or services. Users are advised to exercise their own discretion and take responsibility when using such content or services.",
+  "text_disclaimer_body_10": "5. Changes to Disclaimer",
+  "text_disclaimer_body_11": "We reserve the right to modify this disclaimer as necessary. The updated disclaimer will take effect from the time it is posted within the App.",
+  "text_disclaimer_body_12": "This disclaimer applies to the use of the App. Please read and understand it before using the App.",
+  "text_page_licenses": "This app utilizes various types of programs, including the software listed below, based on the terms of the respective software licenses and usage agreements.",
+
+
   "text_page_favorites_01": "This list of favorites is empty.",
   "text_page_favorites_02": "You can add from the button on the artwork screen.",
   "text_page_licenses": "This app utilizes various types of programs, including the software listed below, based on the terms of the respective software licenses and usage agreements."

@@ -5,6 +5,7 @@ import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 
+import 'package:edo_ukiyo_map/pages/about.dart';
 import 'package:edo_ukiyo_map/pages/debug.dart';
 import 'package:edo_ukiyo_map/pages/favourites.dart';
 import 'package:edo_ukiyo_map/pages/packages.dart';
@@ -77,8 +78,18 @@ class Menu extends StatelessWidget {
                   ],
                 ),
                 CupertinoListSection(
+                  hasLeading: false,
                   backgroundColor: Theme.of(context).drawerTheme.backgroundColor!,
                   children: [
+                    _MenuItem(
+                        title: AppLocalizations.of(context)!.page_about,
+                        onTap: () {
+                          Navigator.of(context).pop();
+                          Navigator.of(context).push(
+                            MaterialWithModalsPageRoute(builder: (context) => const AboutPage()),
+                          );
+                        }
+                    ),
                     _MenuItem(
                       title: AppLocalizations.of(context)!.page_licenses,
                       onTap: () {
