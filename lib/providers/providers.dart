@@ -5,8 +5,8 @@ import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:package_info_plus/package_info_plus.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
+import 'package:edo_ukiyo_map/database/database.dart';
 import 'package:edo_ukiyo_map/providers/notifiers.dart';
-import 'package:edo_ukiyo_map/storage/database.dart';
 
 part 'providers.g.dart';
 

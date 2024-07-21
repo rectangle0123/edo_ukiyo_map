@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 
-import 'package:edo_ukiyo_map/storage/database.dart';
+import 'package:edo_ukiyo_map/database/database.dart';
 
 /// 選択されているシリーズIDの状態通知
 class SelectedStateIdNotifier extends StateNotifier<int> {

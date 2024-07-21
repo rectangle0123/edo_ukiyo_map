@@ -1,7 +1,7 @@
 import 'package:flutter_test/flutter_test.dart';
 import 'package:flutter/widgets.dart';
 
-import 'package:edo_ukiyo_map/storage/database.dart';
+import 'package:edo_ukiyo_map/database/database.dart';
 
 void main() async {
   // データベース
