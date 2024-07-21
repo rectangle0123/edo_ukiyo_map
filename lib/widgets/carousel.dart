@@ -57,8 +57,6 @@ class WorkCarouselState extends ConsumerState<WorkCarousel> {
 
   // アイテム変更イベント
   void onItemChanged(int index, CarouselPageChangedReason reason) async {
-    // Googleマップのマーカーに設定したバルーンを表示する
-    ref.read(mapControllerNotifierProvider)?.showMarkerInfoWindow(MarkerId('${index + 1}'));
     // 選択されている作品IDを更新する
     ref.read(selectedWorkIndexNotifierProvider.notifier).updateState(index + 1);
     // 選択されている作品の位置にGoogleマップのカメラを移動する
@@ -66,6 +64,8 @@ class WorkCarouselState extends ConsumerState<WorkCarousel> {
     ref.watch(mapControllerNotifierProvider)?.animateCamera(
       CameraUpdate.newLatLng(LatLng(work.latitude, work.longitude)),
     );
+    // Googleマップのマーカーに設定したバルーンを表示する
+    ref.read(mapControllerNotifierProvider)?.showMarkerInfoWindow(MarkerId('${index + 1}'));
   }
 }
 
@@ -88,7 +88,7 @@ class _CarouselItem extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     return GestureDetector(
-      onTap: () => _handleItemChanged(context, ref),
+      onTap: () => _handleItemTapped(context, ref),
       child: Card(
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(radius),
@@ -138,8 +138,8 @@ class _CarouselItem extends ConsumerWidget {
     );
   }
 
-  // アイテム変更イベント
-  Future<void> _handleItemChanged(BuildContext context, WidgetRef ref) async {
+  // アイテムタップイベント
+  Future<void> _handleItemTapped(BuildContext context, WidgetRef ref) async {
     // タップされたものがカルーセルのカレントアイテムかどうかを判定する
     final currentWorkIndex = ref.watch(selectedWorkIndexNotifierProvider);
     if (currentWorkIndex == workWithPainters.$1.index) {
