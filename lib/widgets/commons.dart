@@ -92,14 +92,14 @@ class CircleNumber extends StatelessWidget {
 
 /// 作品リストアイテム
 class WorkListItem extends ConsumerWidget {
-  // 角丸
+  /// 角丸
   static const radius = 2.0;
-  // ボタンのサイズ
+  /// ボタンのサイズ
   static const buttonDimension = 22.0;
-  // ボタンの間隔
+  /// ボタンの間隔
   static const buttonSpace = 8.0;
 
-  // 作品
+  /// 作品
   final Work work;
 
   const WorkListItem({super.key, required this.work});

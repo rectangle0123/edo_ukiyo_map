@@ -75,9 +75,9 @@ class _CarouselItem extends ConsumerWidget {
   static const radius = 8.0;
   // テキストのマージン
   static const textMargin = 8.0;
-  /// 丸数字のサイズ
+  // 丸数字のサイズ
   static const numberDimension = 28.0;
-  /// 丸数字のマージン
+  // 丸数字のマージン
   static const numberMargin = 4.0;
 
   // 作品と絵師
