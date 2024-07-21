@@ -77,7 +77,6 @@ class SeriesTabState extends ConsumerState<SeriesTab> with SingleTickerProviderS
               Text(e.$1.getShortName(context)),
               CircleNumber(
                 dimension: numberDimension,
-                color: Colors.black12,
                 margin: const EdgeInsets.only(left: numberMargin),
                 value: e.$2.length,
                 fontSize: numberFontSize,

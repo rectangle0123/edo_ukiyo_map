@@ -106,7 +106,6 @@ class _CarouselItem extends ConsumerWidget {
                     alignment: Alignment.topRight,
                     child: CircleNumber(
                       dimension: numberDimension,
-                      color: Colors.white70,
                       margin: const EdgeInsets.all(numberMargin),
                       value: workWithPainters.$1.index,
                     ),

@@ -7,12 +7,12 @@ class CircleButton extends StatelessWidget {
   final double dimension;
   /// 色
   final Color? color;
-  /// 透過
-  final opacity = 0.6;
   /// ボタンアクション
   final VoidCallback onPressed;
   /// 子ウィジェット
   final Widget child;
+  /// 透過
+  final opacity = 0.6;
 
   const CircleButton({
     super.key,
@@ -41,19 +41,18 @@ class CircleButton extends StatelessWidget {
 class CircleNumber extends StatelessWidget {
   /// サイズ
   final double dimension;
-  /// 色
-  final Color color;
   /// マージン
   final EdgeInsetsGeometry margin;
   /// 値
   final int value;
   /// フォントサイズ
   final double? fontSize;
+  /// 透過
+  final opacity = 0.6;
 
   const CircleNumber({
     super.key,
     required this.dimension,
-    required this.color,
     required this.margin,
     required this.value,
     this.fontSize,
@@ -67,12 +66,19 @@ class CircleNumber extends StatelessWidget {
       margin: margin,
       alignment: Alignment.center,
       decoration: BoxDecoration(
-        color: color,
+        color: Colors.black.withOpacity(opacity),
         borderRadius: BorderRadius.circular(dimension),
       ),
       child: fontSize != null
-        ? Text('$value', style: Theme.of(context).textTheme.labelSmall?.copyWith(fontSize: fontSize, fontFamily: ''))
-        : Text('$value', style: Theme.of(context).textTheme.labelSmall?.copyWith(fontFamily: '')),
+        ? Text('$value', style: Theme.of(context).textTheme.labelSmall?.copyWith(
+            color: Colors.white,
+            fontSize: fontSize,
+            fontFamily: '',
+          ))
+        : Text('$value', style: Theme.of(context).textTheme.labelSmall?.copyWith(
+            color: Colors.white,
+            fontFamily: ''),
+          ),
     );
   }
 }
