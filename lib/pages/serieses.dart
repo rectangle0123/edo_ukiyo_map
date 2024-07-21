@@ -79,9 +79,9 @@ class _ListItem extends StatelessWidget {
 
 // 作品数
 class _WorksNumber extends ConsumerWidget {
-  /// サイズ
+  // サイズ
   static const dimension = 20.0;
-  /// フォントサイズ
+  // フォントサイズ
   static const fontSize = 10.0;
 
   // シリーズ

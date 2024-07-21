@@ -7,6 +7,7 @@ import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 import 'package:edo_ukiyo_map/database/database.dart';
 import 'package:edo_ukiyo_map/pages/painter.dart';
 import 'package:edo_ukiyo_map/providers/providers.dart';
+import 'package:edo_ukiyo_map/widgets/commons.dart';
 
 /// 絵師一覧画面
 class PaintersPage extends ConsumerWidget {
@@ -71,11 +72,40 @@ class _ListItem extends StatelessWidget {
             : Image.asset('assets/painters/0.jpg'),
       ),
       trailing: const CupertinoListTileChevron(),
+      additionalInfo: _WorksNumber(painter: painter),
       onTap: () => Navigator.of(context).push(
         MaterialWithModalsPageRoute(
           builder: (_) => PainterPage(painter: painter),
         ),
       ),
     );
+  }
+}
+
+// 作品数
+class _WorksNumber extends ConsumerWidget {
+  // サイズ
+  static const dimension = 20.0;
+  // フォントサイズ
+  static const fontSize = 10.0;
+
+  // 絵師
+  final Painter painter;
+
+  const _WorksNumber({required this.painter});
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    // 絵師から作品数を取得する
+    final works = ref.watch(worksByPainterProvider(painter));
+
+    return switch (works) {
+      AsyncData(:final value) => CircleNumber(
+        dimension: dimension,
+        fontSize: fontSize,
+        value: value.length,
+      ),
+      _ => Container(),
+    };
   }
 }
