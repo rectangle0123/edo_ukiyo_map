@@ -36,10 +36,6 @@ class AppMapState extends ConsumerState<AppMap> {
         // マーカーの設定
         markers: _createMarkers(value),
         onMapCreated: (controller) async {
-          final temp = await controller.getLatLng(
-            ScreenCoordinate(x: (MediaQuery.of(context).size.width / 2).round() , y: (MediaQuery.of(context).size.height / 2).round())
-          );
-          print('${temp.latitude} : ${temp.longitude}');
           // Googleマップコントローラーをプロバイダに設定する
           ref.read(mapControllerNotifierProvider.notifier).updateState(controller);
           // 最初のマーカーのバルーンを表示する
