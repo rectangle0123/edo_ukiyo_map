@@ -88,10 +88,10 @@ Future<List<Painter>> allPainters(AllPaintersRef ref) {
 }
 
 /// シリーズから作品を取得する
-// @riverpod
-// Future<List<Work>> worksBySeries(WorksBySeriesRef ref, Series series) {
-//   return Database.instance.getWorksBySeriesId(series.id);
-// }
+@riverpod
+Future<List<Work>> worksBySeries(WorksBySeriesRef ref, Series series) {
+  return Database.instance.getWorksBySeriesId(series.id);
+}
 
 /// 選択されているシリーズに含まれるすべての作品を取得する
 @riverpod

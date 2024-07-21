@@ -6,8 +6,8 @@ import 'package:edo_ukiyo_map/database/database.dart';
 import 'package:edo_ukiyo_map/providers/providers.dart';
 import 'package:edo_ukiyo_map/widgets/commons.dart';
 
-/// 絵師画面
-class PainterPage extends ConsumerWidget {
+/// シリーズ画面
+class SeriesPage extends ConsumerWidget {
   /// パディング
   static const padding = 16.0;
   /// 要素の間隔
@@ -15,19 +15,19 @@ class PainterPage extends ConsumerWidget {
   /// インジケーターのサイズ
   static const dimension = 16.0;
 
-  /// 絵師
-  final Painter painter;
+  /// シリーズ
+  final Series series;
 
-  const PainterPage({super.key, required this.painter});
+  const SeriesPage({super.key, required this.series});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    // 絵師から作品を取得する
-    final works = ref.watch(worksByPainterProvider(painter));
+    // シリーズから作品を取得する
+    final works = ref.watch(worksBySeriesProvider(series));
 
     return CupertinoPageScaffold(
       navigationBar: CupertinoNavigationBar(
-        middle: Text(painter.getShortName(context), overflow: TextOverflow.ellipsis),
+        middle: Text(series.getShortName(context), overflow: TextOverflow.ellipsis),
       ),
       child: switch (works) {
         AsyncData(:final value) => Scrollbar(
@@ -40,7 +40,7 @@ class PainterPage extends ConsumerWidget {
                     padding: const EdgeInsets.all(padding),
                     child: Column(
                       children: [
-                        _PainterCard(painter: painter),
+                        _SeriesCard(series: series),
                         const SizedBox(height: space),
                         CupertinoListSection.insetGrouped(
                           margin: EdgeInsets.zero,
@@ -65,23 +65,19 @@ class PainterPage extends ConsumerWidget {
   }
 }
 
-// 絵師カード
-class _PainterCard extends StatelessWidget {
+// シリーズカード
+class _SeriesCard extends StatelessWidget {
   // パディング
   static const padding = 16.0;
   // 角丸
   static const radius = 12.0;
-  // アバターの寸法
-  static const avatarDimension = 48.0;
-  // アバターの角丸
-  static const avatarRadius = 4.0;
   // 要素の間隔
   static const space = 16.0;
 
-  // 絵師
-  final Painter painter;
+  // シリーズ
+  final Series series;
 
-  const _PainterCard({required this.painter});
+  const _SeriesCard({required this.series});
 
   @override
   Widget build(BuildContext context) {
@@ -97,44 +93,18 @@ class _PainterCard extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             SizedBox(
-              height: avatarDimension,
-              child: Row(
-                children: [
-                  ClipRRect(
-                    borderRadius: BorderRadius.circular(avatarRadius),
-                    child: painter.hasPortrait
-                        ? Image.asset('assets/painters/${painter.id}.jpg')
-                        : Image.asset('assets/painters/0.jpg'),
-                  ),
-                  const SizedBox(width: space),
-                  Expanded(
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(painter.getName(context),
-                          style: Theme.of(context).textTheme.bodyLarge?.copyWith(
-                            fontWeight: FontWeight.bold,
-                            overflow: TextOverflow.ellipsis,
-                          ),
-                        ),
-                        Text('${painter.bornIn ?? "?"} - ${painter.diedIn ?? "?"}',
-                          style: Theme.of(context).textTheme.labelLarge?.copyWith(
-                            color: Colors.grey[600],
-                            overflow: TextOverflow.ellipsis,
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-                ],
+              width: double.infinity,
+              child: Text(series.getName(context),
+                style: Theme.of(context).textTheme.bodyLarge?.copyWith(
+                  fontWeight: FontWeight.bold,
+                  overflow: TextOverflow.ellipsis,
+                ),
               ),
             ),
-            if (painter.getDescription(context) != null)
-              const SizedBox(height: space),
-            if (painter.getDescription(context) != null)
-              Text(painter.getDescription(context)!,
-                style: Theme.of(context).textTheme.bodyMedium,
-              ),
+            const SizedBox(height: space),
+            Text(series.getDescription(context),
+              style: Theme.of(context).textTheme.bodyMedium,
+            ),
           ],
         ),
       ),

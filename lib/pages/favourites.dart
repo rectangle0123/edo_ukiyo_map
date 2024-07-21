@@ -46,7 +46,7 @@ class FavouritesPage extends ConsumerWidget {
                         )
                       : CupertinoListSection.insetGrouped(
                           margin: EdgeInsets.zero,
-                          children: favourites.map((e) => WorkListItem(work: e)).toList(),
+                          children: favourites.map((e) => WorkListItemWithoutSeries(work: e)).toList(),
                         ),
                 ),
               ),

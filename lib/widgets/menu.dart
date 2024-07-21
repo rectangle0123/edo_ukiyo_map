@@ -9,6 +9,7 @@ import 'package:edo_ukiyo_map/pages/debug.dart';
 import 'package:edo_ukiyo_map/pages/favourites.dart';
 import 'package:edo_ukiyo_map/pages/packages.dart';
 import 'package:edo_ukiyo_map/pages/painters.dart';
+import 'package:edo_ukiyo_map/pages/serieses.dart';
 import 'package:edo_ukiyo_map/providers/providers.dart';
 
 /// メニュー
@@ -38,6 +39,7 @@ class Menu extends StatelessWidget {
                   ],
                 ),
                 CupertinoListSection(
+                  hasLeading: false,
                   backgroundColor: Theme.of(context).drawerTheme.backgroundColor!,
                   children: [
                     _MenuItem(
@@ -46,6 +48,15 @@ class Menu extends StatelessWidget {
                           Navigator.of(context).pop();
                           Navigator.of(context).push(
                             MaterialWithModalsPageRoute(builder: (context) => const PaintersPage()),
+                          );
+                        }
+                    ),
+                    _MenuItem(
+                        title: AppLocalizations.of(context)!.page_series,
+                        onTap: () {
+                          Navigator.of(context).pop();
+                          Navigator.of(context).push(
+                            MaterialWithModalsPageRoute(builder: (context) => const SeriesesPage()),
                           );
                         }
                     ),

@@ -49,7 +49,7 @@ class CircleNumber extends StatelessWidget {
   /// サイズ
   final double dimension;
   /// マージン
-  final EdgeInsetsGeometry margin;
+  final EdgeInsetsGeometry? margin;
   /// 値
   final int value;
   /// フォントサイズ
@@ -60,7 +60,7 @@ class CircleNumber extends StatelessWidget {
   const CircleNumber({
     super.key,
     required this.dimension,
-    required this.margin,
+    this.margin,
     required this.value,
     this.fontSize,
   });
@@ -90,8 +90,8 @@ class CircleNumber extends StatelessWidget {
   }
 }
 
-/// 作品リストアイテム
-class WorkListItem extends ConsumerWidget {
+/// 作品リストアイテム（シリーズなし）
+class WorkListItemWithoutSeries extends ConsumerWidget {
   /// 角丸
   static const radius = 2.0;
   /// ボタンのサイズ
@@ -102,7 +102,7 @@ class WorkListItem extends ConsumerWidget {
   /// 作品
   final Work work;
 
-  const WorkListItem({super.key, required this.work});
+  const WorkListItemWithoutSeries({super.key, required this.work});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -110,43 +110,65 @@ class WorkListItem extends ConsumerWidget {
     final series = ref.watch(seriesByIdProvider(work.series));
 
     return switch (series) {
-      AsyncData(:final value) => CupertinoListTile.notched(
-        title: Text(work.getName(context), overflow: TextOverflow.ellipsis),
-        leading: ClipRRect(
-          borderRadius: BorderRadius.circular(radius),
-          child: SizedBox.expand(
-            child: Image.asset('assets/works/${work.id}.jpg', fit: BoxFit.cover),
-          ),
-        ),
-        subtitle: Text(
-          value.getName(context),
-          overflow: TextOverflow.ellipsis,
-        ),
-        trailing: Row(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            SizedBox.square(
-              dimension: buttonDimension,
-              child: CupertinoButton(
-                padding: EdgeInsets.zero,
-                onPressed: () => _handleOpenButtonTapped(context),
-                child: const Icon(Icons.open_in_new_outlined, size: 22),
-              ),
-            ),
-            const SizedBox(width: buttonSpace),
-            SizedBox.square(
-              dimension: buttonDimension,
-              child: CupertinoButton(
-                padding: EdgeInsets.zero,
-                onPressed: () => _handleMapButtonTapped(context, ref),
-                child: const Icon(CupertinoIcons.map, size: 22),
-              ),
-            ),
-          ],
-        ),
-      ),
+      AsyncData(:final value) => WorkListItem(series: value, work: work),
       _ => Container(),
     };
+  }
+}
+
+/// 作品リストアイテム
+class WorkListItem extends ConsumerWidget {
+  /// 角丸
+  static const radius = 2.0;
+  /// ボタンのサイズ
+  static const buttonDimension = 22.0;
+  /// ボタンの間隔
+  static const buttonSpace = 8.0;
+
+  /// シリーズ
+  final Series series;
+  /// 作品
+  final Work work;
+
+  const WorkListItem({super.key, required this.series, required this.work});
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    return CupertinoListTile.notched(
+      title: Text(work.getName(context), overflow: TextOverflow.ellipsis),
+      leading: ClipRRect(
+        borderRadius: BorderRadius.circular(radius),
+        child: SizedBox.expand(
+          child: Image.asset('assets/works/${work.id}.jpg', fit: BoxFit.cover),
+        ),
+      ),
+      subtitle: Text(
+        series.getName(context),
+        overflow: TextOverflow.ellipsis,
+      ),
+      trailing: Row(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          SizedBox.square(
+            dimension: buttonDimension,
+            child: CupertinoButton(
+              padding: EdgeInsets.zero,
+              onPressed: () => _handleOpenButtonTapped(context),
+              child: const Icon(Icons.open_in_new_outlined, size: 22),
+            ),
+          ),
+          const SizedBox(width: buttonSpace),
+          SizedBox.square(
+            dimension: buttonDimension,
+            child: CupertinoButton(
+              padding: EdgeInsets.zero,
+              onPressed: () => _handleMapButtonTapped(context, ref),
+              child: const Icon(CupertinoIcons.map, size: 22),
+            ),
+          ),
+        ],
+      ),
+    );
   }
 
   // オープンボタンタップイベント

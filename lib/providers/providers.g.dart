@@ -461,9 +461,190 @@ final allPaintersProvider = AutoDisposeFutureProvider<List<Painter>>.internal(
 );
 
 typedef AllPaintersRef = AutoDisposeFutureProviderRef<List<Painter>>;
-String _$currentAllWorksHash() => r'c0a8c52d620cafcd7da218e0444c9b4d4199ba3c';
+String _$worksBySeriesHash() => r'50088bd1cc6a3f7ae471662d29059b5f58227353';
 
 /// シリーズから作品を取得する
+///
+/// Copied from [worksBySeries].
+@ProviderFor(worksBySeries)
+const worksBySeriesProvider = WorksBySeriesFamily();
+
+/// シリーズから作品を取得する
+///
+/// Copied from [worksBySeries].
+class WorksBySeriesFamily extends Family {
+  /// シリーズから作品を取得する
+  ///
+  /// Copied from [worksBySeries].
+  const WorksBySeriesFamily();
+
+  static const Iterable<ProviderOrFamily>? _dependencies = null;
+
+  static const Iterable<ProviderOrFamily>? _allTransitiveDependencies = null;
+
+  @override
+  Iterable<ProviderOrFamily>? get dependencies => _dependencies;
+
+  @override
+  Iterable<ProviderOrFamily>? get allTransitiveDependencies =>
+      _allTransitiveDependencies;
+
+  @override
+  String? get name => r'worksBySeriesProvider';
+
+  /// シリーズから作品を取得する
+  ///
+  /// Copied from [worksBySeries].
+  WorksBySeriesProvider call(
+    Series series,
+  ) {
+    return WorksBySeriesProvider(
+      series,
+    );
+  }
+
+  @visibleForOverriding
+  @override
+  WorksBySeriesProvider getProviderOverride(
+    covariant WorksBySeriesProvider provider,
+  ) {
+    return call(
+      provider.series,
+    );
+  }
+
+  /// Enables overriding the behavior of this provider, no matter the parameters.
+  Override overrideWith(
+      FutureOr<List<Work>> Function(WorksBySeriesRef ref) create) {
+    return _$WorksBySeriesFamilyOverride(this, create);
+  }
+}
+
+class _$WorksBySeriesFamilyOverride implements FamilyOverride {
+  _$WorksBySeriesFamilyOverride(this.overriddenFamily, this.create);
+
+  final FutureOr<List<Work>> Function(WorksBySeriesRef ref) create;
+
+  @override
+  final WorksBySeriesFamily overriddenFamily;
+
+  @override
+  WorksBySeriesProvider getProviderOverride(
+    covariant WorksBySeriesProvider provider,
+  ) {
+    return provider._copyWith(create);
+  }
+}
+
+/// シリーズから作品を取得する
+///
+/// Copied from [worksBySeries].
+class WorksBySeriesProvider extends AutoDisposeFutureProvider<List<Work>> {
+  /// シリーズから作品を取得する
+  ///
+  /// Copied from [worksBySeries].
+  WorksBySeriesProvider(
+    Series series,
+  ) : this._internal(
+          (ref) => worksBySeries(
+            ref as WorksBySeriesRef,
+            series,
+          ),
+          from: worksBySeriesProvider,
+          name: r'worksBySeriesProvider',
+          debugGetCreateSourceHash:
+              const bool.fromEnvironment('dart.vm.product')
+                  ? null
+                  : _$worksBySeriesHash,
+          dependencies: WorksBySeriesFamily._dependencies,
+          allTransitiveDependencies:
+              WorksBySeriesFamily._allTransitiveDependencies,
+          series: series,
+        );
+
+  WorksBySeriesProvider._internal(
+    super.create, {
+    required super.name,
+    required super.dependencies,
+    required super.allTransitiveDependencies,
+    required super.debugGetCreateSourceHash,
+    required super.from,
+    required this.series,
+  }) : super.internal();
+
+  final Series series;
+
+  @override
+  Override overrideWith(
+    FutureOr<List<Work>> Function(WorksBySeriesRef ref) create,
+  ) {
+    return ProviderOverride(
+      origin: this,
+      override: WorksBySeriesProvider._internal(
+        (ref) => create(ref as WorksBySeriesRef),
+        from: from,
+        name: null,
+        dependencies: null,
+        allTransitiveDependencies: null,
+        debugGetCreateSourceHash: null,
+        series: series,
+      ),
+    );
+  }
+
+  @override
+  (Series,) get argument {
+    return (series,);
+  }
+
+  @override
+  AutoDisposeFutureProviderElement<List<Work>> createElement() {
+    return _WorksBySeriesProviderElement(this);
+  }
+
+  WorksBySeriesProvider _copyWith(
+    FutureOr<List<Work>> Function(WorksBySeriesRef ref) create,
+  ) {
+    return WorksBySeriesProvider._internal(
+      (ref) => create(ref as WorksBySeriesRef),
+      name: name,
+      dependencies: dependencies,
+      allTransitiveDependencies: allTransitiveDependencies,
+      debugGetCreateSourceHash: debugGetCreateSourceHash,
+      from: from,
+      series: series,
+    );
+  }
+
+  @override
+  bool operator ==(Object other) {
+    return other is WorksBySeriesProvider && other.series == series;
+  }
+
+  @override
+  int get hashCode {
+    var hash = _SystemHash.combine(0, runtimeType.hashCode);
+    hash = _SystemHash.combine(hash, series.hashCode);
+
+    return _SystemHash.finish(hash);
+  }
+}
+
+mixin WorksBySeriesRef on AutoDisposeFutureProviderRef<List<Work>> {
+  /// The parameter `series` of this provider.
+  Series get series;
+}
+
+class _WorksBySeriesProviderElement
+    extends AutoDisposeFutureProviderElement<List<Work>> with WorksBySeriesRef {
+  _WorksBySeriesProviderElement(super.provider);
+
+  @override
+  Series get series => (origin as WorksBySeriesProvider).series;
+}
+
+String _$currentAllWorksHash() => r'c0a8c52d620cafcd7da218e0444c9b4d4199ba3c';
+
 /// 選択されているシリーズに含まれるすべての作品を取得する
 ///
 /// Copied from [currentAllWorks].
