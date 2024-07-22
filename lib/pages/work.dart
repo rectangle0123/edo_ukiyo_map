@@ -36,7 +36,7 @@ class WorkPage extends StatelessWidget {
 // ヘッダー
 class _Header extends StatelessWidget {
   // 高さ
-  static const height = 56.0;
+  static const height = 52.0;
   // ボタンの寸法
   static const buttonDimension = 32.0;
   // ボタンのパディング
@@ -61,7 +61,7 @@ class _Header extends StatelessWidget {
             child: Stack(
               children: [
                 Align(
-                  alignment: Alignment.topRight,
+                  alignment: Alignment.bottomRight,
                   child: Image.asset(
                         work.season == 1 ? 'assets/images/uguisu.png'
                       : work.season == 2 ? 'assets/images/kingyo.png'
@@ -177,7 +177,7 @@ class _Body extends StatelessWidget {
               const SizedBox(height: paddingVertical / 2),
               Container(
                 padding: const EdgeInsets.symmetric(horizontal: paddingHorizontal),
-                child: _SourceText(work: work),
+                child: _MetaData(work: work),
               ),
               const SizedBox(height: paddingVertical),
               Container(
@@ -185,26 +185,12 @@ class _Body extends StatelessWidget {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    if (work.series != 0) _SeriesText(work: work),
+                    if (work.series != 0)
+                      _SeriesText(work: work),
                     Text(
                       work.getName(context),
                       style: Theme.of(context).textTheme.bodyLarge?.copyWith(fontWeight: FontWeight.bold),
                     ),
-                  ],
-                ),
-              ),
-              const SizedBox(height: paddingVertical),
-              Container(
-                padding: const EdgeInsets.symmetric(horizontal: paddingHorizontal),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    _PainterText(work: work),
-                    if (work.publishedIn != null)
-                      Text(
-                        AppLocalizations.of(context)!.label_published('${work.publishedIn}'),
-                        style: Theme.of(context).textTheme.bodySmall,
-                      ),
                   ],
                 ),
               ),
@@ -229,22 +215,37 @@ class _Body extends StatelessWidget {
   }
 }
 
-// シリーズテキスト
-class _SeriesText extends ConsumerWidget {
+// 諸元情報
+class _MetaData extends ConsumerWidget {
   // 作品
   final Work work;
 
-  const _SeriesText({required this.work});
+  const _MetaData({required this.work});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    // 作品からシリーズを取得する
-    final series = ref.watch(seriesByIdProvider(work.series));
+    // 作品の出典を取得する
+    final source = ref.watch(sourceByIdProvider(work.source));
 
-    return switch (series) {
-      AsyncData(:final value) => Text(
-        value.getName(context),
-        style: Theme.of(context).textTheme.bodySmall,
+    return switch (source) {
+      AsyncData(:final value) => Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          _PainterText(work: work),
+          if (work.publishedIn != null)
+            Text(
+              AppLocalizations.of(context)!.label_published('${work.publishedIn}'),
+              style: Theme.of(context).textTheme.bodySmall?.copyWith(color: Colors.grey),
+            ),
+          Text(
+            AppLocalizations.of(context)!.label_permission(value.getLicense(context)),
+            style: Theme.of(context).textTheme.bodySmall?.copyWith(color: Colors.grey),
+          ),
+          Text(
+            AppLocalizations.of(context)!.label_collection(value.getName(context)),
+            style: Theme.of(context).textTheme.bodySmall?.copyWith(color: Colors.grey),
+          ),
+        ],
       ),
       _ => Container(),
     };
@@ -266,38 +267,29 @@ class _PainterText extends ConsumerWidget {
     return switch (painters) {
       AsyncData(:final value) => Text(
         AppLocalizations.of(context)!.label_painter(value.map((e) => e.getName(context)).join('  ')),
-        style: Theme.of(context).textTheme.bodySmall,
+        style: Theme.of(context).textTheme.bodySmall?.copyWith(color: Colors.grey),
       ),
       _ => Container(),
     };
   }
 }
 
-// 出典テキスト
-class _SourceText extends ConsumerWidget {
+// シリーズテキスト
+class _SeriesText extends ConsumerWidget {
   // 作品
   final Work work;
 
-  const _SourceText({required this.work});
+  const _SeriesText({required this.work});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    // 作品の出典を取得する
-    final source = ref.watch(sourceByIdProvider(work.source));
+    // 作品からシリーズを取得する
+    final series = ref.watch(seriesByIdProvider(work.series));
 
-    return switch (source) {
-      AsyncData(:final value) => Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Text(
-            AppLocalizations.of(context)!.label_permission(value.getLicense(context)),
-            style: Theme.of(context).textTheme.bodySmall?.copyWith(color: Colors.grey),
-          ),
-          Text(
-            AppLocalizations.of(context)!.label_collection(value.getName(context)),
-            style: Theme.of(context).textTheme.bodySmall?.copyWith(color: Colors.grey),
-          ),
-        ],
+    return switch (series) {
+      AsyncData(:final value) => Text(
+        value.getName(context),
+        style: Theme.of(context).textTheme.bodySmall,
       ),
       _ => Container(),
     };
