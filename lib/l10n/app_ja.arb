@@ -7,8 +7,10 @@
   "page_licenses": "ライセンス",
   "page_debug": "デバッグ",
 
-  "label_permission": "ライセンス：",
-  "label_collection": "所蔵：",
+  "label_permission": "ライセンス：{permission}",
+  "label_collection": "所蔵：{collection}",
+  "label_painter": "絵師：{painter}",
+  "label_published": "発行年：{year}年",
 
   "text_welcome_title": "ようこそ！",
   "text_welcome_body_01": "アプリをご利用いただきありがとうございます。",

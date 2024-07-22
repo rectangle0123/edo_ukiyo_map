@@ -154,7 +154,7 @@ class WorkListItem extends ConsumerWidget {
             child: CupertinoButton(
               padding: EdgeInsets.zero,
               onPressed: () => _handleOpenButtonTapped(context),
-              child: const Icon(Icons.open_in_new_outlined, size: 22),
+              child: const Icon(Icons.open_in_new_outlined),
             ),
           ),
           const SizedBox(width: buttonSpace),
@@ -163,7 +163,7 @@ class WorkListItem extends ConsumerWidget {
             child: CupertinoButton(
               padding: EdgeInsets.zero,
               onPressed: () => _handleMapButtonTapped(context, ref),
-              child: const Icon(CupertinoIcons.map, size: 22),
+              child: const Icon(CupertinoIcons.map),
             ),
           ),
         ],

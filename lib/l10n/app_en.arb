@@ -7,8 +7,10 @@
   "page_favourites": "Favourites",
   "page_debug": "Debug",
 
-  "label_permission": "Permission: ",
-  "label_collection": "Collection: ",
+  "label_permission": "Permission: {permission}",
+  "label_collection": "Collection: {collection}",
+  "label_painter": "Painter: {painter}",
+  "label_published": "Published: {year}",
 
   "text_welcome_title": "Welcome!",
   "text_welcome_body_01": "Thank you for using!",

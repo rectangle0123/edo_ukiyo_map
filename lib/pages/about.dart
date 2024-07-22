@@ -27,7 +27,10 @@ class AboutPage extends StatelessWidget {
                 children: [
                   Padding(
                     padding: const EdgeInsets.only(left: padding),
-                    child: Text(AppLocalizations.of(context)!.text_welcome_title, style: Theme.of(context).textTheme.bodyMedium),
+                    child: Text(
+                      AppLocalizations.of(context)!.text_welcome_title,
+                      style: Theme.of(context).textTheme.bodyMedium?.copyWith(fontWeight: FontWeight.bold),
+                    ),
                   ),
                   _TextCard(
                     children: [
@@ -39,7 +42,10 @@ class AboutPage extends StatelessWidget {
                   const SizedBox(height: space),
                   Padding(
                     padding: const EdgeInsets.only(left: padding),
-                    child: Text(AppLocalizations.of(context)!.text_disclaimer_title, style: Theme.of(context).textTheme.bodyMedium),
+                    child: Text(
+                      AppLocalizations.of(context)!.text_disclaimer_title,
+                      style: Theme.of(context).textTheme.bodyMedium?.copyWith(fontWeight: FontWeight.bold),
+                    ),
                   ),
                   _TextCard(
                     children: [

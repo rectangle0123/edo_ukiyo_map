@@ -194,7 +194,7 @@ class MenuButton extends StatelessWidget {
           height: height,
           child: Transform.translate(
             offset: const Offset(0, iconMarginTop),
-            child: const Icon(Icons.menu, color: Colors.white),
+            child: const Icon(Icons.menu_rounded, color: Colors.white),
           ),
         ),
       ),

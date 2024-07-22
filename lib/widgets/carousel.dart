@@ -121,7 +121,7 @@ class _CarouselItem extends ConsumerWidget {
               child: Column(
                 children: [
                   Text(workWithPainters.$1.getName(context),
-                    style: Theme.of(context).textTheme.bodySmall,
+                    style: Theme.of(context).textTheme.bodySmall?.copyWith(fontWeight: FontWeight.bold),
                     overflow: TextOverflow.ellipsis,
                   ),
                   Text(workWithPainters.$2.map((e) => e.getShortName(context)).join(', '),

@@ -44,7 +44,6 @@ class PainterPage extends ConsumerWidget {
                         const SizedBox(height: space),
                         CupertinoListSection.insetGrouped(
                           margin: EdgeInsets.zero,
-                          hasLeading: false,
                           children: value.map((e) => WorkListItemWithoutSeries(work: e)).toList(),
                         ),
                       ],

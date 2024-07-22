@@ -8,6 +8,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:edo_ukiyo_map/database/database.dart';
 import 'package:edo_ukiyo_map/providers/providers.dart';
 import 'package:edo_ukiyo_map/widgets/commons.dart';
+import 'package:path/path.dart';
 
 /// 作品ページ
 class WorkPage extends StatelessWidget {
@@ -101,8 +102,6 @@ class _Header extends StatelessWidget {
 
 // キャンバス
 class _Canvas extends StatelessWidget {
-  // 最大の高さ（折りたたみ端末対応）
-  static const maxHeight = 300.0;
   // アイコンのパディング
   static const padding = 8.0;
 
@@ -114,14 +113,9 @@ class _Canvas extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final transformationController = TransformationController();
-    // アスペクト比を取得する（折りたたみ端末対応）
-    // アスペクト比が0.6以下の端末は高さを300にする
-    double screenWidth = MediaQuery.of(context).size.width;
-    double screenHeight = MediaQuery.of(context).size.height;
-    double aspectRatio = screenWidth / screenHeight;
     return SizedBox(
       width: double.infinity,
-      height: aspectRatio <= 0.6 ? MediaQuery.of(context).size.width : maxHeight,
+      height: MediaQuery.of(context).size.height * 0.45,
       child: Container(
         color: Colors.black12,
         child: Stack(
@@ -205,7 +199,17 @@ class _Body extends StatelessWidget {
               const SizedBox(height: paddingVertical),
               Container(
                 padding: const EdgeInsets.symmetric(horizontal: paddingHorizontal),
-                child: _PainterText(work: work),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    _PainterText(work: work),
+                    if (work.publishedIn != null)
+                      Text(
+                        AppLocalizations.of(context)!.label_published('${work.publishedIn}'),
+                        style: Theme.of(context).textTheme.bodySmall,
+                      ),
+                  ],
+                ),
               ),
               const SizedBox(height: paddingVertical),
             ],
@@ -264,7 +268,8 @@ class _PainterText extends ConsumerWidget {
 
     return switch (painters) {
       AsyncData(:final value) => Text(
-        value.map((e) => e.getName(context)).join('  '),
+        AppLocalizations.of(context)!.label_painter(value.map((e) => e.getName(context)).join('  ')),
+        style: Theme.of(context).textTheme.bodySmall,
       ),
       _ => Container(),
     };
@@ -288,11 +293,11 @@ class _SourceText extends ConsumerWidget {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Text(
-            AppLocalizations.of(context)!.label_permission + value.getLicense(context),
+            AppLocalizations.of(context)!.label_permission(value.getLicense(context)),
             style: Theme.of(context).textTheme.bodySmall?.copyWith(color: Colors.grey),
           ),
           Text(
-            AppLocalizations.of(context)!.label_collection + value.getName(context),
+            AppLocalizations.of(context)!.label_collection(value.getName(context)),
             style: Theme.of(context).textTheme.bodySmall?.copyWith(color: Colors.grey),
           ),
         ],
