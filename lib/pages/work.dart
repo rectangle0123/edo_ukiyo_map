@@ -215,7 +215,7 @@ class _Body extends StatelessWidget {
   }
 }
 
-// 諸元情報
+// 作品のメタ情報
 class _MetaData extends ConsumerWidget {
   // 作品
   final Work work;
@@ -224,50 +224,49 @@ class _MetaData extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    // 作品の出典を取得する
-    final source = ref.watch(sourceByIdProvider(work.source));
+    // フォントスタイル
+    final fontStyle = Theme.of(context).textTheme.bodySmall?.copyWith(color: Colors.black.withOpacity(0.5));
+    // 作品のメタ情報を取得する
+    final meta = ref.watch(metaByWorkProvider(work));
 
-    return switch (source) {
-      AsyncData(:final value) => Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          _PainterText(work: work),
-          if (work.publishedIn != null)
-            Text(
-              AppLocalizations.of(context)!.label_year('${work.publishedIn}'),
-              style: Theme.of(context).textTheme.bodySmall?.copyWith(color: Colors.grey),
+    return switch (meta) {
+      AsyncData(:final value) => Container(
+        padding: const EdgeInsets.only(left: 16.0),
+        decoration: const BoxDecoration(
+          border: Border(left: BorderSide(width: 2.0, color: Colors.grey)),
+        ),
+        child: Row(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Column(
+              crossAxisAlignment: CrossAxisAlignment.end,
+              children: [
+                Text(AppLocalizations.of(context)!.label_painter, style: fontStyle),
+                if (work.publishedIn != null)
+                  Text(AppLocalizations.of(context)!.label_year, style: fontStyle),
+                Text(AppLocalizations.of(context)!.label_collection, style: fontStyle),
+                Text(AppLocalizations.of(context)!.label_license, style: fontStyle),
+              ],
             ),
-          Text(
-            AppLocalizations.of(context)!.label_permission(value.getLicense(context)),
-            style: Theme.of(context).textTheme.bodySmall?.copyWith(color: Colors.grey),
-          ),
-          Text(
-            AppLocalizations.of(context)!.label_collection(value.getName(context)),
-            style: Theme.of(context).textTheme.bodySmall?.copyWith(color: Colors.grey),
-          ),
-        ],
-      ),
-      _ => Container(),
-    };
-  }
-}
-
-// 絵師テキスト
-class _PainterText extends ConsumerWidget {
-  // 作品
-  final Work work;
-
-  const _PainterText({required this.work});
-
-  @override
-  Widget build(BuildContext context, WidgetRef ref) {
-    // 作品から絵師を取得する
-    final painters = ref.watch(paintersByWorkProvider(work));
-
-    return switch (painters) {
-      AsyncData(:final value) => Text(
-        AppLocalizations.of(context)!.label_painter(value.map((e) => e.getName(context)).join('  ')),
-        style: Theme.of(context).textTheme.bodySmall?.copyWith(color: Colors.grey),
+            Expanded(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    Localizations.localeOf(context).languageCode == 'ja'
+                        ? value.$1.map((e) => e.getName(context)).toList().join('  ')
+                        : value.$1.map((e) => e.getShortName(context)).toList().join(', '),
+                    style: fontStyle,
+                  ),
+                  if (work.publishedIn != null)
+                    Text(AppLocalizations.of(context)!.value_year('${work.publishedIn}'), style: fontStyle),
+                  Text(value.$2.getName(context), style: fontStyle),
+                  Text(value.$2.getLicense(context), style: fontStyle),
+                ],
+              ),
+            ),
+          ],
+        ),
       ),
       _ => Container(),
     };

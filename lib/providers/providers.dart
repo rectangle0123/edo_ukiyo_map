@@ -131,6 +131,14 @@ Future<List<Work>> worksByPainter(WorksByPainterRef ref, Painter painter) {
   return Database.instance.getWorksByPainterId(painter.id);
 }
 
+/// 作品から絵師と出典を取得する
+@riverpod
+Future<(List<Painter>, Source)> metaByWork(MetaByWorkRef ref, Work work) async {
+  final painters = await ref.watch(paintersByWorkProvider(work).future);
+  final source = await ref.watch(sourceByIdProvider(work.source).future);
+  return (painters, source);
+}
+
 /// 全ての作品を取得する
 // @riverpod
 // Future<List<Work>> allWorks(AllWorksRef ref) {

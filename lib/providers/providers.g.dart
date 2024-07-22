@@ -1063,6 +1063,190 @@ class _WorksByPainterProviderElement
   Painter get painter => (origin as WorksByPainterProvider).painter;
 }
 
+String _$metaByWorkHash() => r'8a1b19f06e54ae0bb80a886e24928436caea3ec1';
+
+/// 作品から絵師と出典を取得する
+///
+/// Copied from [metaByWork].
+@ProviderFor(metaByWork)
+const metaByWorkProvider = MetaByWorkFamily();
+
+/// 作品から絵師と出典を取得する
+///
+/// Copied from [metaByWork].
+class MetaByWorkFamily extends Family {
+  /// 作品から絵師と出典を取得する
+  ///
+  /// Copied from [metaByWork].
+  const MetaByWorkFamily();
+
+  static const Iterable<ProviderOrFamily>? _dependencies = null;
+
+  static const Iterable<ProviderOrFamily>? _allTransitiveDependencies = null;
+
+  @override
+  Iterable<ProviderOrFamily>? get dependencies => _dependencies;
+
+  @override
+  Iterable<ProviderOrFamily>? get allTransitiveDependencies =>
+      _allTransitiveDependencies;
+
+  @override
+  String? get name => r'metaByWorkProvider';
+
+  /// 作品から絵師と出典を取得する
+  ///
+  /// Copied from [metaByWork].
+  MetaByWorkProvider call(
+    Work work,
+  ) {
+    return MetaByWorkProvider(
+      work,
+    );
+  }
+
+  @visibleForOverriding
+  @override
+  MetaByWorkProvider getProviderOverride(
+    covariant MetaByWorkProvider provider,
+  ) {
+    return call(
+      provider.work,
+    );
+  }
+
+  /// Enables overriding the behavior of this provider, no matter the parameters.
+  Override overrideWith(
+      FutureOr<(List<Painter>, Source)> Function(MetaByWorkRef ref) create) {
+    return _$MetaByWorkFamilyOverride(this, create);
+  }
+}
+
+class _$MetaByWorkFamilyOverride implements FamilyOverride {
+  _$MetaByWorkFamilyOverride(this.overriddenFamily, this.create);
+
+  final FutureOr<(List<Painter>, Source)> Function(MetaByWorkRef ref) create;
+
+  @override
+  final MetaByWorkFamily overriddenFamily;
+
+  @override
+  MetaByWorkProvider getProviderOverride(
+    covariant MetaByWorkProvider provider,
+  ) {
+    return provider._copyWith(create);
+  }
+}
+
+/// 作品から絵師と出典を取得する
+///
+/// Copied from [metaByWork].
+class MetaByWorkProvider
+    extends AutoDisposeFutureProvider<(List<Painter>, Source)> {
+  /// 作品から絵師と出典を取得する
+  ///
+  /// Copied from [metaByWork].
+  MetaByWorkProvider(
+    Work work,
+  ) : this._internal(
+          (ref) => metaByWork(
+            ref as MetaByWorkRef,
+            work,
+          ),
+          from: metaByWorkProvider,
+          name: r'metaByWorkProvider',
+          debugGetCreateSourceHash:
+              const bool.fromEnvironment('dart.vm.product')
+                  ? null
+                  : _$metaByWorkHash,
+          dependencies: MetaByWorkFamily._dependencies,
+          allTransitiveDependencies:
+              MetaByWorkFamily._allTransitiveDependencies,
+          work: work,
+        );
+
+  MetaByWorkProvider._internal(
+    super.create, {
+    required super.name,
+    required super.dependencies,
+    required super.allTransitiveDependencies,
+    required super.debugGetCreateSourceHash,
+    required super.from,
+    required this.work,
+  }) : super.internal();
+
+  final Work work;
+
+  @override
+  Override overrideWith(
+    FutureOr<(List<Painter>, Source)> Function(MetaByWorkRef ref) create,
+  ) {
+    return ProviderOverride(
+      origin: this,
+      override: MetaByWorkProvider._internal(
+        (ref) => create(ref as MetaByWorkRef),
+        from: from,
+        name: null,
+        dependencies: null,
+        allTransitiveDependencies: null,
+        debugGetCreateSourceHash: null,
+        work: work,
+      ),
+    );
+  }
+
+  @override
+  (Work,) get argument {
+    return (work,);
+  }
+
+  @override
+  AutoDisposeFutureProviderElement<(List<Painter>, Source)> createElement() {
+    return _MetaByWorkProviderElement(this);
+  }
+
+  MetaByWorkProvider _copyWith(
+    FutureOr<(List<Painter>, Source)> Function(MetaByWorkRef ref) create,
+  ) {
+    return MetaByWorkProvider._internal(
+      (ref) => create(ref as MetaByWorkRef),
+      name: name,
+      dependencies: dependencies,
+      allTransitiveDependencies: allTransitiveDependencies,
+      debugGetCreateSourceHash: debugGetCreateSourceHash,
+      from: from,
+      work: work,
+    );
+  }
+
+  @override
+  bool operator ==(Object other) {
+    return other is MetaByWorkProvider && other.work == work;
+  }
+
+  @override
+  int get hashCode {
+    var hash = _SystemHash.combine(0, runtimeType.hashCode);
+    hash = _SystemHash.combine(hash, work.hashCode);
+
+    return _SystemHash.finish(hash);
+  }
+}
+
+mixin MetaByWorkRef on AutoDisposeFutureProviderRef<(List<Painter>, Source)> {
+  /// The parameter `work` of this provider.
+  Work get work;
+}
+
+class _MetaByWorkProviderElement
+    extends AutoDisposeFutureProviderElement<(List<Painter>, Source)>
+    with MetaByWorkRef {
+  _MetaByWorkProviderElement(super.provider);
+
+  @override
+  Work get work => (origin as MetaByWorkProvider).work;
+}
+
 String _$packageInfoHash() => r'6d24887a45825322730812d638eae4192104901b';
 
 /// 全ての作品を取得する

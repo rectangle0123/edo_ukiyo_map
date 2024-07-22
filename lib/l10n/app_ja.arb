@@ -7,10 +7,11 @@
   "page_licenses": "ライセンス",
   "page_debug": "デバッグ",
 
-  "label_painter": "絵師：{painter}",
-  "label_year": "発行年：{year}年",
-  "label_permission": "ライセンス：{permission}",
-  "label_collection": "所蔵：{collection}",
+  "label_painter": "絵 師：",
+  "label_year": "発 行：",
+  "value_year": "{year}年",
+  "label_collection": "所 蔵：",
+  "label_license": "利 用：",
 
   "text_welcome_title": "ようこそ！",
   "text_welcome_body_01": "アプリをご利用いただきありがとうございます。",
