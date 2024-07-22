@@ -1,6 +1,8 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
+import 'package:edo_ukiyo_map/widgets/commons.dart';
+
 /// デバッグ画面
 class DebugPage extends StatelessWidget {
 
@@ -8,35 +10,12 @@ class DebugPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    // return Scaffold(
-    //   appBar: AppBar(
-    //     title: Text('Hello!'),
-    //   ),
-    //   body: const SizedBox.expand(
-    //     child: Center(
-    //       child: Text('Hello!'),
-    //     ),
-    //   ),
-    //   floatingActionButton: FloatingActionButton(
-    //     onPressed: () {},
-    //     child: const Icon(Icons.add),
-    //   ),
-    // );
     return CupertinoPageScaffold(
       navigationBar: const CupertinoNavigationBar(
         middle: Text('Hello!'),
       ),
-      child: SizedBox.expand(
-        child: Column(
-          children: [
-            const Text('Hello!'),
-            CupertinoButton(
-              color: Theme.of(context).primaryColor,
-              onPressed: () {},
-              child: const Icon(Icons.add),
-            ),
-          ],
-        ),
+      child: Center(
+        child: Compass(degree: 202.5),
       ),
     );
   }

@@ -42,7 +42,7 @@ class _Header extends StatelessWidget {
   // ボタンのパディング
   static const padding = 8.0;
   // テキストの横パディング
-  static const textPaddingHorizontal = 24.0;
+  static const textPaddingHorizontal = 12.0;
   // ヘッダ画像の透明度
   static const opacity = 0.4;
 
@@ -74,9 +74,17 @@ class _Header extends StatelessWidget {
                 Container(
                   padding: const EdgeInsets.symmetric(horizontal: textPaddingHorizontal),
                   alignment: Alignment.centerLeft,
-                  child: Text(work.getName(context),
-                    overflow: TextOverflow.ellipsis,
-                    style: Theme.of(context).cupertinoOverrideTheme?.textTheme?.navTitleTextStyle,
+                  child: Row(
+                    children: [
+                      Compass(degree: work.direction),
+                      const SizedBox(width: textPaddingHorizontal),
+                      Expanded(
+                        child: Text(work.getName(context),
+                          overflow: TextOverflow.ellipsis,
+                          style: Theme.of(context).cupertinoOverrideTheme?.textTheme?.navTitleTextStyle,
+                        ),
+                      ),
+                    ],
                   ),
                 ),
               ],
@@ -174,7 +182,7 @@ class _Body extends StatelessWidget {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              const SizedBox(height: paddingVertical / 2),
+              const SizedBox(height: paddingVertical),
               Container(
                 padding: const EdgeInsets.symmetric(horizontal: paddingHorizontal),
                 child: _MetaData(work: work),

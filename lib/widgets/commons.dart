@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -219,4 +221,97 @@ class WorkListItem extends ConsumerWidget {
       Navigator.of(context).popUntil((route) => route.isFirst);
     }
   }
+}
+
+/// コンパス
+class Compass extends StatelessWidget {
+  /// サイズ
+  static const dimension = 32.0;
+  /// フォントサイズ
+  static const fontSize = 10.0;
+
+  /// 角度
+  final double? degree;
+
+  const Compass({super.key, this.degree});
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      mainAxisSize: MainAxisSize.min,
+      children: [
+        Text('N', style: Theme.of(context).textTheme.bodySmall?.copyWith(
+          fontSize: fontSize,
+          fontFamily: '',
+          fontWeight: FontWeight.bold,
+          height: 0.0,
+        )),
+        Stack(
+          children: [
+            SizedBox.square(
+              dimension: dimension,
+              child: CustomPaint(
+                painter: _CompassBodyPainter(),
+              ),
+            ),
+            if (degree != null)
+              SizedBox.square(
+                dimension: dimension,
+                child: Transform.rotate(
+                  angle: degree! * pi / 180,
+                  child: CustomPaint(
+                    painter: _CompassNeedlePainter(),
+                  ),
+                ),
+              ),
+          ],
+        ),
+      ],
+    );
+  }
+}
+
+// コンパスの本体描画
+class _CompassBodyPainter extends CustomPainter {
+  @override
+  void paint(Canvas canvas, Size size) {
+    final p = Offset(size.width / 2, size.height / 2);
+    final paint = Paint()..color = Colors.black.withOpacity(0.1);
+    canvas.drawCircle(p, size.height / 2, paint);
+  }
+
+  @override
+  bool shouldRepaint(covariant CustomPainter oldDelegate) => true;
+}
+
+// コンパスの針描画
+class _CompassNeedlePainter extends CustomPainter {
+  // 幅
+  static const width = 10.0;
+
+  @override
+  void paint(Canvas canvas, Size size) {
+    final p1 = Offset(size.width / 2, 0.0);
+    final p2 = Offset((size.width / 2 - width / 2), size.height / 2);
+    final p3 = Offset((size.width / 2 + width / 2), size.height / 2);
+    final p4 = Offset(size.width / 2, size.height);
+
+    final paint1 = Paint()..color = Colors.white..strokeCap = StrokeCap.round;
+    final Path path1 = Path()
+      ..moveTo(p2.dx, p2.dy)
+      ..lineTo(p3.dx, p3.dy)
+      ..lineTo(p4.dx, p4.dy)
+      ..lineTo(p2.dx, p2.dy);
+    canvas.drawPath(path1, paint1);
+    final paint2 = Paint()..color = Colors.red..strokeCap = StrokeCap.round;
+    final Path path2 = Path()
+      ..moveTo(p1.dx, p1.dy)
+      ..lineTo(p2.dx, p2.dy)
+      ..lineTo(p3.dx, p3.dy)
+      ..lineTo(p1.dx, p1.dy);
+    canvas.drawPath(path2, paint2);
+  }
+
+  @override
+  bool shouldRepaint(covariant CustomPainter oldDelegate) => true;
 }
