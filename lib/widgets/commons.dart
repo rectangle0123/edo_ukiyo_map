@@ -226,9 +226,9 @@ class WorkListItem extends ConsumerWidget {
 /// コンパス
 class Compass extends StatelessWidget {
   /// サイズ
-  static const dimension = 32.0;
+  static const dimension = 22.0;
   /// フォントサイズ
-  static const fontSize = 10.0;
+  static const fontSize = 8.0;
 
   /// 角度
   final double? degree;
@@ -287,7 +287,7 @@ class _CompassBodyPainter extends CustomPainter {
 // コンパスの針描画
 class _CompassNeedlePainter extends CustomPainter {
   // 幅
-  static const width = 10.0;
+  static const width = 8.0;
 
   @override
   void paint(Canvas canvas, Size size) {

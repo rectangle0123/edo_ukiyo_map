@@ -76,7 +76,9 @@ class _CarouselItem extends ConsumerWidget {
   // テキストのマージン
   static const textMargin = 8.0;
   // 丸数字のサイズ
-  static const numberDimension = 28.0;
+  static const numberDimension = 20.0;
+  // 丸数字のフォントサイズ
+  static const numberFontSize = 10.0;
   // 丸数字のマージン
   static const numberMargin = 4.0;
 
@@ -95,6 +97,7 @@ class _CarouselItem extends ConsumerWidget {
         ),
         clipBehavior: Clip.hardEdge,
         child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Expanded(
               child: Stack(
@@ -107,29 +110,44 @@ class _CarouselItem extends ConsumerWidget {
                     child: CircleNumber(
                       dimension: numberDimension,
                       margin: const EdgeInsets.all(numberMargin),
+                      fontSize: numberFontSize,
                       value: workWithPainters.$1.index,
                     ),
                   )
                 ],
               ),
             ),
-            Container(
-              padding: const EdgeInsets.symmetric(
-                vertical: textMargin,
-                horizontal: textMargin,
-              ),
-              child: Column(
-                children: [
-                  Text(workWithPainters.$1.getName(context),
-                    style: Theme.of(context).textTheme.bodySmall?.copyWith(fontWeight: FontWeight.bold),
-                    overflow: TextOverflow.ellipsis,
+            Row(
+              children: [
+                Expanded(
+                  child: Container(
+                    padding: const EdgeInsets.symmetric(
+                      vertical: textMargin,
+                      horizontal: textMargin,
+                    ),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(workWithPainters.$1.getName(context),
+                          style: Theme.of(context).textTheme.bodySmall?.copyWith(fontWeight: FontWeight.bold),
+                          overflow: TextOverflow.ellipsis,
+                        ),
+                        Text(workWithPainters.$2.map((e) => e.getShortName(context)).join(', '),
+                          style: Theme.of(context).textTheme.labelSmall,
+                          overflow: TextOverflow.ellipsis,
+                        ),
+                      ],
+                    ),
                   ),
-                  Text(workWithPainters.$2.map((e) => e.getShortName(context)).join(', '),
-                    style: Theme.of(context).textTheme.labelSmall,
-                    overflow: TextOverflow.ellipsis,
+                ),
+                Container(
+                  padding: const EdgeInsets.only(
+                    right: textMargin,
+                    bottom: textMargin,
                   ),
-                ],
-              ),
+                  child: Compass(degree: workWithPainters.$1.direction),
+                ),
+              ],
             ),
           ],
         ),
