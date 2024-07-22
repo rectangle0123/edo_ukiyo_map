@@ -1,5 +1,8 @@
 /// Googleマップカメラ ズームの初期値
-const double defaultMapZoom = 14.0;
+const defaultMapZoom = 14.0;
 
 /// Googleマップカメラ 傾きの初期値
-const double defaultMapTilt = 0.0;
+const defaultMapTilt = 0.0;
+
+/// ヘルプのURL
+const urlHelp = 'https://www.google.com';

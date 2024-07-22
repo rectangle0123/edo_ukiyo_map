@@ -234,7 +234,7 @@ class _MetaData extends ConsumerWidget {
           _PainterText(work: work),
           if (work.publishedIn != null)
             Text(
-              AppLocalizations.of(context)!.label_published('${work.publishedIn}'),
+              AppLocalizations.of(context)!.label_year('${work.publishedIn}'),
               style: Theme.of(context).textTheme.bodySmall?.copyWith(color: Colors.grey),
             ),
           Text(

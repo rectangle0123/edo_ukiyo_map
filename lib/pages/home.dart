@@ -1,3 +1,4 @@
+import 'package:edo_ukiyo_map/widgets/dialog.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
@@ -64,7 +65,14 @@ class _Header extends StatelessWidget {
         Container(
           alignment: Alignment.topRight,
           margin: const EdgeInsets.all(margin),
-          child: const _LocateButton(),
+          child: const Row(
+            mainAxisAlignment: MainAxisAlignment.end,
+            children: [
+              _HelpButton(),
+              SizedBox(width: margin),
+              _LocateButton(),
+            ],
+          ),
         ),
       ],
     );
@@ -114,6 +122,26 @@ class _Footer extends StatelessWidget {
           child: const WorkCarousel(),
         ),
       ],
+    );
+  }
+}
+
+// ヘルプボタン
+class _HelpButton extends ConsumerWidget {
+  // サイズ
+  static const dimension = 40.0;
+
+  const _HelpButton();
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    return CircleButton(
+      dimension: dimension,
+      onPressed: () => showDialog(
+        context: context,
+        builder: (_) => const HelpDialog(),
+      ),
+      child: const Icon(Icons.question_mark_rounded),
     );
   }
 }
