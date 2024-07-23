@@ -41,8 +41,6 @@ class _Header extends StatelessWidget {
   static const buttonDimension = 32.0;
   // ボタンのパディング
   static const padding = 8.0;
-  // テキストの横パディング
-  static const textPaddingHorizontal = 12.0;
   // ヘッダ画像の透明度
   static const opacity = 0.4;
 
@@ -57,6 +55,15 @@ class _Header extends StatelessWidget {
       height: height,
       child: Row(
         children: [
+          Container(
+            padding: const EdgeInsets.symmetric(horizontal: padding),
+            alignment: Alignment.centerLeft,
+            child: CircleNumber(
+              color: Colors.grey,
+              fontColor: Colors.white,
+              value: work.index,
+            ),
+          ),
           Expanded(
             child: Stack(
               children: [
@@ -72,7 +79,6 @@ class _Header extends StatelessWidget {
                   ),
                 ),
                 Container(
-                  padding: const EdgeInsets.symmetric(horizontal: textPaddingHorizontal),
                   alignment: Alignment.centerLeft,
                   child: Text(work.getName(context),
                     overflow: TextOverflow.ellipsis,
