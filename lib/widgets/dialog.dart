@@ -61,12 +61,13 @@ class HelpDialog extends StatelessWidget {
 
 // WebView
 class _WebView extends StatelessWidget {
-  final controller = WebViewController()
-      ..setJavaScriptMode(JavaScriptMode.unrestricted)
-      ..loadRequest(Uri.parse(urlHelp));
-
   @override
   Widget build(BuildContext context) {
-    return WebViewWidget(controller: controller);
+    final url = Localizations.localeOf(context).languageCode == 'ja' ? urlHelpJa : urlHelpEn;
+
+    return WebViewWidget(controller: WebViewController()
+      ..setJavaScriptMode(JavaScriptMode.unrestricted)
+      ..setBackgroundColor(Colors.white)
+      ..loadRequest(Uri.parse(url)));
   }
 }

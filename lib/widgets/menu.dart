@@ -213,8 +213,7 @@ class _MenuButtonPainter extends CustomPainter {
   // 中骨の高さ
   static const honeHeight = 10.0;
   // 中骨の色
-  // static const boneColor = Color(0xffe0c38c);
-  static const boneColor = Color(0xffb98c46);
+  static const boneColor = Color(0xff956f29);
   // 中骨の太さ
   static const boneWidth = 2.4;
   // 中骨の影の太さ

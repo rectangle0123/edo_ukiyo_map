@@ -49,22 +49,28 @@ class CircleButton extends StatelessWidget {
 /// 丸数字
 class CircleNumber extends StatelessWidget {
   /// サイズ
-  final double dimension;
-  /// マージン
-  final EdgeInsetsGeometry? margin;
+  static const dimension = 20.0;
+  /// フォントサイズ
+  static const fontSize = 10.0;
+
   /// 値
   final int value;
-  /// フォントサイズ
-  final double? fontSize;
+  /// 色
+  final Color? color;
   /// 透過
-  final opacity = 0.6;
+  final double opacity;
+  /// フォントの色
+  final Color? fontColor;
+  /// マージン
+  final EdgeInsetsGeometry? margin;
 
   const CircleNumber({
     super.key,
-    required this.dimension,
-    this.margin,
     required this.value,
-    this.fontSize,
+    this.color,
+    this.opacity = 1.0,
+    this.fontColor,
+    this.margin,
   });
 
   @override
@@ -75,19 +81,16 @@ class CircleNumber extends StatelessWidget {
       margin: margin,
       alignment: Alignment.center,
       decoration: BoxDecoration(
-        color: Colors.black.withOpacity(opacity),
+        color: color != null
+            ? color!.withOpacity(opacity)
+            : Theme.of(context).scaffoldBackgroundColor,
         borderRadius: BorderRadius.circular(dimension),
       ),
-      child: fontSize != null
-        ? Text('$value', style: Theme.of(context).textTheme.labelSmall?.copyWith(
-            color: Colors.white,
-            fontSize: fontSize,
-            fontFamily: '',
-          ))
-        : Text('$value', style: Theme.of(context).textTheme.labelSmall?.copyWith(
-            color: Colors.white,
-            fontFamily: ''),
-          ),
+      child: Text('$value', style: Theme.of(context).textTheme.labelSmall?.copyWith(
+        color: fontColor ?? Theme.of(context).textTheme.bodyMedium?.color,
+        fontSize: fontSize,
+        fontFamily: '',
+      ))
     );
   }
 }

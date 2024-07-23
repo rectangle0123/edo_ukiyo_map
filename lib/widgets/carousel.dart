@@ -73,14 +73,12 @@ class WorkCarouselState extends ConsumerState<WorkCarousel> {
 class _CarouselItem extends ConsumerWidget {
   // 角丸
   static const radius = 8.0;
+  // コンテンツのマージン
+  static const margin = 4.0;
   // テキストのマージン
   static const textMargin = 8.0;
-  // 丸数字のサイズ
-  static const numberDimension = 20.0;
-  // 丸数字のフォントサイズ
-  static const numberFontSize = 10.0;
-  // 丸数字のマージン
-  static const numberMargin = 4.0;
+  // 丸数字の透過
+  static const numberOpacity = 0.6;
 
   // 作品と絵師
   final (Work, List<Painter>) workWithPainters;
@@ -108,10 +106,11 @@ class _CarouselItem extends ConsumerWidget {
                   Align(
                     alignment: Alignment.topRight,
                     child: CircleNumber(
-                      dimension: numberDimension,
-                      margin: const EdgeInsets.all(numberMargin),
-                      fontSize: numberFontSize,
                       value: workWithPainters.$1.index,
+                      color: Colors.black,
+                      opacity: numberOpacity,
+                      fontColor: Colors.white,
+                      margin: const EdgeInsets.all(margin),
                     ),
                   )
                 ],
@@ -142,8 +141,8 @@ class _CarouselItem extends ConsumerWidget {
                 ),
                 Container(
                   padding: const EdgeInsets.only(
-                    right: textMargin,
-                    bottom: textMargin,
+                    right: margin,
+                    bottom: margin,
                   ),
                   child: Compass(degree: workWithPainters.$1.direction),
                 ),

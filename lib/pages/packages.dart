@@ -7,6 +7,7 @@ import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 
 import 'package:edo_ukiyo_map/pages/lisenses.dart';
+import 'package:edo_ukiyo_map/widgets/commons.dart';
 
 /// パッケージ情報
 class PackagesPage extends StatefulWidget {
@@ -92,7 +93,7 @@ class _ListItem extends StatelessWidget {
   Widget build(BuildContext context) {
     return CupertinoListTile.notched(
       title: Text(package.key),
-      additionalInfo: Text('${package.value.length}'),
+      additionalInfo: CircleNumber(value: package.value.length),
       trailing: const CupertinoListTileChevron(),
       onTap: () => Navigator.of(context).push(
         MaterialWithModalsPageRoute(

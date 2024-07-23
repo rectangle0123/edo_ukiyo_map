@@ -74,17 +74,9 @@ class _Header extends StatelessWidget {
                 Container(
                   padding: const EdgeInsets.symmetric(horizontal: textPaddingHorizontal),
                   alignment: Alignment.centerLeft,
-                  child: Row(
-                    children: [
-                      Compass(degree: work.direction),
-                      const SizedBox(width: textPaddingHorizontal),
-                      Expanded(
-                        child: Text(work.getName(context),
-                          overflow: TextOverflow.ellipsis,
-                          style: Theme.of(context).cupertinoOverrideTheme?.textTheme?.navTitleTextStyle,
-                        ),
-                      ),
-                    ],
+                  child: Text(work.getName(context),
+                    overflow: TextOverflow.ellipsis,
+                    style: Theme.of(context).cupertinoOverrideTheme?.textTheme?.navTitleTextStyle,
                   ),
                 ),
               ],

@@ -79,11 +79,6 @@ class _ListItem extends StatelessWidget {
 
 // 作品数
 class _WorksNumber extends ConsumerWidget {
-  // サイズ
-  static const dimension = 20.0;
-  // フォントサイズ
-  static const fontSize = 10.0;
-
   // シリーズ
   final Series series;
 
@@ -96,8 +91,6 @@ class _WorksNumber extends ConsumerWidget {
 
     return switch (works) {
       AsyncData(:final value) => CircleNumber(
-        dimension: dimension,
-        fontSize: fontSize,
         value: value.length,
       ),
       _ => Container(),
