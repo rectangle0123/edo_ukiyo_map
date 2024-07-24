@@ -5,7 +5,7 @@ const defaultMapZoom = 14.0;
 const defaultMapTilt = 0.0;
 
 /// ヘルプのURL（日本語）
-const urlHelpJa = 'https://rect-angle.gitbook.io/edo-ukiyo-map/ja/howto';
+const urlHelpJa = 'https://rect-angle.gitbook.io/edo-ukiyo-map/ja/map-description';
 
 /// ヘルプのURL（英語）
-const urlHelpEn = 'https://rect-angle.gitbook.io/edo-ukiyo-map/en/howto';
+const urlHelpEn = 'https://rect-angle.gitbook.io/edo-ukiyo-map/en/map-description';
