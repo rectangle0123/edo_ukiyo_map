@@ -7,6 +7,7 @@ import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 import 'package:edo_ukiyo_map/database/database.dart';
 import 'package:edo_ukiyo_map/pages/home.dart';
@@ -83,8 +84,17 @@ class AppState extends ConsumerState<App> with WidgetsBindingObserver {
   Future<void> _initialize() async {
     // デバイスの向きを縦に固定する
     await SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp]);
-    // データベース初期化
-    await Database.instance.initialize();
+    // 起動時のバージョン番号とパッケージ情報のバージョン番号を取得して
+    // 起動時のバージョン番号がパッケージ情報のバージョン番号より古ければマスタデータを更新する
+    final packageInfo = await ref.watch(packageInfoProvider.future);
+    final prefs = await SharedPreferences.getInstance();
+    final current = prefs.getString('version') ?? '0';
+    if (current.compareTo(packageInfo.version) < 0) {
+      // データベース初期化
+      await Database.instance.initialize();
+      // バージョン番号更新
+      await prefs.setString('version', packageInfo.version);
+    }
     // Googleマップマーカー画像を生成する
     var image1 = await _loadCustomMarker('assets/images/pin_black.png');
     var image2 = await _loadCustomMarker('assets/images/pin_blue.png');
