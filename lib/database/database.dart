@@ -74,8 +74,8 @@ class Database extends _$Database {
           nameEn: Value(data[3]),
           shortNameJa: Value(data[4]),
           shortNameEn: Value(data[5]),
-          descriptionJa: Value(data[6]),
-          descriptionEn: Value(data[7]),
+          descriptionJa: Value(data[6].isEmpty ? null : data[6]),
+          descriptionEn: Value(data[7].isEmpty ? null : data[7]),
         )).toList());
       });
       await batch((batch) async {
@@ -108,8 +108,8 @@ class Database extends _$Database {
           longitude: Value(double.parse(data[8])),
           direction: Value(data[9].isEmpty ? null : double.parse(data[9])),
           source: Value(int.parse(data[10])),
-          descriptionJa: Value(data[11]),
-          descriptionEn: Value(data[12]),
+          descriptionJa: Value(data[11].isEmpty ? null : data[11]),
+          descriptionEn: Value(data[12].isEmpty ? null : data[12]),
         )).toList());
       });
       await batch((batch) async {
@@ -241,9 +241,9 @@ class Serieses extends Table {
   /// 短縮名（英語）
   TextColumn get shortNameEn => text()();
   /// 解説（日本語）
-  TextColumn get descriptionJa => text()();
+  TextColumn get descriptionJa => text().nullable()();
   /// 解説（英語）
-  TextColumn get descriptionEn => text()();
+  TextColumn get descriptionEn => text().nullable()();
 }
 
 extension SeriesExtension on Series {
@@ -256,7 +256,7 @@ extension SeriesExtension on Series {
     return f.Localizations.localeOf(context).languageCode == 'ja' ? shortNameJa : shortNameEn;
   }
   /// ロケールの言語に応じた解説を返す
-  String getDescription(f.BuildContext context) {
+  String? getDescription(f.BuildContext context) {
     return f.Localizations.localeOf(context).languageCode == 'ja' ? descriptionJa : descriptionEn;
   }
 }
@@ -337,9 +337,9 @@ class Works extends Table {
   /// 出典
   IntColumn get source => integer().references(Sources, #id)();
   /// 解説（日本語）
-  TextColumn get descriptionJa => text()();
+  TextColumn get descriptionJa => text().nullable()();
   /// 解説（英語）
-  TextColumn get descriptionEn => text()();
+  TextColumn get descriptionEn => text().nullable()();
 }
 
 extension WorkExtension on Work {
@@ -348,7 +348,7 @@ extension WorkExtension on Work {
     return f.Localizations.localeOf(context).languageCode == 'ja' ? nameJa : nameEn;
   }
   /// ロケールの言語に応じた解説を返す
-  String getDescription(f.BuildContext context) {
+  String? getDescription(f.BuildContext context) {
     return f.Localizations.localeOf(context).languageCode == 'ja' ? descriptionJa : descriptionEn;
   }
 }

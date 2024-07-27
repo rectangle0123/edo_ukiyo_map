@@ -65,6 +65,8 @@ class SeriesTabState extends ConsumerState<SeriesTab> with SingleTickerProviderS
 
     return TabBar(
       controller: _tabController,
+      isScrollable: true,
+      tabAlignment: TabAlignment.start,
       tabs: _series.map((e) {
         return Tab(
           child: Row(

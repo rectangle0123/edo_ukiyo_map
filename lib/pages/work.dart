@@ -204,18 +204,19 @@ class _Body extends StatelessWidget {
             ],
           ),
         ),
-        Expanded(
-          child: Scrollbar(
-            child: SingleChildScrollView(
-              physics: const AlwaysScrollableScrollPhysics(),
-              child: Container(
-                padding: const EdgeInsets.symmetric(horizontal: paddingHorizontal),
-                child: Text(work.getDescription(context)),
+        if (work.getDescription(context) != null)
+          Expanded(
+            child: Scrollbar(
+              child: SingleChildScrollView(
+                physics: const AlwaysScrollableScrollPhysics(),
+                child: Container(
+                  padding: const EdgeInsets.symmetric(horizontal: paddingHorizontal),
+                  child: Text(work.getDescription(context)!),
+                ),
               ),
             ),
           ),
-        ),
-        const SizedBox(height: paddingVertical),
+          const SizedBox(height: paddingVertical),
       ],
     );
   }

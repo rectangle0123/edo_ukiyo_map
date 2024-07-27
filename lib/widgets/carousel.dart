@@ -139,13 +139,14 @@ class _CarouselItem extends ConsumerWidget {
                     ),
                   ),
                 ),
-                Container(
-                  padding: const EdgeInsets.only(
-                    right: margin,
-                    bottom: margin,
+                if (workWithPainters.$1.direction != null)
+                  Container(
+                    padding: const EdgeInsets.only(
+                      right: margin,
+                      bottom: margin,
+                    ),
+                    child: Compass(degree: workWithPainters.$1.direction),
                   ),
-                  child: Compass(degree: workWithPainters.$1.direction),
-                ),
               ],
             ),
           ],

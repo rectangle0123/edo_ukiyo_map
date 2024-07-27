@@ -359,14 +359,14 @@ class $SeriesesTable extends Serieses with TableInfo<$SeriesesTable, Series> {
       const VerificationMeta('descriptionJa');
   @override
   late final GeneratedColumn<String> descriptionJa = GeneratedColumn<String>(
-      'description_ja', aliasedName, false,
-      type: DriftSqlType.string, requiredDuringInsert: true);
+      'description_ja', aliasedName, true,
+      type: DriftSqlType.string, requiredDuringInsert: false);
   static const VerificationMeta _descriptionEnMeta =
       const VerificationMeta('descriptionEn');
   @override
   late final GeneratedColumn<String> descriptionEn = GeneratedColumn<String>(
-      'description_en', aliasedName, false,
-      type: DriftSqlType.string, requiredDuringInsert: true);
+      'description_en', aliasedName, true,
+      type: DriftSqlType.string, requiredDuringInsert: false);
   @override
   List<GeneratedColumn> get $columns => [
         id,
@@ -432,16 +432,12 @@ class $SeriesesTable extends Serieses with TableInfo<$SeriesesTable, Series> {
           _descriptionJaMeta,
           descriptionJa.isAcceptableOrUnknown(
               data['description_ja']!, _descriptionJaMeta));
-    } else if (isInserting) {
-      context.missing(_descriptionJaMeta);
     }
     if (data.containsKey('description_en')) {
       context.handle(
           _descriptionEnMeta,
           descriptionEn.isAcceptableOrUnknown(
               data['description_en']!, _descriptionEnMeta));
-    } else if (isInserting) {
-      context.missing(_descriptionEnMeta);
     }
     return context;
   }
@@ -465,9 +461,9 @@ class $SeriesesTable extends Serieses with TableInfo<$SeriesesTable, Series> {
       shortNameEn: attachedDatabase.typeMapping
           .read(DriftSqlType.string, data['${effectivePrefix}short_name_en'])!,
       descriptionJa: attachedDatabase.typeMapping
-          .read(DriftSqlType.string, data['${effectivePrefix}description_ja'])!,
+          .read(DriftSqlType.string, data['${effectivePrefix}description_ja']),
       descriptionEn: attachedDatabase.typeMapping
-          .read(DriftSqlType.string, data['${effectivePrefix}description_en'])!,
+          .read(DriftSqlType.string, data['${effectivePrefix}description_en']),
     );
   }
 
@@ -497,10 +493,10 @@ class Series extends DataClass implements Insertable<Series> {
   final String shortNameEn;
 
   /// 解説（日本語）
-  final String descriptionJa;
+  final String? descriptionJa;
 
   /// 解説（英語）
-  final String descriptionEn;
+  final String? descriptionEn;
   const Series(
       {required this.id,
       required this.sort,
@@ -508,8 +504,8 @@ class Series extends DataClass implements Insertable<Series> {
       required this.nameEn,
       required this.shortNameJa,
       required this.shortNameEn,
-      required this.descriptionJa,
-      required this.descriptionEn});
+      this.descriptionJa,
+      this.descriptionEn});
   @override
   Map<String, Expression> toColumns(bool nullToAbsent) {
     final map = <String, Expression>{};
@@ -519,8 +515,12 @@ class Series extends DataClass implements Insertable<Series> {
     map['name_en'] = Variable<String>(nameEn);
     map['short_name_ja'] = Variable<String>(shortNameJa);
     map['short_name_en'] = Variable<String>(shortNameEn);
-    map['description_ja'] = Variable<String>(descriptionJa);
-    map['description_en'] = Variable<String>(descriptionEn);
+    if (!nullToAbsent || descriptionJa != null) {
+      map['description_ja'] = Variable<String>(descriptionJa);
+    }
+    if (!nullToAbsent || descriptionEn != null) {
+      map['description_en'] = Variable<String>(descriptionEn);
+    }
     return map;
   }
 
@@ -532,8 +532,12 @@ class Series extends DataClass implements Insertable<Series> {
       nameEn: Value(nameEn),
       shortNameJa: Value(shortNameJa),
       shortNameEn: Value(shortNameEn),
-      descriptionJa: Value(descriptionJa),
-      descriptionEn: Value(descriptionEn),
+      descriptionJa: descriptionJa == null && nullToAbsent
+          ? const Value.absent()
+          : Value(descriptionJa),
+      descriptionEn: descriptionEn == null && nullToAbsent
+          ? const Value.absent()
+          : Value(descriptionEn),
     );
   }
 
@@ -547,8 +551,8 @@ class Series extends DataClass implements Insertable<Series> {
       nameEn: serializer.fromJson<String>(json['nameEn']),
       shortNameJa: serializer.fromJson<String>(json['shortNameJa']),
       shortNameEn: serializer.fromJson<String>(json['shortNameEn']),
-      descriptionJa: serializer.fromJson<String>(json['descriptionJa']),
-      descriptionEn: serializer.fromJson<String>(json['descriptionEn']),
+      descriptionJa: serializer.fromJson<String?>(json['descriptionJa']),
+      descriptionEn: serializer.fromJson<String?>(json['descriptionEn']),
     );
   }
   @override
@@ -561,8 +565,8 @@ class Series extends DataClass implements Insertable<Series> {
       'nameEn': serializer.toJson<String>(nameEn),
       'shortNameJa': serializer.toJson<String>(shortNameJa),
       'shortNameEn': serializer.toJson<String>(shortNameEn),
-      'descriptionJa': serializer.toJson<String>(descriptionJa),
-      'descriptionEn': serializer.toJson<String>(descriptionEn),
+      'descriptionJa': serializer.toJson<String?>(descriptionJa),
+      'descriptionEn': serializer.toJson<String?>(descriptionEn),
     };
   }
 
@@ -573,8 +577,8 @@ class Series extends DataClass implements Insertable<Series> {
           String? nameEn,
           String? shortNameJa,
           String? shortNameEn,
-          String? descriptionJa,
-          String? descriptionEn}) =>
+          Value<String?> descriptionJa = const Value.absent(),
+          Value<String?> descriptionEn = const Value.absent()}) =>
       Series(
         id: id ?? this.id,
         sort: sort ?? this.sort,
@@ -582,8 +586,10 @@ class Series extends DataClass implements Insertable<Series> {
         nameEn: nameEn ?? this.nameEn,
         shortNameJa: shortNameJa ?? this.shortNameJa,
         shortNameEn: shortNameEn ?? this.shortNameEn,
-        descriptionJa: descriptionJa ?? this.descriptionJa,
-        descriptionEn: descriptionEn ?? this.descriptionEn,
+        descriptionJa:
+            descriptionJa.present ? descriptionJa.value : this.descriptionJa,
+        descriptionEn:
+            descriptionEn.present ? descriptionEn.value : this.descriptionEn,
       );
   Series copyWithCompanion(SeriesesCompanion data) {
     return Series(
@@ -643,8 +649,8 @@ class SeriesesCompanion extends UpdateCompanion<Series> {
   final Value<String> nameEn;
   final Value<String> shortNameJa;
   final Value<String> shortNameEn;
-  final Value<String> descriptionJa;
-  final Value<String> descriptionEn;
+  final Value<String?> descriptionJa;
+  final Value<String?> descriptionEn;
   final Value<int> rowid;
   const SeriesesCompanion({
     this.id = const Value.absent(),
@@ -664,17 +670,15 @@ class SeriesesCompanion extends UpdateCompanion<Series> {
     required String nameEn,
     required String shortNameJa,
     required String shortNameEn,
-    required String descriptionJa,
-    required String descriptionEn,
+    this.descriptionJa = const Value.absent(),
+    this.descriptionEn = const Value.absent(),
     this.rowid = const Value.absent(),
   })  : id = Value(id),
         sort = Value(sort),
         nameJa = Value(nameJa),
         nameEn = Value(nameEn),
         shortNameJa = Value(shortNameJa),
-        shortNameEn = Value(shortNameEn),
-        descriptionJa = Value(descriptionJa),
-        descriptionEn = Value(descriptionEn);
+        shortNameEn = Value(shortNameEn);
   static Insertable<Series> custom({
     Expression<int>? id,
     Expression<int>? sort,
@@ -706,8 +710,8 @@ class SeriesesCompanion extends UpdateCompanion<Series> {
       Value<String>? nameEn,
       Value<String>? shortNameJa,
       Value<String>? shortNameEn,
-      Value<String>? descriptionJa,
-      Value<String>? descriptionEn,
+      Value<String?>? descriptionJa,
+      Value<String?>? descriptionEn,
       Value<int>? rowid}) {
     return SeriesesCompanion(
       id: id ?? this.id,
@@ -1522,14 +1526,14 @@ class $WorksTable extends Works with TableInfo<$WorksTable, Work> {
       const VerificationMeta('descriptionJa');
   @override
   late final GeneratedColumn<String> descriptionJa = GeneratedColumn<String>(
-      'description_ja', aliasedName, false,
-      type: DriftSqlType.string, requiredDuringInsert: true);
+      'description_ja', aliasedName, true,
+      type: DriftSqlType.string, requiredDuringInsert: false);
   static const VerificationMeta _descriptionEnMeta =
       const VerificationMeta('descriptionEn');
   @override
   late final GeneratedColumn<String> descriptionEn = GeneratedColumn<String>(
-      'description_en', aliasedName, false,
-      type: DriftSqlType.string, requiredDuringInsert: true);
+      'description_en', aliasedName, true,
+      type: DriftSqlType.string, requiredDuringInsert: false);
   @override
   List<GeneratedColumn> get $columns => [
         id,
@@ -1622,16 +1626,12 @@ class $WorksTable extends Works with TableInfo<$WorksTable, Work> {
           _descriptionJaMeta,
           descriptionJa.isAcceptableOrUnknown(
               data['description_ja']!, _descriptionJaMeta));
-    } else if (isInserting) {
-      context.missing(_descriptionJaMeta);
     }
     if (data.containsKey('description_en')) {
       context.handle(
           _descriptionEnMeta,
           descriptionEn.isAcceptableOrUnknown(
               data['description_en']!, _descriptionEnMeta));
-    } else if (isInserting) {
-      context.missing(_descriptionEnMeta);
     }
     return context;
   }
@@ -1665,9 +1665,9 @@ class $WorksTable extends Works with TableInfo<$WorksTable, Work> {
       source: attachedDatabase.typeMapping
           .read(DriftSqlType.int, data['${effectivePrefix}source'])!,
       descriptionJa: attachedDatabase.typeMapping
-          .read(DriftSqlType.string, data['${effectivePrefix}description_ja'])!,
+          .read(DriftSqlType.string, data['${effectivePrefix}description_ja']),
       descriptionEn: attachedDatabase.typeMapping
-          .read(DriftSqlType.string, data['${effectivePrefix}description_en'])!,
+          .read(DriftSqlType.string, data['${effectivePrefix}description_en']),
     );
   }
 
@@ -1712,10 +1712,10 @@ class Work extends DataClass implements Insertable<Work> {
   final int source;
 
   /// 解説（日本語）
-  final String descriptionJa;
+  final String? descriptionJa;
 
   /// 解説（英語）
-  final String descriptionEn;
+  final String? descriptionEn;
   const Work(
       {required this.id,
       required this.series,
@@ -1728,8 +1728,8 @@ class Work extends DataClass implements Insertable<Work> {
       required this.longitude,
       this.direction,
       required this.source,
-      required this.descriptionJa,
-      required this.descriptionEn});
+      this.descriptionJa,
+      this.descriptionEn});
   @override
   Map<String, Expression> toColumns(bool nullToAbsent) {
     final map = <String, Expression>{};
@@ -1750,8 +1750,12 @@ class Work extends DataClass implements Insertable<Work> {
       map['direction'] = Variable<double>(direction);
     }
     map['source'] = Variable<int>(source);
-    map['description_ja'] = Variable<String>(descriptionJa);
-    map['description_en'] = Variable<String>(descriptionEn);
+    if (!nullToAbsent || descriptionJa != null) {
+      map['description_ja'] = Variable<String>(descriptionJa);
+    }
+    if (!nullToAbsent || descriptionEn != null) {
+      map['description_en'] = Variable<String>(descriptionEn);
+    }
     return map;
   }
 
@@ -1773,8 +1777,12 @@ class Work extends DataClass implements Insertable<Work> {
           ? const Value.absent()
           : Value(direction),
       source: Value(source),
-      descriptionJa: Value(descriptionJa),
-      descriptionEn: Value(descriptionEn),
+      descriptionJa: descriptionJa == null && nullToAbsent
+          ? const Value.absent()
+          : Value(descriptionJa),
+      descriptionEn: descriptionEn == null && nullToAbsent
+          ? const Value.absent()
+          : Value(descriptionEn),
     );
   }
 
@@ -1793,8 +1801,8 @@ class Work extends DataClass implements Insertable<Work> {
       longitude: serializer.fromJson<double>(json['longitude']),
       direction: serializer.fromJson<double?>(json['direction']),
       source: serializer.fromJson<int>(json['source']),
-      descriptionJa: serializer.fromJson<String>(json['descriptionJa']),
-      descriptionEn: serializer.fromJson<String>(json['descriptionEn']),
+      descriptionJa: serializer.fromJson<String?>(json['descriptionJa']),
+      descriptionEn: serializer.fromJson<String?>(json['descriptionEn']),
     );
   }
   @override
@@ -1812,8 +1820,8 @@ class Work extends DataClass implements Insertable<Work> {
       'longitude': serializer.toJson<double>(longitude),
       'direction': serializer.toJson<double?>(direction),
       'source': serializer.toJson<int>(source),
-      'descriptionJa': serializer.toJson<String>(descriptionJa),
-      'descriptionEn': serializer.toJson<String>(descriptionEn),
+      'descriptionJa': serializer.toJson<String?>(descriptionJa),
+      'descriptionEn': serializer.toJson<String?>(descriptionEn),
     };
   }
 
@@ -1829,8 +1837,8 @@ class Work extends DataClass implements Insertable<Work> {
           double? longitude,
           Value<double?> direction = const Value.absent(),
           int? source,
-          String? descriptionJa,
-          String? descriptionEn}) =>
+          Value<String?> descriptionJa = const Value.absent(),
+          Value<String?> descriptionEn = const Value.absent()}) =>
       Work(
         id: id ?? this.id,
         series: series ?? this.series,
@@ -1843,8 +1851,10 @@ class Work extends DataClass implements Insertable<Work> {
         longitude: longitude ?? this.longitude,
         direction: direction.present ? direction.value : this.direction,
         source: source ?? this.source,
-        descriptionJa: descriptionJa ?? this.descriptionJa,
-        descriptionEn: descriptionEn ?? this.descriptionEn,
+        descriptionJa:
+            descriptionJa.present ? descriptionJa.value : this.descriptionJa,
+        descriptionEn:
+            descriptionEn.present ? descriptionEn.value : this.descriptionEn,
       );
   Work copyWithCompanion(WorksCompanion data) {
     return Work(
@@ -1935,8 +1945,8 @@ class WorksCompanion extends UpdateCompanion<Work> {
   final Value<double> longitude;
   final Value<double?> direction;
   final Value<int> source;
-  final Value<String> descriptionJa;
-  final Value<String> descriptionEn;
+  final Value<String?> descriptionJa;
+  final Value<String?> descriptionEn;
   final Value<int> rowid;
   const WorksCompanion({
     this.id = const Value.absent(),
@@ -1966,8 +1976,8 @@ class WorksCompanion extends UpdateCompanion<Work> {
     required double longitude,
     this.direction = const Value.absent(),
     required int source,
-    required String descriptionJa,
-    required String descriptionEn,
+    this.descriptionJa = const Value.absent(),
+    this.descriptionEn = const Value.absent(),
     this.rowid = const Value.absent(),
   })  : id = Value(id),
         series = Value(series),
@@ -1976,9 +1986,7 @@ class WorksCompanion extends UpdateCompanion<Work> {
         nameEn = Value(nameEn),
         latitude = Value(latitude),
         longitude = Value(longitude),
-        source = Value(source),
-        descriptionJa = Value(descriptionJa),
-        descriptionEn = Value(descriptionEn);
+        source = Value(source);
   static Insertable<Work> custom({
     Expression<int>? id,
     Expression<int>? series,
@@ -2025,8 +2033,8 @@ class WorksCompanion extends UpdateCompanion<Work> {
       Value<double>? longitude,
       Value<double?>? direction,
       Value<int>? source,
-      Value<String>? descriptionJa,
-      Value<String>? descriptionEn,
+      Value<String?>? descriptionJa,
+      Value<String?>? descriptionEn,
       Value<int>? rowid}) {
     return WorksCompanion(
       id: id ?? this.id,
@@ -2619,8 +2627,8 @@ typedef $$SeriesesTableCreateCompanionBuilder = SeriesesCompanion Function({
   required String nameEn,
   required String shortNameJa,
   required String shortNameEn,
-  required String descriptionJa,
-  required String descriptionEn,
+  Value<String?> descriptionJa,
+  Value<String?> descriptionEn,
   Value<int> rowid,
 });
 typedef $$SeriesesTableUpdateCompanionBuilder = SeriesesCompanion Function({
@@ -2630,8 +2638,8 @@ typedef $$SeriesesTableUpdateCompanionBuilder = SeriesesCompanion Function({
   Value<String> nameEn,
   Value<String> shortNameJa,
   Value<String> shortNameEn,
-  Value<String> descriptionJa,
-  Value<String> descriptionEn,
+  Value<String?> descriptionJa,
+  Value<String?> descriptionEn,
   Value<int> rowid,
 });
 
@@ -2658,8 +2666,8 @@ class $$SeriesesTableTableManager extends RootTableManager<
             Value<String> nameEn = const Value.absent(),
             Value<String> shortNameJa = const Value.absent(),
             Value<String> shortNameEn = const Value.absent(),
-            Value<String> descriptionJa = const Value.absent(),
-            Value<String> descriptionEn = const Value.absent(),
+            Value<String?> descriptionJa = const Value.absent(),
+            Value<String?> descriptionEn = const Value.absent(),
             Value<int> rowid = const Value.absent(),
           }) =>
               SeriesesCompanion(
@@ -2680,8 +2688,8 @@ class $$SeriesesTableTableManager extends RootTableManager<
             required String nameEn,
             required String shortNameJa,
             required String shortNameEn,
-            required String descriptionJa,
-            required String descriptionEn,
+            Value<String?> descriptionJa = const Value.absent(),
+            Value<String?> descriptionEn = const Value.absent(),
             Value<int> rowid = const Value.absent(),
           }) =>
               SeriesesCompanion.insert(
@@ -3078,8 +3086,8 @@ typedef $$WorksTableCreateCompanionBuilder = WorksCompanion Function({
   required double longitude,
   Value<double?> direction,
   required int source,
-  required String descriptionJa,
-  required String descriptionEn,
+  Value<String?> descriptionJa,
+  Value<String?> descriptionEn,
   Value<int> rowid,
 });
 typedef $$WorksTableUpdateCompanionBuilder = WorksCompanion Function({
@@ -3094,8 +3102,8 @@ typedef $$WorksTableUpdateCompanionBuilder = WorksCompanion Function({
   Value<double> longitude,
   Value<double?> direction,
   Value<int> source,
-  Value<String> descriptionJa,
-  Value<String> descriptionEn,
+  Value<String?> descriptionJa,
+  Value<String?> descriptionEn,
   Value<int> rowid,
 });
 
@@ -3127,8 +3135,8 @@ class $$WorksTableTableManager extends RootTableManager<
             Value<double> longitude = const Value.absent(),
             Value<double?> direction = const Value.absent(),
             Value<int> source = const Value.absent(),
-            Value<String> descriptionJa = const Value.absent(),
-            Value<String> descriptionEn = const Value.absent(),
+            Value<String?> descriptionJa = const Value.absent(),
+            Value<String?> descriptionEn = const Value.absent(),
             Value<int> rowid = const Value.absent(),
           }) =>
               WorksCompanion(
@@ -3159,8 +3167,8 @@ class $$WorksTableTableManager extends RootTableManager<
             required double longitude,
             Value<double?> direction = const Value.absent(),
             required int source,
-            required String descriptionJa,
-            required String descriptionEn,
+            Value<String?> descriptionJa = const Value.absent(),
+            Value<String?> descriptionEn = const Value.absent(),
             Value<int> rowid = const Value.absent(),
           }) =>
               WorksCompanion.insert(
