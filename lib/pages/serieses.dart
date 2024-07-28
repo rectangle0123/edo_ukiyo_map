@@ -54,9 +54,6 @@ class SeriesesPage extends ConsumerWidget {
 
 // リストアイテム
 class _ListItem extends StatelessWidget {
-  // 角丸
-  static const radius = 2.0;
-
   // シリーズ
   final Series series;
 
