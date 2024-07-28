@@ -128,10 +128,8 @@ class Database extends _$Database {
   Future<Series> getSeries(int id) => (select(serieses)..where((e) => e.id.equals(id))).getSingle();
 
   /// すべてのシリーズを取得する
-  /// 「該当なし」はとりあえず取得せず、並び順でソートする
   Future<List<Series>> getAllSeries() {
     return (select(serieses)
-      ..where((e) => e.id.isBiggerThanValue(0))
       ..orderBy([(e) => OrderingTerm(expression: e.sort)])
     ).get();
   }

@@ -29,5 +29,11 @@ void main() async {
 
     final painters = await database.getPaintersByWorkId(work.id);
     expect(painters[0].hasPortrait, true);
+
+    final series = await database.getAllSeries();
+    expect(series.length, 4);
+
+    final works = await database.getWorksBySeriesId(0);
+    expect(works.length, 9);
   });
 }
