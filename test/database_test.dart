@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:flutter_test/flutter_test.dart';
 import 'package:flutter/widgets.dart';
 
@@ -32,6 +34,7 @@ void main() async {
 
     final series = await database.getAllSeries();
     expect(series.length, 4);
+    debugPrint(series[3].descriptionJa);
 
     final works = await database.getWorksBySeriesId(0);
     expect(works.length, 9);

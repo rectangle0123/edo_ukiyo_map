@@ -89,7 +89,8 @@ class SeriesTabState extends ConsumerState<SeriesTab> with SingleTickerProviderS
     if (_tabController.indexIsChanging) {
       // 選択されているシリーズIDを更新する
       ref.read(selectedSeriesIdNotifierProvider.notifier).updateState(
-        _tabController.index == 3 ? 0 : _tabController.index + 1
+        // 「その他」はシリーズIDを0に、それ以外はタブインデックスからシリーズIDを算出する
+        _tabController.index == _tabController.length - 1 ? 0 : _tabController.index + 1
       );
       // 選択されている作品IDを更新する
       ref.read(selectedWorkIndexNotifierProvider.notifier).updateState(1);

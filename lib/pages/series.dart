@@ -102,6 +102,7 @@ class _SeriesCard extends StatelessWidget {
             ),
             if (series.getDescription(context) != null)
               const SizedBox(height: space),
+            if (series.getDescription(context) != null)
               Text(series.getDescription(context)!,
                 style: Theme.of(context).textTheme.bodyMedium,
               ),

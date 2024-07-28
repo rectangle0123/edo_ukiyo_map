@@ -212,7 +212,11 @@ class WorkListItem extends ConsumerWidget {
       // 一致しない場合
       // シリーズタブを切り替える
       // 選択されているシリーズIDの変更はシリーズタブの変更イベントで実行される
-      ref.watch(tabControllerNotifierProvider)?.animateTo(work.series - 1);
+      final tabController = ref.watch(tabControllerNotifierProvider);
+      tabController?.animateTo(
+        // 「その他」はシリーズIDを0に、それ以外はタブインデックスからシリーズIDを算出する
+        work.series == 0 ? tabController.length - 1 : work.series - 1
+      );
       // シリーズタブの変更イベントが終了するまで少し待つ
       await Future.delayed(const Duration(milliseconds: 500));
       // カルーセルのカレントアイテムを変更する
