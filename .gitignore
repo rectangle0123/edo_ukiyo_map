@@ -46,4 +46,4 @@ app.*.map.json
 /env/*.json
 
 # キーストア
-/keysotre/*
+/keystore/*
