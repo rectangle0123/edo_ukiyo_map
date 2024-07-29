@@ -47,4 +47,4 @@ app.*.map.json
 
 # キーストアの設定
 /keystore/*
-/local.properties
+/android/key.properties
