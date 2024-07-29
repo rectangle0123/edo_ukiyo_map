@@ -45,6 +45,6 @@ app.*.map.json
 # 環境変数ファイル
 /env/*.json
 
-# キーストア
+# キーストアの設定
 /keystore/*
 /local.properties
