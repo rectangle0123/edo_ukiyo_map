@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 
 /// スプラッシュ画面
 class SplashPage extends StatelessWidget {
-  /// インジケーターの寸法
+  /// インジケーターのサイズ
   static const dimension = 16.0;
 
   const SplashPage({super.key});

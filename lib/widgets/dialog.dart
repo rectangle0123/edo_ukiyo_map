@@ -1,3 +1,4 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:webview_flutter/webview_flutter.dart';
 
@@ -60,14 +61,43 @@ class HelpDialog extends StatelessWidget {
 }
 
 // WebView
-class _WebView extends StatelessWidget {
+class _WebView extends StatefulWidget {
+  @override
+  _WebViewState createState() => _WebViewState();
+}
+
+class _WebViewState extends State<_WebView> {
+  // インジケーターのサイズ
+  static const dimension = 16.0;
+  // ロード中かどうか
+  bool _isLoading = true;
+  // WebViewコントローラー
+  late WebViewController _controller;
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    final url = Localizations.localeOf(context).languageCode == 'ja' ? urlHelpJa : urlHelpEn;
+    _controller = WebViewController()
+        ..setJavaScriptMode(JavaScriptMode.unrestricted)
+        ..setBackgroundColor(Colors.white)
+        ..setNavigationDelegate(NavigationDelegate(
+            onPageStarted: (url) => setState(() => _isLoading = true),
+            onPageFinished: (url) => setState(() => _isLoading = false),
+        ))
+        ..loadRequest(Uri.parse(url));
+  }
+
   @override
   Widget build(BuildContext context) {
-    final url = Localizations.localeOf(context).languageCode == 'ja' ? urlHelpJa : urlHelpEn;
-
-    return WebViewWidget(controller: WebViewController()
-      ..setJavaScriptMode(JavaScriptMode.unrestricted)
-      ..setBackgroundColor(Colors.white)
-      ..loadRequest(Uri.parse(url)));
+    return Stack(
+      children: [
+        WebViewWidget(controller: _controller),
+        if (_isLoading)
+          const Center(
+            child: CupertinoActivityIndicator(radius: dimension),
+          ),
+      ],
+    );
   }
 }
