@@ -54,6 +54,8 @@ class AppState extends ConsumerState<App> with WidgetsBindingObserver {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
+      // デバッグ表示オフ
+      debugShowCheckedModeBanner: false,
       // 多言語化
       localizationsDelegates: AppLocalizations.localizationsDelegates,
       supportedLocales: AppLocalizations.supportedLocales,
