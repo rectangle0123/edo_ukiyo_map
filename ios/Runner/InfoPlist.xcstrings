@@ -44,13 +44,13 @@
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Required for pointing your location on the map."
+            "value" : "This app uses location information to show your location on this map."
           }
         },
         "ja" : {
           "stringUnit" : {
-            "state" : "translated",
-            "value" : "現在位置を表示するために使用します。"
+            "state" : "needs_review",
+            "value" : "このアプリは、あなたの現在位置を地図上に表示するために位置情報を取得します。"
           }
         }
       }

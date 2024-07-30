@@ -48,6 +48,6 @@
 	<key>DartDefines</key>
 	<string>$(DART_DEFINES)</string>
 	<key>NSLocationWhenInUseUsageDescription</key>
-	<string>Required for pointing your location on the map.</string>
+	<string>This app uses location information to show your location on this map.</string>
 </dict>
 </plist>
