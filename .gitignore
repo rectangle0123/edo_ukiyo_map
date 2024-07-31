@@ -48,3 +48,6 @@ app.*.map.json
 # キーストアの設定
 /keystore/*
 /android/key.properties
+
+# ストア申請用
+/store
